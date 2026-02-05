@@ -1,0 +1,208 @@
+/* Staff dashboard */
+.staff-page .main-content {
+  padding: 1.5rem 1rem;
+}
+
+.staff-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.staff-heading {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #2d5a27;
+}
+
+.staff-intro {
+  margin-bottom: 1.5rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.staff-table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.staff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.staff-table th,
+.staff-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.staff-table thead th {
+  background: #2d5a27;
+  color: #fff;
+  font-weight: 600;
+}
+
+.staff-table tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.staff-status {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.staff-status-submitted { background: #e8f0e8; color: #2d5a27; }
+.staff-status-under-review { background: #fff3e0; color: #e65100; }
+.staff-status-approved { background: #e8f5e9; color: #2e7d32; }
+.staff-status-rejected { background: #ffebee; color: #c62828; }
+
+.staff-actions-cell {
+  white-space: nowrap;
+}
+
+.staff-btn {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  margin-right: 0.35rem;
+  margin-bottom: 0.25rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.staff-btn-view {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.staff-btn-approve {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.staff-btn-deny {
+  background: #c62828;
+  color: #fff;
+}
+
+.staff-btn:hover {
+  opacity: 0.9;
+}
+
+/* Detail modal */
+.staff-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.staff-modal-overlay[hidden] {
+  display: none;
+}
+
+.staff-modal {
+  background: #fff;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.staff-modal-header {
+  padding: 1rem 1.25rem;
+  background: #2d5a27;
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.staff-modal-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.staff-modal-close {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.staff-modal-body {
+  padding: 1.25rem;
+}
+
+.staff-detail-dl {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.staff-detail-dl dt {
+  margin-top: 0.75rem;
+  margin-bottom: 0.2rem;
+  color: #666;
+  font-weight: 600;
+}
+
+.staff-detail-dl dt:first-child {
+  margin-top: 0;
+}
+
+.staff-detail-dl dd {
+  margin: 0;
+  color: #333;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.staff-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+@media (max-width: 640px) {
+  .staff-table th,
+  .staff-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .staff-btn {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+}

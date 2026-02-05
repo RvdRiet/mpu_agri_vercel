@@ -1,0 +1,412 @@
+/* Application page overrides */
+.app-page .main-content {
+  padding: 2rem 1rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #2d5a27;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.app-heading {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  color: #2d5a27;
+}
+
+/* Step indicator */
+.app-steps {
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.app-steps-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0.25rem;
+}
+
+.app-step {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: #666;
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.app-step.active {
+  background: #2d5a27;
+  color: #fff;
+  font-weight: 600;
+}
+
+.app-step.completed {
+  background: #e8f0e8;
+  color: #2d5a27;
+}
+
+/* Form panels */
+.app-form {
+  margin-top: 1rem;
+}
+
+.app-step-panel {
+  display: none;
+  padding: 0.5rem 0;
+}
+
+.app-step-panel.active {
+  display: block;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  color: #333;
+}
+
+.app-step-intro {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.app-step-note {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Step 1 layout matching website: label and dropdown */
+.form-group-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-group-inline .label-required {
+  color: #c00;
+}
+
+.form-group-inline .label-inline {
+  margin-bottom: 0;
+  display: inline;
+}
+
+.form-group-inline select {
+  max-width: 280px;
+}
+
+.label-block {
+  display: block;
+}
+
+.infra-subheading {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.05rem;
+  color: #2d5a27;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.35rem;
+}
+
+.stock-subheading {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1.05rem;
+  color: #2d5a27;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.35rem;
+}
+
+.stock-subheading:first-of-type {
+  margin-top: 0;
+}
+
+.field-note {
+  font-weight: normal;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Definition of farmer category block (as on website) */
+.definition-block {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.definition-heading {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.definition-block p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.btn-close-definition {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: #2d5a27;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.btn-close-definition:hover {
+  background: #234a20;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-group input[type="file"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 180px;
+}
+
+.form-row-three .form-group,
+.form-row-four .form-group {
+  min-width: 120px;
+}
+
+.form-hint {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.radio-group,
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.radio-label,
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio-label input,
+.checkbox-label input {
+  margin: 0;
+}
+
+.doc-optional {
+  opacity: 0.9;
+}
+
+/* Summary on Complete step */
+.summary-box {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-box p {
+  margin: 0.5rem 0;
+}
+
+/* Buttons */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.btn-prev,
+.btn-next,
+.btn-submit {
+  padding: 0.75rem 1.25rem;
+  min-height: 44px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-prev {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.btn-prev:hover {
+  background: #d0d0d0;
+}
+
+.btn-next,
+.btn-submit {
+  background: #2d5a27;
+  color: #fff;
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+  background: #234a20;
+}
+
+.btn-submit {
+  padding: 0.75rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .app-page .main-content {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .app-heading {
+    font-size: 1.3rem;
+  }
+
+  .form-group-inline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-group-inline select {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .radio-group,
+  .checkbox-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .radio-label,
+  .checkbox-label {
+    min-height: 44px;
+    padding: 0.35rem 0;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-steps-list {
+    flex-direction: row;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .app-steps-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-step {
+    flex-shrink: 0;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row .form-group,
+  .form-row-three .form-group,
+  .form-row-four .form-group {
+    min-width: 100%;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group select,
+  .form-group textarea,
+  .form-group input[type="file"] {
+    max-width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-actions .btn-prev,
+  .form-actions .btn-next,
+  .form-actions .btn-submit {
+    width: 100%;
+  }
+
+  .definition-block {
+    padding: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn-close-definition {
+    min-height: 44px;
+    width: 100%;
+  }
+
+  .summary-box {
+    padding: 0.75rem 1rem;
+  }
+}

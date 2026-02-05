@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Application - Farm</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="application.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="../index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
+        <a href="../index.html" class="site-title-link"><h1 class="site-title">Mpumalanga Livestock Development Programme</h1></a>
+        <nav class="header-nav">
+          <span class="header-user" id="appHeaderUser"></span>
+          <a href="../track.html" class="header-link">Track Application</a>
+          <button type="button" class="header-link header-btn" id="appHeaderLogout">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="header-image-wrap">
+      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
+    </div>
+
+    <main class="main-content app-page">
+      <a href="../index.html" class="back-link">← Back to programme information</a>
+
+      <h2 class="app-heading">Application</h2>
+
+      <nav class="app-steps" aria-label="Application steps">
+        <ol class="app-steps-list">
+          <li class="app-step active" data-step="1"><span class="step-label">Application</span></li>
+          <li class="app-step" data-step="2"><span class="step-label">ProjectDetail</span></li>
+          <li class="app-step" data-step="3"><span class="step-label">Farm</span></li>
+          <li class="app-step" data-step="4"><span class="step-label">Infrastructure</span></li>
+          <li class="app-step" data-step="5"><span class="step-label">Stock</span></li>
+          <li class="app-step" data-step="6"><span class="step-label">Documents</span></li>
+          <li class="app-step" data-step="7"><span class="step-label">Complete</span></li>
+        </ol>
+      </nav>
+
+      <form id="applicationForm" class="app-form" novalidate>
+        <!-- Step 1: Application (matches website exactly) -->
+        <section class="app-step-panel active" id="panel-1" data-step="1">
+          <div class="form-group form-group-inline">
+            <span class="label-required">*</span>
+            <label for="commodity" class="label-inline">Please select the the commodity you are applying for</label>
+            <select id="commodity" name="commodity" required>
+              <option value="">-- Select --</option>
+              <option value="Beef Cattle">Beef Cattle</option>
+              <option value="Dairy Cattle">Dairy Cattle</option>
+              <option value="Goats">Goats</option>
+              <option value="Sheep">Sheep</option>
+              <option value="Pigs">Pigs</option>
+              <option value="Poultry">Poultry</option>
+              <option value="Rabbits">Rabbits</option>
+              <option value="Fish">Fish</option>
+            </select>
+          </div>
+          <p class="app-step-note">*One application must be completed per commodity of livestock*</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="preferredBreed">Preferred Breed</label>
+              <input type="text" id="preferredBreed" name="preferredBreed" />
+            </div>
+            <div class="form-group">
+              <label for="secondChoice">2nd Choice</label>
+              <input type="text" id="secondChoice" name="secondChoice" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Farmer Category</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> <strong>Subsistence</strong></label>
+              <label class="radio-label"><input type="radio" name="farmerCategory" value="Small Holder" /> <strong>Small Holder</strong></label>
+              <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> <strong>Commercial</strong></label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Have you benefitted from Masibuyele Esibayeni previously?</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="mespPreviously" value="No" /> <strong>No</strong></label>
+              <label class="radio-label"><input type="radio" name="mespPreviously" value="Yes" /> <strong>Yes</strong></label>
+            </div>
+            <p class="form-hint">If yes, please provide details and include the date</p>
+            <textarea id="mespDetails" name="mespDetails" rows="3" placeholder="Details and date (if applicable)"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-next" data-next="2"><strong>Next</strong></button>
+          </div>
+
+          <div class="definition-block" id="definitionBlock">
+            <h5 class="definition-heading">DEFINITION OF FARMER CATEGORY</h5>
+            <p><strong>Subsistence farmer</strong> practices agriculture mainly for household food security. These producers are not classified as indigents by their municipality and they produce mainly for household consumption. They may market limited surplus production with an annual turnover of up to R50,000 per annum</p>
+            <p><strong>Smallholder farmer</strong> produces for household consumption and markets, with an annual turnover ranging from R50 001 to R1 000 000.00 per annum aspiring to produce for markets and make profit.</p>
+            <p><strong>Commercial producer</strong> a commercial operation defined as an established farming venture undertaken by an individual or business entity for the purpose of production and sale of agricultural products to make a profit. The farm income must exceed R1 000 000.00 per annum.</p>
+            <button type="button" class="btn-close-definition" id="btnCloseDefinition">Close</button>
+          </div>
+        </section>
+
+        <!-- Step 2: ProjectDetail -->
+        <section class="app-step-panel" id="panel-2" data-step="2">
+          <h3 class="panel-title">Project Detail</h3>
+
+          <div class="form-group">
+            <label for="legalEntityType">Type of Legal Entity</label>
+            <select id="legalEntityType" name="legalEntityType">
+              <option value="">-- Select --</option>
+              <option value="Individual">Individual</option>
+              <option value="Cooperative">Cooperative</option>
+              <option value="Company">Company</option>
+              <option value="Trust">Trust</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group legal-entity-other-wrap" id="legalEntityOtherWrap" style="display: none;">
+            <label for="legalEntityOther">Legal Entity Other (please specify)</label>
+            <input type="text" id="legalEntityOther" name="legalEntityOther" placeholder="Specify legal entity type" />
+          </div>
+
+          <div class="form-group">
+            <label for="registeredName">Registered name or applicant name</label>
+            <input type="text" id="registeredName" name="registeredName" />
+          </div>
+
+          <div class="form-group">
+            <label for="registrationNumber">Registration Number</label>
+            <input type="text" id="registrationNumber" name="registrationNumber" />
+          </div>
+
+          <div class="form-group">
+            <label for="representativeName">Representative name and surname</label>
+            <input type="text" id="representativeName" name="representativeName" />
+          </div>
+
+          <div class="form-group">
+            <label for="representativeId">Representative ID Number</label>
+            <input type="text" id="representativeId" name="representativeId" maxlength="13" pattern="\d{13}" placeholder="13 digits" />
+          </div>
+
+          <div class="form-row form-row-three">
+            <div class="form-group">
+              <label for="telephone">Telephone</label>
+              <input type="text" id="telephone" name="telephone" />
+            </div>
+            <div class="form-group">
+              <label for="mobile">Mobile</label>
+              <input type="text" id="mobile" name="mobile" />
+            </div>
+            <div class="form-group">
+              <label for="fax">Fax</label>
+              <input type="text" id="fax" name="fax" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="physicalAddress">Physical/Business Address</label>
+            <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="physicalPostCode">Post Code</label>
+            <input type="text" id="physicalPostCode" name="physicalPostCode" placeholder="Physical address post code" />
+          </div>
+
+          <div class="form-group">
+            <label for="postalAddress">Postal Address</label>
+            <textarea id="postalAddress" name="postalAddress" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="postalPostCode">Post Code</label>
+            <input type="text" id="postalPostCode" name="postalPostCode" placeholder="Postal address post code" />
+          </div>
+
+          <div class="form-group">
+            <label for="totalMembers">Total number of farmers/project members (attach certified ID copies for all members)</label>
+            <input type="number" id="totalMembers" name="totalMembers" min="0" />
+          </div>
+
+          <div class="form-row form-row-four">
+            <div class="form-group">
+              <label for="numberOfMen">Number of Men</label>
+              <input type="number" id="numberOfMen" name="numberOfMen" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="numberOfWomen">Number of Women</label>
+              <input type="number" id="numberOfWomen" name="numberOfWomen" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="numberOfYouths">Number of Youths</label>
+              <input type="number" id="numberOfYouths" name="numberOfYouths" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="numberWithDisability">People living with Disability</label>
+              <input type="number" id="numberWithDisability" name="numberWithDisability" min="0" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="projectDescription">Project Description</label>
+            <textarea id="projectDescription" name="projectDescription" rows="4" placeholder="Brief description of your farming project"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="businessPlan">Business plan / Business profile summary</label>
+            <textarea id="businessPlan" name="businessPlan" rows="4" placeholder="Summary or attach separately"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="1">Previous</button>
+            <button type="button" class="btn-next" data-next="3">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 3: Farm -->
+        <section class="app-step-panel" id="panel-3" data-step="3">
+          <h3 class="panel-title">Farm</h3>
+
+          <div class="form-group">
+            <label for="farmName">Farm Name (as it appears on title deed)</label>
+            <input type="text" id="farmName" name="farmName" />
+          </div>
+
+          <div class="form-group">
+            <label for="totalLandSize">Total land size (ha)</label>
+            <input type="number" id="totalLandSize" name="totalLandSize" min="0" step="0.01" />
+          </div>
+
+          <div class="form-row form-row-four">
+            <div class="form-group">
+              <label for="naturalGrazing">Natural grazing (ha)</label>
+              <input type="number" id="naturalGrazing" name="naturalGrazing" min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label for="plantedPasture">Planted pasture (ha)</label>
+              <input type="number" id="plantedPasture" name="plantedPasture" min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label for="arable">Arable (ha)</label>
+              <input type="number" id="arable" name="arable" min="0" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label for="plantations">Plantations (ha)</label>
+              <input type="number" id="plantations" name="plantations" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="district">District</label>
+              <input type="text" id="district" name="district" />
+            </div>
+            <div class="form-group">
+              <label for="localMunicipality">Local Municipality</label>
+              <input type="text" id="localMunicipality" name="localMunicipality" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="areaName">Area Name</label>
+              <input type="text" id="areaName" name="areaName" />
+            </div>
+            <div class="form-group">
+              <label for="wardNumber">Ward Number</label>
+              <input type="text" id="wardNumber" name="wardNumber" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gpsLatitude">GPS Latitude</label>
+              <input type="text" id="gpsLatitude" name="gpsLatitude" placeholder="e.g. -25.7479" />
+            </div>
+            <div class="form-group">
+              <label for="gpsLongitude">GPS Longitude</label>
+              <input type="text" id="gpsLongitude" name="gpsLongitude" placeholder="e.g. 28.2293" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="landAccessType">Type of Land Access</label>
+            <select id="landAccessType" name="landAccessType">
+              <option value="">-- Select --</option>
+              <option value="Own">Own</option>
+              <option value="Lease">Lease</option>
+              <option value="PTO">PTO (Permission to Occupy)</option>
+              <option value="RTO">RTO (Right to Occupy)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group lease-period-wrap" id="leasePeriodWrap" style="display: none;">
+            <label for="leasePeriodYears">If Lease Agreement, indicate period of lease (years)</label>
+            <input type="number" id="leasePeriodYears" name="leasePeriodYears" min="0" placeholder="e.g. 5" />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="2">Previous</button>
+            <button type="button" class="btn-next" data-next="4">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 4: Infrastructure -->
+        <section class="app-step-panel" id="panel-4" data-step="4">
+          <h3 class="panel-title">Infrastructure</h3>
+
+          <div class="form-group">
+            <label class="label-block">Boundary Fence</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="boundaryFence" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="boundaryFence" value="No" /> No</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Grazing Camps</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="grazingCamps" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="grazingCamps" value="No" /> No</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="conditionOfFence">Condition of Fence</label>
+            <select id="conditionOfFence" name="conditionOfFence">
+              <option value="">-- Select --</option>
+              <option value="Excellent">Excellent</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Poor">Poor</option>
+            </select>
+          </div>
+
+          <h4 class="infra-subheading">Water Sources</h4>
+          <div class="form-group">
+            <label class="label-block">River</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="waterRiver" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="waterRiver" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label-block">Streams</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="waterStreams" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="waterStreams" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label-block">Windmill</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="waterWindmill" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="waterWindmill" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label-block">Borehole</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="waterOther">Other water source (specify)</label>
+            <input type="text" id="waterOther" name="waterOther" placeholder="Specify if applicable" />
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Kraals</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="kraals" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="kraals" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label-block">Crush Pens</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="crushPens" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="crushPens" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label-block">Dipping Facilities</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="dippingFacilities" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="dippingFacilities" value="No" /> No</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="conditionKraals">Condition of kraals and handling infrastructure</label>
+            <select id="conditionKraals" name="conditionKraals">
+              <option value="">-- Select --</option>
+              <option value="Excellent">Excellent</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Poor">Poor</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="3">Previous</button>
+            <button type="button" class="btn-next" data-next="5">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 5: Stock -->
+        <section class="app-step-panel" id="panel-5" data-step="5">
+          <h3 class="panel-title">Stock</h3>
+
+          <h4 class="stock-subheading">Beef Cattle</h4>
+          <div class="form-row form-row-three">
+            <div class="form-group">
+              <label for="beefBreedingBulls">Breeding Bulls</label>
+              <input type="number" id="beefBreedingBulls" name="beefBreedingBulls" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="beefSteers">Steers</label>
+              <input type="number" id="beefSteers" name="beefSteers" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="beefCowsHeifers">Cows/Heifers</label>
+              <input type="number" id="beefCowsHeifers" name="beefCowsHeifers" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Dairy Cattle</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dairyBreedingBulls">Breeding Bulls</label>
+              <input type="number" id="dairyBreedingBulls" name="dairyBreedingBulls" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="dairyCowsHeifers">Cows/Heifers</label>
+              <input type="number" id="dairyCowsHeifers" name="dairyCowsHeifers" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Goats</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goatsBucks">Bucks</label>
+              <input type="number" id="goatsBucks" name="goatsBucks" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="goatsDoes">Does</label>
+              <input type="number" id="goatsDoes" name="goatsDoes" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Sheep</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="sheepRams">Rams</label>
+              <input type="number" id="sheepRams" name="sheepRams" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="sheepEwes">Ewes</label>
+              <input type="number" id="sheepEwes" name="sheepEwes" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Pigs</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pigsBoars">Boars</label>
+              <input type="number" id="pigsBoars" name="pigsBoars" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="pigsSows">Sows</label>
+              <input type="number" id="pigsSows" name="pigsSows" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Rabbits</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rabbitsBucks">Bucks</label>
+              <input type="number" id="rabbitsBucks" name="rabbitsBucks" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="rabbitsDoes">Does</label>
+              <input type="number" id="rabbitsDoes" name="rabbitsDoes" min="0" />
+            </div>
+          </div>
+
+          <h4 class="stock-subheading">Poultry</h4>
+          <div class="form-row form-row-three">
+            <div class="form-group">
+              <label for="poultryBroilers">Broilers <span class="field-note">(per 6 week cycle)</span></label>
+              <input type="number" id="poultryBroilers" name="poultryBroilers" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="poultryLayers">Layers</label>
+              <input type="number" id="poultryLayers" name="poultryLayers" min="0" />
+            </div>
+            <div class="form-group">
+              <label for="poultryFreeRange">Free Range</label>
+              <input type="number" id="poultryFreeRange" name="poultryFreeRange" min="0" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Farm infrastructure capable to quarantine/separate current stock from new animals</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="No" /> No</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="label-block">Livestock Brand mark (if yes attach copy)</label>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="livestockBrandMark" value="Yes" /> Yes</label>
+              <label class="radio-label"><input type="radio" name="livestockBrandMark" value="No" /> No</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="stockAdditionalInfo">Any additional information</label>
+            <textarea id="stockAdditionalInfo" name="stockAdditionalInfo" rows="4" placeholder="Any additional information"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="4">Previous</button>
+            <button type="button" class="btn-next" data-next="6">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 6: Documents -->
+        <section class="app-step-panel" id="panel-6" data-step="6">
+          <h3 class="panel-title">Documents</h3>
+          <p class="app-step-intro">Required documents as per your farmer category (see programme information).</p>
+
+          <div class="form-group">
+            <label>Certified ID copies of all applicants</label>
+            <input type="file" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+          </div>
+
+          <div class="form-group">
+            <label>Proof of land access (Title deed / lease / PTO/RTO)</label>
+            <input type="file" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+
+          <div class="form-group">
+            <label>Business plan / Business profile</label>
+            <input type="file" name="businessPlanDoc" accept=".pdf,.doc,.docx" />
+          </div>
+
+          <div class="form-group doc-optional">
+            <label>Proof of farming income (Smallholder / Commercial)</label>
+            <input type="file" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+
+          <div class="form-group doc-optional">
+            <label>Markets / off-take agreement</label>
+            <input type="file" name="offtakeAgreement" accept=".pdf,.doc,.docx" />
+          </div>
+
+          <div class="form-group doc-optional">
+            <label>Brand mark certificate</label>
+            <input type="file" name="brandCertificate" accept=".pdf,.jpg,.jpeg,.png" />
+          </div>
+
+          <div class="form-group doc-optional">
+            <label>EIA (if applicable)</label>
+            <input type="file" name="eia" accept=".pdf" />
+          </div>
+
+          <div class="form-group doc-optional">
+            <label>Biosecurity plan (if applicable)</label>
+            <input type="file" name="biosecurityPlan" accept=".pdf,.doc,.docx" />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="5">Previous</button>
+            <button type="button" class="btn-next" data-next="7">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 7: Complete -->
+        <section class="app-step-panel" id="panel-7" data-step="7">
+          <h3 class="panel-title">Complete</h3>
+          <p class="app-step-intro">Review your application. Submit to complete. Application forms can also be collected and submitted manually at DARDLEA Offices (see programme information).</p>
+
+          <div class="summary-box">
+            <p><strong>Commodity:</strong> <span id="summaryCommodity">—</span></p>
+            <p><strong>Farmer Category:</strong> <span id="summaryCategory">—</span></p>
+            <p><strong>Project:</strong> <span id="summaryProject">—</span></p>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-prev" data-prev="6">Previous</button>
+            <button type="submit" class="btn-submit">Submit Application</button>
+          </div>
+        </section>
+      </form>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-image-wrap">
+        <img src="../public/footer.jpg" alt="" class="footer-image" />
+      </div>
+      <div class="footer-inner">
+        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
+        <div class="footer-links">
+          <a href="../popia.html" class="footer-btn">POPIA compliance</a>
+          <a href="../terms.html" class="footer-btn">Terms of service</a>
+          <a href="../staff-login.html" class="footer-btn">Admin login</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/applications.js"></script>
+  <script>
+    (function () {
+      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+        window.location.href = '../login.html?return=Application/index.html';
+        return;
+      }
+      var user = FarmAuth.getCurrentUser();
+      var userEl = document.getElementById('appHeaderUser');
+      var logoutBtn = document.getElementById('appHeaderLogout');
+      if (userEl) userEl.textContent = user.name + ' (' + user.id + ')';
+      if (logoutBtn) logoutBtn.onclick = function () { FarmAuth.logout(); window.location.href = '../index.html'; };
+    })();
+  </script>
+  <script src="application.js"></script>
+  <script>
+    (function () {
+      var block = document.getElementById('definitionBlock');
+      var btn = document.getElementById('btnCloseDefinition');
+      if (block && btn) btn.addEventListener('click', function () { block.style.display = 'none'; });
+    })();
+  </script>
+</body>
+</html>

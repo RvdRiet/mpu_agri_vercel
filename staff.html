@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Staff - Applications - Farm</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="staff.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
+        <a href="index.html" class="site-title-link">
+          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+        </a>
+        <nav class="header-nav staff-header-actions">
+          <span class="header-user" id="staffUser"></span>
+          <button type="button" class="header-link header-btn" id="staffLogout">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="header-image-wrap">
+      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
+    </div>
+
+    <main class="main-content staff-page">
+      <h2 class="staff-heading">Applications</h2>
+      <p class="staff-intro">Review all submitted applications. View full details, then approve or deny each claim.</p>
+
+      <div id="staffList" class="staff-table-wrap">
+        <table class="staff-table">
+          <thead>
+            <tr>
+              <th>Reference</th>
+              <th>Applicant ID</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staffTableBody"></tbody>
+        </table>
+      </div>
+      <div id="staffEmpty" class="staff-empty" hidden>
+        <p>No applications have been submitted yet.</p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-image-wrap">
+        <img src="public/footer.jpg" alt="" class="footer-image" />
+      </div>
+      <div class="footer-inner">
+        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
+        <div class="footer-links">
+          <a href="popia.html" class="footer-btn">POPIA compliance</a>
+          <a href="terms.html" class="footer-btn">Terms of service</a>
+          <a href="staff-login.html" class="footer-btn">Admin login</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="staff-modal-overlay" id="detailModal" hidden role="dialog" aria-labelledby="detailModalTitle">
+    <div class="staff-modal">
+      <div class="staff-modal-header">
+        <h3 id="detailModalTitle">Application details</h3>
+        <button type="button" class="staff-modal-close" id="detailModalClose" aria-label="Close">Close</button>
+      </div>
+      <div class="staff-modal-body" id="detailModalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/staff-auth.js"></script>
+  <script src="js/applications.js"></script>
+  <script>
+    (function () {
+      if (!window.FarmStaffAuth || !FarmStaffAuth.getCurrentStaff()) {
+        window.location.href = 'staff-login.html?return=staff.html';
+        return;
+      }
+      var staff = FarmStaffAuth.getCurrentStaff();
+      document.getElementById('staffUser').textContent = 'Admin: ' + (staff.name || staff.username);
+      document.getElementById('staffLogout').onclick = function () {
+        FarmStaffAuth.logout();
+        window.location.href = 'staff-login.html';
+      };
+
+      function formatLabel(key) {
+        if (!key) return '';
+        return key
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/[_\-]/g, ' ')
+          .replace(/^\s+/, '')
+          .split(' ')
+          .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); })
+          .join(' ');
+      }
+
+      function formatDate(iso) {
+        try {
+          return new Date(iso).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        } catch (e) {
+          return iso || '—';
+        }
+      }
+
+      function statusClass(s) {
+        var v = (s || '').toLowerCase().replace(/\s/g, '-');
+        if (v === 'approved') return 'staff-status-approved';
+        if (v === 'rejected' || v === 'denied') return 'staff-status-rejected';
+        if (v === 'under-review') return 'staff-status-under-review';
+        return 'staff-status-submitted';
+      }
+
+      function renderDetails(details) {
+        if (!details || typeof details !== 'object') return '<p>No details stored.</p>';
+        var keys = Object.keys(details).filter(function (k) { return details[k] !== '' && details[k] != null; }).sort();
+        if (keys.length === 0) return '<p>No details stored.</p>';
+        var html = '<dl class="staff-detail-dl">';
+        keys.forEach(function (k) {
+          html += '<dt>' + formatLabel(k) + '</dt><dd>' + (details[k] === true ? 'Yes' : details[k] === false ? 'No' : String(details[k])) + '</dd>';
+        });
+        html += '</dl>';
+        return html;
+      }
+
+      function openDetail(userId, app) {
+        var body = document.getElementById('detailModalBody');
+        var summary = app.summary || {};
+        var details = app.details || {};
+        var html = '<p><strong>Reference:</strong> ' + (app.id || '—') + '</p>';
+        html += '<p><strong>Applicant ID:</strong> ' + userId + '</p>';
+        html += '<p><strong>Submitted:</strong> ' + formatDate(app.submittedAt) + '</p>';
+        html += '<p><strong>Status:</strong> ' + (app.status || 'Submitted') + '</p>';
+        html += '<p><strong>Commodity:</strong> ' + (summary.commodity || '—') + ' &nbsp; <strong>Category:</strong> ' + (summary.farmerCategory || '—') + '</p>';
+        html += '<p><strong>Applicant / Project:</strong> ' + (summary.registeredName || '—') + '</p>';
+        html += '<p><strong>Farm:</strong> ' + (summary.farmName || '—') + '</p>';
+        html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">All form details</h4>';
+        html += renderDetails(details);
+        body.innerHTML = html;
+        document.getElementById('detailModal').hidden = false;
+        document.getElementById('detailModalTitle').textContent = 'Application ' + (app.id || '');
+      }
+
+      function setStatus(userId, appId, status) {
+        if (!window.FarmApplications) return;
+        FarmApplications.updateApplicationStatus(userId, appId, status);
+        renderList();
+      }
+
+      function renderList() {
+        var list = window.FarmApplications && FarmApplications.getAllApplicationsForStaff() || [];
+        var tbody = document.getElementById('staffTableBody');
+        var tableWrap = document.getElementById('staffList');
+        var emptyEl = document.getElementById('staffEmpty');
+
+        if (list.length === 0) {
+          tableWrap.hidden = true;
+          emptyEl.hidden = false;
+          return;
+        }
+        emptyEl.hidden = true;
+        tableWrap.hidden = false;
+
+        tbody.innerHTML = list.map(function (item) {
+          var uid = item.userId;
+          var app = item.application;
+          var ref = app.id || '—';
+          var submitted = formatDate(app.submittedAt);
+          var status = app.status || 'Submitted';
+          var statusCls = statusClass(status);
+          var approved = status === 'Approved';
+          var rejected = status === 'Rejected' || status === 'Denied';
+          return (
+            '<tr>' +
+              '<td>' + ref + '</td>' +
+              '<td>' + uid + '</td>' +
+              '<td>' + submitted + '</td>' +
+              '<td><span class="staff-status ' + statusCls + '">' + status + '</span></td>' +
+              '<td class="staff-actions-cell">' +
+                '<button type="button" class="staff-btn staff-btn-view" data-userid="' + uid + '" data-appid="' + ref + '" data-action="view">View details</button>' +
+                (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + uid + '" data-appid="' + ref + '" data-action="approve">Approve</button>' : '') +
+                (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + uid + '" data-appid="' + ref + '" data-action="deny">Deny</button>' : '') +
+              '</td>' +
+            '</tr>'
+          );
+        }).join('');
+
+        tbody.querySelectorAll('[data-action="view"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var uid = btn.getAttribute('data-userid');
+            var appId = btn.getAttribute('data-appid');
+            var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+            if (item) openDetail(uid, item.application);
+          });
+        });
+        tbody.querySelectorAll('[data-action="approve"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (confirm('Approve this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Approved');
+          });
+        });
+        tbody.querySelectorAll('[data-action="deny"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            if (confirm('Deny this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Rejected');
+          });
+        });
+      }
+
+      document.getElementById('detailModalClose').addEventListener('click', function () {
+        document.getElementById('detailModal').hidden = true;
+      });
+      document.getElementById('detailModal').addEventListener('click', function (e) {
+        if (e.target === document.getElementById('detailModal')) document.getElementById('detailModal').hidden = true;
+      });
+
+      renderList();
+    })();
+  </script>
+</body>
+</html>

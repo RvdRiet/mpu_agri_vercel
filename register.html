@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Register - Farm</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
+        <a href="index.html" class="site-title-link">
+          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+        </a>
+      </div>
+    </header>
+
+    <div class="header-image-wrap">
+      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
+    </div>
+
+    <main class="main-content auth-page">
+      <div class="auth-card">
+        <h2 class="auth-heading">Register</h2>
+        <p class="auth-intro">Create an account using your South African ID number.</p>
+
+        <form id="registerForm" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="regId">South African ID number <span class="required">*</span></label>
+            <input type="text" id="regId" name="id" maxlength="13" pattern="\d{13}" placeholder="13 digits, no spaces" autocomplete="off" required />
+            <span class="field-error" id="regIdError" aria-live="polite"></span>
+          </div>
+          <div class="form-group">
+            <label for="regName">Full name <span class="required">*</span></label>
+            <input type="text" id="regName" name="fullName" placeholder="As on ID document" required />
+            <span class="field-error" id="regNameError" aria-live="polite"></span>
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password <span class="required">*</span></label>
+            <input type="password" id="regPassword" name="password" minlength="6" placeholder="At least 6 characters" required />
+            <span class="field-error" id="regPasswordError" aria-live="polite"></span>
+          </div>
+          <div class="form-group">
+            <label for="regConfirm">Confirm password <span class="required">*</span></label>
+            <input type="password" id="regConfirm" name="confirmPassword" required />
+            <span class="field-error" id="regConfirmError" aria-live="polite"></span>
+          </div>
+          <div class="form-error" id="registerFormError" role="alert"></div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Register</button>
+          </div>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-image-wrap">
+        <img src="public/footer.jpg" alt="" class="footer-image" />
+      </div>
+      <div class="footer-inner">
+        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
+        <div class="footer-links">
+          <a href="popia.html" class="footer-btn">POPIA compliance</a>
+          <a href="terms.html" class="footer-btn">Terms of service</a>
+          <a href="staff-login.html" class="footer-btn">Admin login</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function () {
+      if (window.FarmAuth && FarmAuth.getCurrentUser()) {
+        window.location.href = 'index.html';
+        return;
+      }
+      var form = document.getElementById('registerForm');
+      var idInput = document.getElementById('regId');
+      var idError = document.getElementById('regIdError');
+      var formError = document.getElementById('registerFormError');
+
+      function onlyDigits(e) {
+        if (e.key && /[^\d]/.test(e.key) && !e.ctrlKey && !e.metaKey && ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) e.preventDefault();
+      }
+      idInput.addEventListener('keypress', onlyDigits);
+
+      function handleResult(result) {
+        if (result.ok) {
+          window.location.href = 'index.html';
+        } else {
+          formError.textContent = result.error || 'Registration failed.';
+        }
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        idError.textContent = '';
+        document.getElementById('regNameError').textContent = '';
+        document.getElementById('regPasswordError').textContent = '';
+        document.getElementById('regConfirmError').textContent = '';
+        formError.textContent = '';
+
+        var id = idInput.value.replace(/\s/g, '');
+        var name = document.getElementById('regName').value.trim();
+        var password = document.getElementById('regPassword').value;
+        var confirm = document.getElementById('regConfirm').value;
+
+        if (!id) {
+          idError.textContent = 'ID number is required.';
+          return;
+        }
+        if (!window.FarmAuth.isValidSAId(id)) {
+          idError.textContent = 'Please enter a valid 13-digit South African ID number.';
+          return;
+        }
+        if (!name) {
+          document.getElementById('regNameError').textContent = 'Full name is required.';
+          return;
+        }
+        if (password.length < 6) {
+          document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters.';
+          return;
+        }
+        if (password !== confirm) {
+          document.getElementById('regConfirmError').textContent = 'Passwords do not match.';
+          return;
+        }
+
+        var p = FarmAuth.register(id, password, name);
+        if (p && typeof p.then === 'function') p.then(handleResult); else handleResult(p);
+      });
+    })();
+  </script>
+</body>
+</html>

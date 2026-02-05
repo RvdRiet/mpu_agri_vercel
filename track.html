@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Track Application - Farm</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="track.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
+        <a href="index.html" class="site-title-link">
+          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+        </a>
+        <nav class="header-nav" aria-label="Account">
+          <span class="header-user" id="headerUser"></span>
+          <a href="Application/index.html" class="header-link">New Application</a>
+          <a href="track.html" class="header-link header-link-active">Track Application</a>
+          <button type="button" class="header-link header-btn" id="headerLogout">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="header-image-wrap">
+      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
+    </div>
+
+    <main class="main-content track-page">
+      <h2 class="track-heading">Track your application</h2>
+      <p class="track-intro">View the status of your submitted applications. This information is confidential and only visible when you are logged in.</p>
+
+      <div id="trackList" class="track-list"></div>
+      <div id="trackEmpty" class="track-empty" hidden>
+        <p>You have not submitted any applications yet.</p>
+        <a href="Application/index.html" class="btn-start-application">Start Application</a>
+      </div>
+
+      <div class="track-actions">
+        <a href="index.html" class="track-link">← Programme information</a>
+        <a href="Application/index.html" class="track-link">New application →</a>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-image-wrap">
+        <img src="public/footer.jpg" alt="" class="footer-image" />
+      </div>
+      <div class="footer-inner">
+        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
+        <div class="footer-links">
+          <a href="popia.html" class="footer-btn">POPIA compliance</a>
+          <a href="terms.html" class="footer-btn">Terms of service</a>
+          <a href="staff-login.html" class="footer-btn">Admin login</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/applications.js"></script>
+  <script>
+    (function () {
+      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+        window.location.href = 'login.html?return=track.html';
+        return;
+      }
+      var user = FarmAuth.getCurrentUser();
+      var userEl = document.getElementById('headerUser');
+      var logoutBtn = document.getElementById('headerLogout');
+      if (userEl) userEl.textContent = user.name + ' (' + user.id + ')';
+      if (logoutBtn) logoutBtn.onclick = function () { FarmAuth.logout(); window.location.href = 'index.html'; };
+
+      var listEl = document.getElementById('trackList');
+      var emptyEl = document.getElementById('trackEmpty');
+      var apps = window.FarmApplications && FarmApplications.getApplicationsByUser(user.id) || [];
+
+      function formatDate(iso) {
+        try {
+          var d = new Date(iso);
+          return d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch (e) {
+          return iso || '—';
+        }
+      }
+
+      function statusClass(s) {
+        var v = (s || '').toLowerCase().replace(/\s/g, '-');
+        if (v === 'approved') return 'status-approved';
+        if (v === 'rejected') return 'status-rejected';
+        if (v === 'under-review') return 'status-review';
+        return 'status-submitted';
+      }
+
+      if (apps.length === 0) {
+        listEl.hidden = true;
+        emptyEl.hidden = false;
+      } else {
+        emptyEl.hidden = true;
+        listEl.innerHTML = apps.map(function (app) {
+          var s = app.status || 'Submitted';
+          var sum = app.summary || {};
+          return (
+            '<article class="track-card">' +
+              '<div class="track-card-header">' +
+                '<span class="track-ref">' + (app.id || '—') + '</span>' +
+                '<span class="track-status ' + statusClass(s) + '">' + s + '</span>' +
+              '</div>' +
+              '<p class="track-date">Submitted ' + formatDate(app.submittedAt) + '</p>' +
+              '<dl class="track-summary">' +
+                '<dt>Commodity</dt><dd>' + (sum.commodity || '—') + '</dd>' +
+                '<dt>Category</dt><dd>' + (sum.farmerCategory || '—') + '</dd>' +
+                '<dt>Applicant / Project</dt><dd>' + (sum.registeredName || '—') + '</dd>' +
+                (sum.farmName ? '<dt>Farm</dt><dd>' + sum.farmName + '</dd>' : '') +
+              '</dl>' +
+              '<div class="track-progress">' +
+                '<span class="track-progress-label">Progress</span>' +
+                '<div class="track-progress-bar"><div class="track-progress-fill ' + statusClass(s) + '" style="width:' + (s === 'Approved' ? 100 : s === 'Rejected' ? 100 : s === 'Under Review' ? 60 : 25) + '%"></div></div>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+      }
+    })();
+  </script>
+</body>
+</html>
