@@ -64,6 +64,12 @@
   margin-top: 0.35rem;
   font-size: 0.875rem;
   color: #c00;
+  font-weight: 500;
+}
+
+.auth-form input.input-error {
+  border-color: #c00;
+  box-shadow: 0 0 0 1px rgba(204, 0, 0, 0.2);
 }
 
 .auth-form .form-actions {

@@ -1,25 +1,24 @@
 {
   "hosting": {
     "public": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**",
-      "**/.git/**",
-      "*.md",
-      "server.js",
-      "server.ps1",
-      "package.json",
-      "package-lock.json"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|ico|webp|svg|js|css|woff2)",
-        "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }]
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "X-XSS-Protection", "value": "1; mode=block" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+        ]
       }
     ]
   },
   "firestore": {
-    "rules": "firestore.rules"
+    "database": "(default)",
+    "location": "africa-south1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

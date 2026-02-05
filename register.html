@@ -99,42 +99,67 @@
           window.location.href = 'index.html';
         } else {
           formError.textContent = result.error || 'Registration failed.';
+          idInput.classList.add('input-error');
+          nameEl.classList.add('input-error');
+          passwordEl.classList.add('input-error');
+          confirmEl.classList.add('input-error');
         }
       }
 
+      var nameEl = document.getElementById('regName');
+      var passwordEl = document.getElementById('regPassword');
+      var confirmEl = document.getElementById('regConfirm');
+      var nameError = document.getElementById('regNameError');
+      var passwordError = document.getElementById('regPasswordError');
+      var confirmError = document.getElementById('regConfirmError');
+
+      function clearFieldErrors() {
+        idError.textContent = '';
+        nameError.textContent = '';
+        passwordError.textContent = '';
+        confirmError.textContent = '';
+        formError.textContent = '';
+        [idInput, nameEl, passwordEl, confirmEl].forEach(function (el) { if (el) el.classList.remove('input-error'); });
+      }
+      idInput.addEventListener('input', clearFieldErrors);
+      nameEl.addEventListener('input', clearFieldErrors);
+      passwordEl.addEventListener('input', clearFieldErrors);
+      confirmEl.addEventListener('input', clearFieldErrors);
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        idError.textContent = '';
-        document.getElementById('regNameError').textContent = '';
-        document.getElementById('regPasswordError').textContent = '';
-        document.getElementById('regConfirmError').textContent = '';
-        formError.textContent = '';
-
+        clearFieldErrors();
         var id = idInput.value.replace(/\s/g, '');
-        var name = document.getElementById('regName').value.trim();
-        var password = document.getElementById('regPassword').value;
-        var confirm = document.getElementById('regConfirm').value;
+        var name = nameEl.value.trim();
+        var password = passwordEl.value;
+        var confirm = confirmEl.value;
+        var hasError = false;
 
         if (!id) {
           idError.textContent = 'ID number is required.';
-          return;
-        }
-        if (!window.FarmAuth.isValidSAId(id)) {
+          idInput.classList.add('input-error');
+          hasError = true;
+        } else if (!window.FarmAuth.isValidSAId(id)) {
           idError.textContent = 'Please enter a valid 13-digit South African ID number.';
-          return;
+          idInput.classList.add('input-error');
+          hasError = true;
         }
         if (!name) {
-          document.getElementById('regNameError').textContent = 'Full name is required.';
-          return;
+          nameError.textContent = 'Full name is required.';
+          nameEl.classList.add('input-error');
+          hasError = true;
         }
         if (password.length < 6) {
-          document.getElementById('regPasswordError').textContent = 'Password must be at least 6 characters.';
-          return;
+          passwordError.textContent = 'Password must be at least 6 characters.';
+          passwordEl.classList.add('input-error');
+          hasError = true;
         }
         if (password !== confirm) {
-          document.getElementById('regConfirmError').textContent = 'Passwords do not match.';
-          return;
+          confirmError.textContent = 'Passwords do not match.';
+          confirmEl.classList.add('input-error');
+          hasError = true;
         }
+        if (hasError) return;
 
         var p = FarmAuth.register(id, password, name);
         if (p && typeof p.then === 'function') p.then(handleResult); else handleResult(p);

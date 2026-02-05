@@ -62,6 +62,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="js/security.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/applications.js"></script>
@@ -79,7 +81,6 @@
 
       var listEl = document.getElementById('trackList');
       var emptyEl = document.getElementById('trackEmpty');
-      var apps = window.FarmApplications && FarmApplications.getApplicationsByUser(user.id) || [];
 
       function formatDate(iso) {
         try {
@@ -98,35 +99,45 @@
         return 'status-submitted';
       }
 
-      if (apps.length === 0) {
-        listEl.hidden = true;
-        emptyEl.hidden = false;
-      } else {
-        emptyEl.hidden = true;
-        listEl.innerHTML = apps.map(function (app) {
-          var s = app.status || 'Submitted';
-          var sum = app.summary || {};
-          return (
-            '<article class="track-card">' +
-              '<div class="track-card-header">' +
-                '<span class="track-ref">' + (app.id || '—') + '</span>' +
-                '<span class="track-status ' + statusClass(s) + '">' + s + '</span>' +
-              '</div>' +
-              '<p class="track-date">Submitted ' + formatDate(app.submittedAt) + '</p>' +
-              '<dl class="track-summary">' +
-                '<dt>Commodity</dt><dd>' + (sum.commodity || '—') + '</dd>' +
-                '<dt>Category</dt><dd>' + (sum.farmerCategory || '—') + '</dd>' +
-                '<dt>Applicant / Project</dt><dd>' + (sum.registeredName || '—') + '</dd>' +
-                (sum.farmName ? '<dt>Farm</dt><dd>' + sum.farmName + '</dd>' : '') +
-              '</dl>' +
-              '<div class="track-progress">' +
-                '<span class="track-progress-label">Progress</span>' +
-                '<div class="track-progress-bar"><div class="track-progress-fill ' + statusClass(s) + '" style="width:' + (s === 'Approved' ? 100 : s === 'Rejected' ? 100 : s === 'Under Review' ? 60 : 25) + '%"></div></div>' +
-              '</div>' +
-            '</article>'
-          );
-        }).join('');
+      function esc(str) {
+        return window.FarmSecurity && window.FarmSecurity.escapeHtml ? window.FarmSecurity.escapeHtml(String(str || '')) : String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
+      function renderApps(apps) {
+        apps = apps || [];
+        if (apps.length === 0) {
+          listEl.hidden = true;
+          emptyEl.hidden = false;
+        } else {
+          emptyEl.hidden = true;
+          listEl.hidden = false;
+          listEl.innerHTML = apps.map(function (app) {
+            var s = app.status || 'Submitted';
+            var sum = app.summary || {};
+            return (
+              '<article class="track-card">' +
+                '<div class="track-card-header">' +
+                  '<span class="track-ref">' + esc(app.id) + '</span>' +
+                  '<span class="track-status ' + statusClass(s) + '">' + esc(s) + '</span>' +
+                '</div>' +
+                '<p class="track-date">Submitted ' + esc(formatDate(app.submittedAt)) + '</p>' +
+                '<dl class="track-summary">' +
+                  '<dt>Commodity</dt><dd>' + esc(sum.commodity) + '</dd>' +
+                  '<dt>Category</dt><dd>' + esc(sum.farmerCategory) + '</dd>' +
+                  '<dt>Applicant / Project</dt><dd>' + esc(sum.registeredName) + '</dd>' +
+                  (sum.farmName ? '<dt>Farm</dt><dd>' + esc(sum.farmName) + '</dd>' : '') +
+                '</dl>' +
+                '<div class="track-progress">' +
+                  '<span class="track-progress-label">Progress</span>' +
+                  '<div class="track-progress-bar"><div class="track-progress-fill ' + statusClass(s) + '" style="width:' + (s === 'Approved' ? 100 : s === 'Rejected' ? 100 : s === 'Under Review' ? 60 : 25) + '%"></div></div>' +
+                '</div>' +
+              '</article>'
+            );
+          }).join('');
+        }
+      }
+
+      var promise = window.FarmApplications ? FarmApplications.getApplicationsByUser(user.id) : Promise.resolve([]);
+      promise.then(renderApps).catch(function () { renderApps([]); });
     })();
   </script>
 </body>

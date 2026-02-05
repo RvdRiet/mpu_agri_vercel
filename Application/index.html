@@ -49,7 +49,7 @@
           <div class="form-group form-group-inline">
             <span class="label-required">*</span>
             <label for="commodity" class="label-inline">Please select the the commodity you are applying for</label>
-            <select id="commodity" name="commodity" required>
+            <select id="commodity" name="commodity" required aria-describedby="commodityError">
               <option value="">-- Select --</option>
               <option value="Beef Cattle">Beef Cattle</option>
               <option value="Dairy Cattle">Dairy Cattle</option>
@@ -60,6 +60,7 @@
               <option value="Rabbits">Rabbits</option>
               <option value="Fish">Fish</option>
             </select>
+            <span class="field-error" id="commodityError" aria-live="polite"></span>
           </div>
           <p class="app-step-note">*One application must be completed per commodity of livestock*</p>
 
@@ -75,12 +76,13 @@
           </div>
 
           <div class="form-group">
-            <label class="label-block">Farmer Category</label>
+            <label class="label-block">Farmer Category <span class="label-required">*</span></label>
             <div class="radio-group">
               <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> <strong>Subsistence</strong></label>
               <label class="radio-label"><input type="radio" name="farmerCategory" value="Small Holder" /> <strong>Small Holder</strong></label>
               <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> <strong>Commercial</strong></label>
             </div>
+            <span class="field-error" id="farmerCategoryError" aria-live="polite"></span>
           </div>
 
           <div class="form-group">
@@ -128,8 +130,9 @@
           </div>
 
           <div class="form-group">
-            <label for="registeredName">Registered name or applicant name</label>
-            <input type="text" id="registeredName" name="registeredName" />
+            <label for="registeredName">Registered name or applicant name <span class="label-required">*</span></label>
+            <input type="text" id="registeredName" name="registeredName" required aria-describedby="registeredNameError" />
+            <span class="field-error" id="registeredNameError" aria-live="polite"></span>
           </div>
 
           <div class="form-group">
@@ -586,10 +589,10 @@
           </div>
         </section>
 
-        <!-- Step 7: Complete -->
+        <!-- Step 7: Complete + POPIA consent -->
         <section class="app-step-panel" id="panel-7" data-step="7">
           <h3 class="panel-title">Complete</h3>
-          <p class="app-step-intro">Review your application. Submit to complete. Application forms can also be collected and submitted manually at DARDLEA Offices (see programme information).</p>
+          <p class="app-step-intro">Review your application. You must read and consent to the POPIA compliance before submitting.</p>
 
           <div class="summary-box">
             <p><strong>Commodity:</strong> <span id="summaryCommodity">—</span></p>
@@ -597,9 +600,21 @@
             <p><strong>Project:</strong> <span id="summaryProject">—</span></p>
           </div>
 
+          <div class="popia-consent-block">
+            <h4 class="popia-consent-heading">POPIA compliance and consent</h4>
+            <p>Please read the <a href="../popia.html" target="_blank" rel="noopener noreferrer">POPIA compliance page</a> (opens in a new tab). It explains how we use and protect your personal information.</p>
+            <div class="form-group popia-checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="popiaConsent" name="popiaConsent" value="yes" required />
+                <span>I have read the POPIA compliance and consent to the processing of my personal information as described. I understand that my application cannot be accepted without this consent.</span>
+              </label>
+              <span class="field-error" id="popiaConsentError" aria-live="polite"></span>
+            </div>
+          </div>
+
           <div class="form-actions">
             <button type="button" class="btn-prev" data-prev="6">Previous</button>
-            <button type="submit" class="btn-submit">Submit Application</button>
+            <button type="submit" class="btn-submit" id="btnSubmitApplication">Submit Application</button>
           </div>
         </section>
       </form>
@@ -622,6 +637,8 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="../js/security.js"></script>
   <script src="../js/firebase-config.js"></script>
   <script src="../js/auth.js"></script>
   <script src="../js/applications.js"></script>

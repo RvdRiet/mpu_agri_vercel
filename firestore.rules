@@ -1,14 +1,27 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // applications: each doc has userId (SA ID). Users can read/write only their own.
-    // For staff read-all you can add custom claims or a staff collection and check here.
+    // Applications: owners can read/write their own; staff can read all (and update status).
     match /applications/{appId} {
       allow create: if request.auth != null
         && request.auth.token.email != null
         && request.resource.data.userId + '@farm.local' == request.auth.token.email;
-      allow read, update, delete: if request.auth != null
-        && resource.data.userId + '@farm.local' == request.auth.token.email;
+      allow read: if request.auth != null
+        && (
+          resource.data.userId + '@farm.local' == request.auth.token.email
+          || exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+        );
+      allow update, delete: if request.auth != null
+        && (
+          resource.data.userId + '@farm.local' == request.auth.token.email
+          || exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+        );
+    }
+    // Staff allowlist: document id = Firebase Auth UID. Create via Console or Admin SDK.
+    // Staff can read their own doc; no client write so only you can add staff.
+    match /staff/{staffId} {
+      allow read: if request.auth != null && request.auth.uid == staffId;
+      allow write: if false;
     }
     match /{document=**} {
       allow read, write: if false;

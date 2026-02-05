@@ -26,7 +26,7 @@
     <main class="main-content auth-page">
       <div class="auth-card staff-login-card">
         <h2 class="auth-heading">Admin Login</h2>
-        <p class="auth-intro">Authorised personnel only. Log in to review and manage applications.</p>
+        <p class="auth-intro">Authorised personnel only. Log in to review and manage applications. If your organisation uses Firebase, use your staff email and password.</p>
 
         <form id="staffLoginForm" class="auth-form" novalidate>
           <div class="form-group">
@@ -64,6 +64,10 @@
     </footer>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script src="js/staff-auth.js"></script>
   <script>
     (function () {
@@ -72,16 +76,62 @@
         return;
       }
       var form = document.getElementById('staffLoginForm');
+      var usernameEl = document.getElementById('staffUsername');
+      var passwordEl = document.getElementById('staffPassword');
+      var usernameError = document.getElementById('staffUsernameError');
+      var passwordError = document.getElementById('staffPasswordError');
+      var formError = document.getElementById('staffFormError');
+
+      function clearFieldErrors() {
+        usernameError.textContent = '';
+        passwordError.textContent = '';
+        formError.textContent = '';
+        usernameEl.classList.remove('input-error');
+        passwordEl.classList.remove('input-error');
+      }
+
+      usernameEl.addEventListener('input', clearFieldErrors);
+      usernameEl.addEventListener('blur', clearFieldErrors);
+      passwordEl.addEventListener('input', clearFieldErrors);
+      passwordEl.addEventListener('blur', clearFieldErrors);
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById('staffFormError').textContent = '';
-        var username = document.getElementById('staffUsername').value.trim();
-        var password = document.getElementById('staffPassword').value;
+        clearFieldErrors();
+        var username = usernameEl.value.trim();
+        var password = passwordEl.value;
+
+        var hasError = false;
+        if (!username) {
+          usernameError.textContent = 'Username or email is required.';
+          usernameEl.classList.add('input-error');
+          hasError = true;
+        }
+        if (!password) {
+          passwordError.textContent = 'Password is required.';
+          passwordEl.classList.add('input-error');
+          hasError = true;
+        }
+        if (hasError) return;
+
         var result = FarmStaffAuth.login(username, password);
-        if (result.ok) {
-          window.location.href = 'staff.html';
+        function onResult(r) {
+          if (r && r.ok) {
+            window.location.href = 'staff.html';
+          } else {
+            formError.textContent = (r && r.error) || 'Login failed.';
+            usernameEl.classList.add('input-error');
+            passwordEl.classList.add('input-error');
+          }
+        }
+        if (result && typeof result.then === 'function') {
+          result.then(onResult).catch(function (err) {
+            formError.textContent = err.message || 'Login failed.';
+            usernameEl.classList.add('input-error');
+            passwordEl.classList.add('input-error');
+          });
         } else {
-          document.getElementById('staffFormError').textContent = result.error || 'Login failed.';
+          onResult(result);
         }
       });
     })();
