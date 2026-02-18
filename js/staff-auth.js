@@ -31,24 +31,6 @@
   function login(username, password) {
     username = (username || '').trim();
     if (!username || !password) return { ok: false, error: 'Username and password required.' };
-    // When Firebase Auth is available, use it (staff must use Firebase email as username)
-    if (global.firebaseAuth && typeof global.firebaseAuth.signInWithEmailAndPassword === 'function') {
-      return global.firebaseAuth.signInWithEmailAndPassword(username, password)
-        .then(function (userCred) {
-          var u = userCred.user;
-          try {
-            sessionStorage.setItem(SESSION_STAFF, JSON.stringify({
-              username: u.email,
-              name: u.email || u.uid
-            }));
-          } catch (e) {}
-          return { ok: true };
-        })
-        .catch(function (err) {
-          return { ok: false, error: err.message || 'Invalid email or password.' };
-        });
-    }
-    // Fallback: localStorage staff list
     var lower = username.toLowerCase();
     var users = getStaffUsers();
     var user = users[lower];
@@ -60,9 +42,6 @@
   }
 
   function logout() {
-    if (global.firebaseAuth && typeof global.firebaseAuth.signOut === 'function') {
-      global.firebaseAuth.signOut().catch(function () {});
-    }
     try {
       sessionStorage.removeItem(SESSION_STAFF);
     } catch (e) {}
