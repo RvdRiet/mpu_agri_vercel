@@ -46,6 +46,7 @@
   font-size: 1.25rem;
   font-weight: var(--weight-extrabold);
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .site-nav__brand-text {
