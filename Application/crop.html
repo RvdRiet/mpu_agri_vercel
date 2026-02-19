@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Crop Grant Application — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../nav.css">
+  <link rel="stylesheet" href="application.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="../index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="../index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="../crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="../livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="../environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="../weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="../alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="../guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="../support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
+              <a href="index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="../track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="../login.html" class="nav-link">Login</a>
+          <a href="../register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="../index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="../weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="../alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="../guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="../support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant</a><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant</a><a href="../track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="../login.html" class="btn btn--secondary btn--block">Login</a><a href="../register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main class="main-content app-page">
+      <div class="container">
+        <a href="../crop.html" class="back-link">← Back to Crop Management</a>
+
+        <div class="card app-form-card">
+          <div class="card__body">
+        <h2 class="app-heading">Crop Grant Application</h2>
+
+        <nav class="app-steps" aria-label="Application steps">
+          <ol class="app-steps-list">
+            <li class="app-step active" data-step="1"><span class="step-label">Crop Selection</span></li>
+            <li class="app-step" data-step="2"><span class="step-label">Applicant Details</span></li>
+            <li class="app-step" data-step="3"><span class="step-label">Farm &amp; Land</span></li>
+            <li class="app-step" data-step="4"><span class="step-label">Infrastructure</span></li>
+            <li class="app-step" data-step="5"><span class="step-label">Documents &amp; Submit</span></li>
+          </ol>
+        </nav>
+
+        <form id="applicationForm" class="app-form" novalidate>
+          <!-- Step 1: Crop Selection -->
+          <section class="app-step-panel active" id="panel-1" data-step="1">
+            <h3 class="panel-title">Crop Selection</h3>
+
+            <div class="form-group">
+              <label for="cropType">Crop Type <span class="label-required">*</span></label>
+              <select id="cropType" name="cropType" required aria-describedby="cropTypeError">
+                <option value="">-- Select --</option>
+                <option value="Maize">Maize</option>
+                <option value="Sorghum">Sorghum</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruit">Fruit</option>
+                <option value="Sugarcane">Sugarcane</option>
+                <option value="Nuts">Nuts</option>
+                <option value="Sunflower">Sunflower</option>
+                <option value="Soybeans">Soybeans</option>
+                <option value="Dry Beans">Dry Beans</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="field-error" id="cropTypeError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="cropVariety">Specific crop variety</label>
+              <input type="text" id="cropVariety" name="cropVariety" placeholder="e.g. PAN 3P-350, Bonsmara" />
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Farmer Category <span class="label-required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence (up to R50,000)" /> <strong>Subsistence</strong> (up to R50,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Smallholder (R50,001–R1,000,000)" /> <strong>Smallholder</strong> (R50,001–R1,000,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial (>R1,000,000)" /> <strong>Commercial</strong> (&gt;R1,000,000)</label>
+              </div>
+              <span class="field-error" id="farmerCategoryError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Previously received agricultural grant</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="previousGrant" value="No" /> No</label>
+                <label class="radio-label"><input type="radio" name="previousGrant" value="Yes" /> Yes</label>
+              </div>
+            </div>
+
+            <div class="form-group" id="previousGrantDetailsWrap" style="display: none;">
+              <label for="previousGrantDetails">If yes, provide details</label>
+              <textarea id="previousGrantDetails" name="previousGrantDetails" rows="3" placeholder="Previous grant programme, date, amount received"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-next" data-next="2"><strong>Next</strong></button>
+            </div>
+          </section>
+
+          <!-- Step 2: Applicant Details -->
+          <section class="app-step-panel" id="panel-2" data-step="2">
+            <h3 class="panel-title">Applicant Details</h3>
+
+            <div class="form-group">
+              <label for="legalEntityType">Type of Legal Entity</label>
+              <select id="legalEntityType" name="legalEntityType">
+                <option value="">-- Select --</option>
+                <option value="Individual">Individual</option>
+                <option value="Cooperative">Cooperative</option>
+                <option value="Company">Company</option>
+                <option value="Trust">Trust</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="registeredName">Registered name / applicant name <span class="label-required">*</span></label>
+              <input type="text" id="registeredName" name="registeredName" required aria-describedby="registeredNameError" />
+              <span class="field-error" id="registeredNameError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="registrationNumber">Registration number</label>
+              <input type="text" id="registrationNumber" name="registrationNumber" />
+            </div>
+
+            <div class="form-group">
+              <label for="representativeName">Representative name</label>
+              <input type="text" id="representativeName" name="representativeName" />
+            </div>
+
+            <div class="form-group">
+              <label for="representativeId">Representative SA ID (13 digits)</label>
+              <input type="text" id="representativeId" name="representativeId" maxlength="13" pattern="\d{13}" placeholder="13 digits" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telephone">Telephone</label>
+                <input type="text" id="telephone" name="telephone" />
+              </div>
+              <div class="form-group">
+                <label for="mobile">Mobile</label>
+                <input type="text" id="mobile" name="mobile" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="physicalAddress">Physical address</label>
+              <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="postalCode">Postal code</label>
+              <input type="text" id="postalCode" name="postalCode" placeholder="Postal code" />
+            </div>
+
+            <div class="form-group">
+              <label for="totalMembers">Total project members</label>
+              <input type="number" id="totalMembers" name="totalMembers" min="0" />
+            </div>
+
+            <div class="form-row form-row-four">
+              <div class="form-group">
+                <label for="numberOfMen">Men</label>
+                <input type="number" id="numberOfMen" name="numberOfMen" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberOfWomen">Women</label>
+                <input type="number" id="numberOfWomen" name="numberOfWomen" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberOfYouth">Youth</label>
+                <input type="number" id="numberOfYouth" name="numberOfYouth" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberWithDisability">People with disability</label>
+                <input type="number" id="numberWithDisability" name="numberWithDisability" min="0" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="1">Previous</button>
+              <button type="button" class="btn-next" data-next="3">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 3: Farm & Land -->
+          <section class="app-step-panel" id="panel-3" data-step="3">
+            <h3 class="panel-title">Farm &amp; Land</h3>
+
+            <div class="form-group">
+              <label for="farmName">Farm name</label>
+              <input type="text" id="farmName" name="farmName" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="totalLandSize">Total land size (ha)</label>
+                <input type="number" id="totalLandSize" name="totalLandSize" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label for="landAllocatedCrop">Land allocated to crop (ha)</label>
+                <input type="number" id="landAllocatedCrop" name="landAllocatedCrop" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="landDryland">Dryland (ha)</label>
+                <input type="number" id="landDryland" name="landDryland" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label for="landIrrigated">Irrigated (ha)</label>
+                <input type="number" id="landIrrigated" name="landIrrigated" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" id="district" name="district" />
+              </div>
+              <div class="form-group">
+                <label for="localMunicipality">Local municipality</label>
+                <input type="text" id="localMunicipality" name="localMunicipality" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="wardNumber">Ward number</label>
+              <input type="text" id="wardNumber" name="wardNumber" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gpsLatitude">GPS Latitude</label>
+                <input type="text" id="gpsLatitude" name="gpsLatitude" placeholder="e.g. -25.7479" />
+              </div>
+              <div class="form-group">
+                <label for="gpsLongitude">GPS Longitude</label>
+                <input type="text" id="gpsLongitude" name="gpsLongitude" placeholder="e.g. 28.2293" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="landAccessType">Type of land access</label>
+              <select id="landAccessType" name="landAccessType">
+                <option value="">-- Select --</option>
+                <option value="Own">Own</option>
+                <option value="Lease">Lease</option>
+                <option value="PTO">PTO</option>
+                <option value="RTO">RTO</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="soilType">Soil type</label>
+              <select id="soilType" name="soilType">
+                <option value="">-- Select --</option>
+                <option value="Clay">Clay</option>
+                <option value="Loam">Loam</option>
+                <option value="Sandy">Sandy</option>
+                <option value="Clay-Loam">Clay-Loam</option>
+                <option value="Sandy-Loam">Sandy-Loam</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Soil test done in last 3 years</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="soilTestDone" value="Yes" /> Yes</label>
+                <label class="radio-label"><input type="radio" name="soilTestDone" value="No" /> No</label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="2">Previous</button>
+              <button type="button" class="btn-next" data-next="4">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 4: Infrastructure & Support Needed -->
+          <section class="app-step-panel" id="panel-4" data-step="4">
+            <h3 class="panel-title">Infrastructure &amp; Support Needed</h3>
+
+            <div class="form-group">
+              <label class="label-block">What support are you applying for?</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" name="supportSeeds" value="yes" /> Seeds/Seedlings</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportFertiliser" value="yes" /> Fertiliser</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportEquipment" value="yes" /> Equipment/Mechanisation</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportIrrigation" value="yes" /> Irrigation</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportStorage" value="yes" /> Storage Facilities</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportFencing" value="yes" /> Fencing</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportPestControl" value="yes" /> Pest Control</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportTraining" value="yes" /> Training</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="irrigationType">Irrigation type</label>
+              <select id="irrigationType" name="irrigationType">
+                <option value="">-- Select --</option>
+                <option value="None">None</option>
+                <option value="Drip">Drip</option>
+                <option value="Sprinkler">Sprinkler</option>
+                <option value="Centre-pivot">Centre-pivot</option>
+                <option value="Flood">Flood</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Current storage</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="currentStorage" value="Yes" /> Yes</label>
+                <label class="radio-label"><input type="radio" name="currentStorage" value="No" /> No</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Existing fencing</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="existingFencing" value="Yes" /> Yes</label>
+                <label class="radio-label"><input type="radio" name="existingFencing" value="No" /> No</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Business plan available</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="businessPlanAvailable" value="Yes" /> Yes</label>
+                <label class="radio-label"><input type="radio" name="businessPlanAvailable" value="No" /> No</label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="3">Previous</button>
+              <button type="button" class="btn-next" data-next="5">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 5: Documents & Submit -->
+          <section class="app-step-panel" id="panel-5" data-step="5">
+            <h3 class="panel-title">Documents &amp; Submit</h3>
+            <p class="app-step-intro">Upload required documents and review your application before submitting.</p>
+
+            <div class="form-group">
+              <label for="idCopies">Certified ID copies</label>
+              <input type="file" id="idCopies" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+            </div>
+
+            <div class="form-group">
+              <label for="proofOfLand">Proof of land</label>
+              <input type="file" id="proofOfLand" name="proofOfLand" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group">
+              <label for="businessPlanDoc">Business plan</label>
+              <input type="file" id="businessPlanDoc" name="businessPlanDoc" accept=".pdf,.doc,.docx" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label for="soilTestReport">Soil test report (optional)</label>
+              <input type="file" id="soilTestReport" name="soilTestReport" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label for="proofOfFarming">Proof of farming activity (optional)</label>
+              <input type="file" id="proofOfFarming" name="proofOfFarming" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="summary-box">
+              <p><strong>Crop type:</strong> <span id="summaryCropType">—</span></p>
+              <p><strong>Farmer category:</strong> <span id="summaryCategory">—</span></p>
+              <p><strong>Applicant name:</strong> <span id="summaryApplicant">—</span></p>
+              <p><strong>Farm name:</strong> <span id="summaryFarm">—</span></p>
+            </div>
+
+            <div class="popia-consent-block">
+              <h4 class="popia-consent-heading">POPIA compliance and consent</h4>
+              <p>Please read the <a href="../popia.html" target="_blank" rel="noopener noreferrer">POPIA compliance page</a> (opens in a new tab). It explains how we use and protect your personal information.</p>
+              <div class="form-group popia-checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="popiaConsent" name="popiaConsent" value="yes" required />
+                  <span>I have read the POPIA compliance and consent to the processing of my personal information as described. I understand that my application cannot be accepted without this consent.</span>
+                </label>
+                <span class="field-error" id="popiaConsentError" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="4">Previous</button>
+              <button type="submit" class="btn-submit" id="btnSubmitApplication">Submit Application</button>
+            </div>
+          </section>
+        </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="../crop.html">Crop Management</a><a href="../livestock.html">Livestock Management</a><a href="../environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="../weather.html">Weather Data</a><a href="../alerts.html">Farming Alerts</a><a href="../guides.html">Advisory Guides</a><a href="../support.html">Support Contacts</a><a href="../track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="../popia.html">POPIA Compliance</a><a href="../terms.html">Terms of Service</a><a href="../staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span></div></div></div>
+    </footer>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/security.js"></script>
+  <script src="../js/applications.js"></script>
+  <script src="../js/nav.js"></script>
+  <script>
+    (function () {
+      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+        window.location.href = '../login.html?return=' + encodeURIComponent('Application/crop.html');
+        return;
+      }
+
+      var form = document.getElementById('applicationForm');
+      var panels = document.querySelectorAll('.app-step-panel');
+      var steps = document.querySelectorAll('.app-step');
+      var currentStep = 1;
+      var totalSteps = 5;
+      var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
+
+      function showPanel(stepNum) {
+        stepNum = parseInt(stepNum, 10);
+        if (stepNum < 1 || stepNum > totalSteps) return;
+        currentStep = stepNum;
+
+        panels.forEach(function (panel) {
+          var n = parseInt(panel.getAttribute('data-step'), 10);
+          panel.classList.toggle('active', n === stepNum);
+        });
+
+        steps.forEach(function (step) {
+          var n = parseInt(step.getAttribute('data-step'), 10);
+          step.classList.remove('active', 'completed');
+          if (n === stepNum) step.classList.add('active');
+          else if (n < stepNum) step.classList.add('completed');
+        });
+      }
+
+      function clearStepErrors(stepNum) {
+        var panel = document.getElementById('panel-' + stepNum);
+        if (!panel) return;
+        panel.querySelectorAll('.field-error').forEach(function (el) { el.textContent = ''; });
+        panel.querySelectorAll('.input-error').forEach(function (el) { el.classList.remove('input-error'); });
+      }
+
+      function setFieldError(fieldId, errorId, message) {
+        var field = fieldId ? document.getElementById(fieldId) : null;
+        var errEl = errorId ? document.getElementById(errorId) : null;
+        if (field) field.classList.toggle('input-error', !!message);
+        if (errEl) errEl.textContent = message || '';
+      }
+
+      function validateStep1() {
+        var cropType = document.getElementById('cropType');
+        var category = document.querySelector('input[name="farmerCategory"]:checked');
+        var ok = true;
+        if (!cropType || !cropType.value) {
+          setFieldError('cropType', 'cropTypeError', 'Please select the crop type.');
+          ok = false;
+        } else {
+          setFieldError('cropType', 'cropTypeError', '');
+        }
+        if (!category) {
+          setFieldError(null, 'farmerCategoryError', 'Please select your farmer category.');
+          ok = false;
+        } else {
+          setFieldError(null, 'farmerCategoryError', '');
+        }
+        return ok;
+      }
+
+      function validateStep2() {
+        var registered = document.getElementById('registeredName');
+        var val = registered ? registered.value.trim() : '';
+        if (!val) {
+          setFieldError('registeredName', 'registeredNameError', 'Registered name or applicant name is required.');
+          return false;
+        }
+        setFieldError('registeredName', 'registeredNameError', '');
+        return true;
+      }
+
+      function validateStep(stepNum) {
+        clearStepErrors(stepNum);
+        if (stepNum === 1) return validateStep1();
+        if (stepNum === 2) return validateStep2();
+        return true;
+      }
+
+      function validatePopiaConsent() {
+        var consent = document.getElementById('popiaConsent');
+        var errEl = document.getElementById('popiaConsentError');
+        if (!consent || !consent.checked) {
+          if (errEl) errEl.textContent = 'You must read and consent to the POPIA compliance before we can accept your application.';
+          if (consent) (consent.closest('.form-group') || document.body).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return false;
+        }
+        if (errEl) errEl.textContent = '';
+        return true;
+      }
+
+      function updateSummary() {
+        var cropType = document.getElementById('cropType');
+        var category = document.querySelector('input[name="farmerCategory"]:checked');
+        var applicant = document.getElementById('registeredName');
+        var farm = document.getElementById('farmName');
+
+        var elCrop = document.getElementById('summaryCropType');
+        var elCat = document.getElementById('summaryCategory');
+        var elApp = document.getElementById('summaryApplicant');
+        var elFarm = document.getElementById('summaryFarm');
+
+        if (elCrop) elCrop.textContent = cropType && cropType.value ? cropType.value : '—';
+        if (elCat) elCat.textContent = category ? category.value : '—';
+        if (elApp) elApp.textContent = applicant && applicant.value ? applicant.value.trim() : '—';
+        if (elFarm) elFarm.textContent = farm && farm.value ? farm.value.trim() : '—';
+      }
+
+      var previousGrantRadios = document.querySelectorAll('input[name="previousGrant"]');
+      var previousGrantWrap = document.getElementById('previousGrantDetailsWrap');
+      previousGrantRadios.forEach(function (r) {
+        r.addEventListener('change', function () {
+          previousGrantWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
+        });
+      });
+      if (document.querySelector('input[name="previousGrant"]:checked') && document.querySelector('input[name="previousGrant"]:checked').value === 'Yes') {
+        previousGrantWrap.style.display = 'block';
+      }
+
+      form.addEventListener('click', function (e) {
+        var nextBtn = e.target.closest('.btn-next');
+        var prevBtn = e.target.closest('.btn-prev');
+
+        if (nextBtn) {
+          e.preventDefault();
+          var next = nextBtn.getAttribute('data-next');
+          if (next) {
+            var nextNum = parseInt(next, 10);
+            if (!validateStep(currentStep)) return;
+            if (nextNum === 5) updateSummary();
+            showPanel(next);
+          }
+        }
+
+        if (prevBtn) {
+          e.preventDefault();
+          showPanel(prevBtn.getAttribute('data-prev'));
+        }
+      });
+
+      function serializeFormDetails(formEl) {
+        var details = {};
+        var els = formEl.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < els.length; i++) {
+          var el = els[i];
+          var name = el.name;
+          if (!name) continue;
+          if (el.type === 'file') continue;
+          if (el.type === 'radio') {
+            if (el.checked) details[name] = el.value;
+          } else if (el.type === 'checkbox') {
+            details[name] = el.checked ? el.value || 'yes' : '';
+          } else {
+            details[name] = el.value || '';
+          }
+        }
+        if (sanitize && typeof sanitize === 'function') details = sanitize(details);
+        return details;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var user = window.FarmAuth && FarmAuth.getCurrentUser();
+        if (!user) {
+          alert('Session expired. Please log in again.');
+          window.location.href = '../login.html?return=' + encodeURIComponent('Application/crop.html');
+          return;
+        }
+
+        updateSummary();
+
+        if (!validatePopiaConsent()) {
+          document.getElementById('panel-5').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showPanel(5);
+          return;
+        }
+
+        var cropTypeEl = document.getElementById('cropType');
+        var categoryEl = document.querySelector('input[name="farmerCategory"]:checked');
+        var applicantEl = document.getElementById('registeredName');
+        var farmEl = document.getElementById('farmName');
+
+        var safeVal = function (v) { return v != null && String(v).trim ? String(v).trim() : ''; };
+        var summaryCrop = safeVal(cropTypeEl && cropTypeEl.value);
+        var summaryCat = safeVal(categoryEl && categoryEl.value);
+        var summaryApp = safeVal(applicantEl && applicantEl.value);
+        var summaryFarm = safeVal(farmEl && farmEl.value);
+        if (window.FarmSecurity && window.FarmSecurity.sanitizeString) {
+          summaryCrop = window.FarmSecurity.sanitizeString(summaryCrop);
+          summaryCat = window.FarmSecurity.sanitizeString(summaryCat);
+          summaryApp = window.FarmSecurity.sanitizeString(summaryApp);
+          summaryFarm = window.FarmSecurity.sanitizeString(summaryFarm);
+        }
+
+        var details = serializeFormDetails(form);
+        details.popiaConsent = true;
+        details.popiaConsentAt = new Date().toISOString();
+
+        var application = {
+          type: 'crop',
+          status: 'Submitted',
+          summary: {
+            type: 'crop',
+            cropType: summaryCrop || '—',
+            farmerCategory: summaryCat || '—',
+            applicantName: summaryApp || '—',
+            farmName: summaryFarm || '—'
+          },
+          details: details
+        };
+
+        if (window.FarmApplications) {
+          FarmApplications.saveApplication(user.id, application).then(function () {
+            window.location.href = '../track.html';
+          }).catch(function () {
+            window.location.href = '../track.html';
+          });
+        } else {
+          window.location.href = '../track.html';
+        }
+      });
+
+      steps.forEach(function (step) {
+        step.addEventListener('click', function () {
+          var n = parseInt(step.getAttribute('data-step'), 10);
+          if (n <= currentStep || step.classList.contains('completed')) showPanel(n);
+        });
+      });
+
+      showPanel(1);
+    })();
+  </script>
+</body>
+</html>

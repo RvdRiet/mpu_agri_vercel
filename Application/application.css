@@ -1,30 +1,81 @@
-/* Application page overrides */
+/* Application page — matches crop grant screenshot (light gray page, white card, same styling) */
 .app-page .main-content {
-  padding: 2rem 1rem;
+  padding: var(--space-8) var(--space-4);
+  background-color: #f5f7fa;
+  min-height: 100vh;
 }
 
 .back-link {
   display: inline-block;
-  margin-bottom: 1rem;
-  color: #2d5a27;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-secondary);
   text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
 }
 
 .back-link:hover {
+  color: var(--color-primary);
   text-decoration: underline;
+}
+
+/* Inline link button (e.g. Show definition) — matches crop form tone */
+.app-form .btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.app-form .btn-link:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Card wrapper — white card, rounded corners, subtle shadow (matches crop screenshot) */
+.app-form-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.app-form-card .card__body {
+  padding: var(--space-8);
 }
 
 .app-heading {
   margin-top: 0;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-6);
   font-size: 1.5rem;
-  color: #2d5a27;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
 }
 
-/* Step indicator */
+/* Subtle group label (replaces h4 subheadings so layout matches crop) */
+.form-group-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+/* Step tabs — same as crop screenshot: active = green, inactive = light gray */
 .app-steps {
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--color-border-light);
 }
 
 .app-steps-list {
@@ -33,36 +84,41 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 0.25rem;
+  gap: var(--space-2);
 }
 
 .app-step {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.85rem;
-  color: #666;
-  background: #f0f0f0;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: #f0f2f5;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .app-step.active {
-  background: #2d5a27;
-  color: #fff;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
   font-weight: 600;
 }
 
 .app-step.completed {
-  background: #e8f0e8;
-  color: #2d5a27;
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+  border-color: var(--color-primary-lighter);
 }
 
 /* Form panels */
 .app-form {
-  margin-top: 1rem;
+  margin-top: var(--space-6);
 }
 
 .app-step-panel {
   display: none;
-  padding: 0.5rem 0;
+  padding: var(--space-2) 0;
 }
 
 .app-step-panel.active {
@@ -71,20 +127,23 @@
 
 .panel-title {
   margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.15rem;
-  color: #333;
+  margin-bottom: var(--space-5);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .app-step-intro {
-  margin-bottom: 1rem;
-  color: #555;
+  margin-bottom: var(--space-5);
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
 }
 
 .app-step-note {
-  margin: 0.5rem 0 1rem;
-  font-size: 0.9rem;
-  color: #333;
+  margin: var(--space-2) 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
 }
 
 /* Step 1 layout matching website: label and dropdown */
@@ -97,7 +156,7 @@
 
 .label-required,
 .form-group-inline .label-required {
-  color: #c00;
+  color: var(--color-error);
 }
 
 .form-group-inline .label-inline {
@@ -114,19 +173,21 @@
 }
 
 .infra-subheading {
-  margin: 1.5rem 0 0.75rem;
-  font-size: 1.05rem;
-  color: #2d5a27;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 0.35rem;
+  margin: var(--space-6) 0 var(--space-3);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: var(--space-2);
 }
 
 .stock-subheading {
-  margin: 1.25rem 0 0.5rem;
-  font-size: 1.05rem;
-  color: #2d5a27;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 0.35rem;
+  margin: var(--space-5) 0 var(--space-2);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: var(--space-2);
 }
 
 .stock-subheading:first-of-type {
@@ -135,55 +196,88 @@
 
 .field-note {
   font-weight: normal;
-  font-size: 0.85rem;
-  color: #666;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
-/* Definition of farmer category block (as on website) */
+/* Definition of farmer category block */
 .definition-block {
-  margin-top: 2rem;
-  padding: 1.25rem;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-top: var(--space-8);
+  padding: var(--space-5);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .definition-heading {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: #333;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
 }
 
 .definition-block p {
-  margin: 0.5rem 0;
-  font-size: 0.95rem;
+  margin: var(--space-2) 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
 }
 
 .btn-close-definition {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background: #2d5a27;
-  color: #fff;
+  margin-top: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  transition: background var(--transition-fast);
 }
 
 .btn-close-definition:hover {
-  background: #234a20;
+  background: var(--color-primary-dark);
 }
 
-/* Form groups */
+/* Form groups — match design system inputs */
 .form-group {
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.375rem;
   font-weight: 600;
-  color: #333;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+/* Inputs — light gray background, subtle border, rounded (matches crop screenshot) */
+.app-form-card .form-group input[type="text"],
+.app-form-card .form-group input[type="number"],
+.app-form-card .form-group select,
+.app-form-card .form-group textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.6rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  background: #f8f9fa;
+  color: var(--color-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.app-form-card .form-group input:focus,
+.app-form-card .form-group select:focus,
+.app-form-card .form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.15);
 }
 
 .form-group input[type="text"],
@@ -192,26 +286,37 @@
 .form-group textarea {
   width: 100%;
   max-width: 400px;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 0.6rem 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 1rem;
-  font-family: inherit;
+  background: #f8f9fa;
+  color: var(--color-text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   -webkit-appearance: none;
   appearance: none;
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.15);
+}
+
 .form-group input[type="file"] {
   width: 100%;
-  max-width: 400px;
-  padding: 0.5rem 0;
-  font-size: 0.95rem;
+  max-width: 100%;
+  padding: var(--space-2) 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
 }
 
 .form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .form-row .form-group {
@@ -225,52 +330,57 @@
 }
 
 .form-hint {
-  margin: 0.25rem 0 0.5rem;
-  font-size: 0.9rem;
-  color: #666;
+  margin: var(--space-1) 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
-/* Validation: red error hints and invalid input state */
+.form-hint--spaced {
+  margin-bottom: var(--space-3);
+}
+
+/* Validation */
 .app-form .field-error,
 .app-form .validation-error {
   display: block;
-  margin-top: 0.35rem;
-  font-size: 0.875rem;
-  color: #c00;
-  font-weight: 500;
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-error);
+  font-weight: var(--weight-medium);
 }
 
 .app-form input.input-error,
 .app-form select.input-error,
 .app-form textarea.input-error {
-  border-color: #c00;
-  box-shadow: 0 0 0 1px rgba(204, 0, 0, 0.2);
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.12);
 }
 
-/* POPIA consent block on Complete step */
+/* POPIA consent block */
 .popia-consent-block {
-  margin: 1.5rem 0;
-  padding: 1.25rem;
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin: var(--space-6) 0;
+  padding: var(--space-5);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .popia-consent-heading {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
-  color: #2d5a27;
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary);
 }
 
 .popia-consent-block p {
-  margin: 0 0 1rem;
-  font-size: 0.95rem;
-  color: #333;
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
 }
 
 .popia-consent-block a {
-  color: #2d5a27;
-  font-weight: 600;
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
 }
 
 .popia-checkbox-group {
@@ -280,7 +390,7 @@
 .popia-checkbox-group .checkbox-label {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .popia-checkbox-group .checkbox-label span {
@@ -291,16 +401,17 @@
 .checkbox-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .radio-label,
 .checkbox-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   font-weight: normal;
   cursor: pointer;
+  font-size: var(--text-sm);
 }
 
 .radio-label input,
@@ -312,59 +423,72 @@
   opacity: 0.9;
 }
 
-/* Summary on Complete step */
+/* Summary box */
 .summary-box {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
 }
 
 .summary-box p {
-  margin: 0.5rem 0;
+  margin: var(--space-2) 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
 }
 
-/* Buttons */
+.summary-box strong {
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+/* Form actions bar — top border, same as crop screenshot */
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border-light);
 }
 
+/* Buttons — same as crop: Next = green, Previous = gray outline */
 .btn-prev,
 .btn-next,
 .btn-submit {
   padding: 0.75rem 1.25rem;
   min-height: 44px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   border: none;
+  transition: background 0.15s ease, color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn-prev {
-  background: #e0e0e0;
-  color: #333;
+  background: #ffffff;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
 }
 
 .btn-prev:hover {
-  background: #d0d0d0;
+  background: #f0f2f5;
 }
 
 .btn-next,
 .btn-submit {
-  background: #2d5a27;
-  color: #fff;
+  background: var(--color-primary);
+  color: #ffffff;
+  border: 1px solid var(--color-primary);
 }
 
 .btn-next:hover,
 .btn-submit:hover {
-  background: #234a20;
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: #ffffff;
 }
 
 .btn-submit {
@@ -373,11 +497,15 @@
 
 @media (max-width: 768px) {
   .app-page .main-content {
-    padding: 1.25rem 0.75rem;
+    padding: var(--space-5) var(--space-3);
+  }
+
+  .app-form-card .card__body {
+    padding: var(--space-5);
   }
 
   .app-heading {
-    font-size: 1.3rem;
+    font-size: var(--text-xl);
   }
 
   .form-group-inline {
@@ -393,7 +521,7 @@
   .radio-group,
   .checkbox-group {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .radio-label,
@@ -455,8 +583,8 @@
   }
 
   .definition-block {
-    padding: 1rem;
-    margin-top: 1.5rem;
+    padding: var(--space-4);
+    margin-top: var(--space-6);
   }
 
   .btn-close-definition {
@@ -465,6 +593,6 @@
   }
 
   .summary-box {
-    padding: 0.75rem 1rem;
+    padding: var(--space-4);
   }
 }

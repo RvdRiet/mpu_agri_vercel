@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Livestock Management — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link">Login</a>
+          <a href="register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="login.html" class="btn btn--secondary btn--block">Login</a><a href="register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main>
+      <!-- ===== PAGE HEADER ===== -->
+      <section class="page-header">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <a href="index.html#programmes">Programmes</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <span class="breadcrumbs__current">Livestock Management</span>
+          </nav>
+          <h1 class="page-header__title">Livestock Management Programme</h1>
+          <p class="page-header__subtitle">The Masibuyele Esibayeni Programme supports livestock farmers across Mpumalanga with breeding stock allocation for beef cattle, dairy, goats, sheep, pigs, poultry, and rabbits. Grow your herd with government-backed grants tailored to your farmer category.</p>
+        </div>
+      </section>
+
+      <!-- ===== PROGRAMME OVERVIEW ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Programme Overview</span>
+          <h2 class="section-title">Masibuyele Esibayeni Programme</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">The Masibuyele Esibayeni Programme (meaning &ldquo;Let us return to livestock&rdquo;) is a provincial initiative by the Mpumalanga Department of Agriculture to revitalise livestock farming. It provides qualifying farmers with breeding stock — bulls, cows, rams, ewes, bucks, does, boars, sows, and poultry — based on their farmer category and annual turnover. The programme aims to build sustainable herds, improve food security, and support economic development in rural areas.</p>
+          <div class="info-banner info-banner--info reveal">
+            <p><strong>Farmer categories</strong> are determined by annual agricultural turnover: <strong>Subsistence</strong> (up to R50,000), <strong>Smallholder</strong> (R50,001 – R1,000,000), and <strong>Commercial</strong> (exceeds R1,000,000). Allocations for commercial farmers are subject to individual assessment.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== LIVESTOCK ALLOCATION TABLES ===== -->
+      <section class="section section--alt">
+        <div class="container">
+          <span class="section-label">Livestock Allocations</span>
+          <h2 class="section-title">Breeding Stock by Farmer Category</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Allocations are specified exactly as per the Masibuyele Esibayeni Programme. Choose your commodity and verify your farmer category to see your eligible allocation.</p>
+
+          <!-- Subsistence Farmers -->
+          <h3 class="section-title" style="font-size: var(--text-xl); margin-top: var(--space-8); margin-bottom: var(--space-4);">Subsistence Farmers (up to R50,000 turnover)</h3>
+          <div class="table-wrapper reveal">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Commodity</th>
+                  <th>Allocation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Beef Cattle</td><td>1 Bull + 10 Cows/Heifers</td></tr>
+                <tr><td>Dairy Cattle</td><td>1 Bull + 5 Cows/Heifers</td></tr>
+                <tr><td>Goats</td><td>1 Buck + 10 Does</td></tr>
+                <tr><td>Sheep</td><td>1 Ram + 10 Ewes</td></tr>
+                <tr><td>Pigs</td><td>1 Boar + 5 Sows</td></tr>
+                <tr><td>Poultry</td><td>100 Broilers OR 100 Layers</td></tr>
+                <tr><td>Rabbits</td><td>1 Buck + 5 Does</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Smallholder Farmers -->
+          <h3 class="section-title" style="font-size: var(--text-xl); margin-top: var(--space-8); margin-bottom: var(--space-4);">Smallholder Farmers (R50,001 – R1,000,000)</h3>
+          <div class="table-wrapper reveal reveal--delay-1">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Commodity</th>
+                  <th>Allocation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Beef Cattle</td><td>2 Bulls + 20 Cows/Heifers</td></tr>
+                <tr><td>Dairy Cattle</td><td>1 Bull + 10 Cows/Heifers</td></tr>
+                <tr><td>Goats</td><td>2 Bucks + 20 Does</td></tr>
+                <tr><td>Sheep</td><td>2 Rams + 20 Ewes</td></tr>
+                <tr><td>Pigs</td><td>1 Boar + 10 Sows</td></tr>
+                <tr><td>Poultry</td><td>500 Broilers OR 300 Layers</td></tr>
+                <tr><td>Rabbits</td><td>2 Bucks + 10 Does</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Commercial Farmers -->
+          <h3 class="section-title" style="font-size: var(--text-xl); margin-top: var(--space-8); margin-bottom: var(--space-4);">Commercial Farmers (exceeds R1,000,000)</h3>
+          <div class="info-banner info-banner--info reveal reveal--delay-2">
+            <p><strong>Subject to individual assessment.</strong> Commercial farmers with annual agricultural turnover exceeding R1,000,000 are assessed on a case-by-case basis. Contact the Department of Agriculture for eligibility and allocation details.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REQUIREMENTS ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Eligibility</span>
+          <h2 class="section-title">Application Requirements</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">To apply for livestock support under the Masibuyele Esibayeni Programme, you must meet the following eligibility requirements:</p>
+          <ul class="card reveal" style="padding: var(--space-6); margin-bottom: 0;">
+            <li style="margin-bottom: var(--space-3);">Valid South African ID and residency in Mpumalanga province, or proof of farming within Mpumalanga</li>
+            <li style="margin-bottom: var(--space-3);">Proof of land access — lease, PTO (Permission to Occupy), RTO (Right to Occupy), or title deed</li>
+            <li style="margin-bottom: var(--space-3);">Registration as a farmer or proof of farming activity</li>
+            <li style="margin-bottom: var(--space-3);">Business plan or business profile outlining your livestock enterprise</li>
+            <li style="margin-bottom: var(--space-3);">Commitment to participate in extension services and animal health programmes</li>
+            <li style="margin-bottom: var(--space-3);">Not previously disqualified from departmental livestock programmes</li>
+            <li>Appropriate infrastructure and capacity to care for allocated animals (where applicable)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===== DOCUMENTS TABLE ===== -->
+      <section class="section section--alt">
+        <div class="container">
+          <span class="section-label">Documents</span>
+          <h2 class="section-title">Required Documents for Application</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Prepare these documents before applying. Have certified copies ready where required.</p>
+          <div class="table-wrapper reveal">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Document</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Certified ID copies of all project members</td><td>Required</td></tr>
+                <tr><td>Proof of land access (lease, PTO, RTO, or title deed)</td><td>Required</td></tr>
+                <tr><td>Business plan or business profile</td><td>Required</td></tr>
+                <tr><td>Proof of farming income or activity</td><td>If applicable</td></tr>
+                <tr><td>Markets / off-take agreement</td><td>If applicable</td></tr>
+                <tr><td>Brand mark certificate</td><td>If applicable</td></tr>
+                <tr><td>EIA (Authorisation or exemption if applicable)</td><td>If applicable</td></tr>
+                <tr><td>Biosecurity plan</td><td>If applicable</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT INFORMATION ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Support</span>
+          <h2 class="section-title">Contact Information</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">For enquiries about the Masibuyele Esibayeni Programme, livestock allocations, or application support, contact the Mpumalanga Department of Agriculture:</p>
+          <div class="card reveal">
+            <div class="card__body">
+              <p><strong>Mpumalanga Department of Agriculture, Rural Development, Land and Environmental Affairs</strong></p>
+              <p style="margin-top: var(--space-4);">Visit your nearest district agricultural office or the provincial head office in Nelspruit for programme details, eligibility checks, and application assistance. Contact details are available on the Department&rsquo;s official website.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ADDITIONAL SUPPORT ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Beyond the Grant</span>
+          <h2 class="section-title">Additional Support &amp; Financing</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Besides the Masibuyele Esibayeni grant, these provincial programmes can support your livestock operation.</p>
+          <div class="card-grid card-grid--3 reveal">
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#127963;</div>
+                <h3 class="card__title">MADC Loans</h3>
+                <p class="card__text">The Mpumalanga Agricultural Development Corporation offers <strong>seasonal loans</strong> for inputs and <strong>business loans</strong> for farm improvements such as fencing, kraals, and equipment.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>Tel:</strong> <a href="tel:0137556328">013 755 6328</a></p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#127793;</div>
+                <h3 class="card__title">CASP</h3>
+                <p class="card__text">The <strong>Comprehensive Agricultural Support Programme</strong> provides post-settlement support including livestock infrastructure, veterinary inputs, and training.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>Ehlanzeni:</strong> 013 759 4000 &middot; <strong>Gert Sibande:</strong> 017 647 5917 &middot; <strong>Nkangala:</strong> 013 957 2551</p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#128188;</div>
+                <h3 class="card__title">SEDA &amp; LED</h3>
+                <p class="card__text"><strong>SEDA</strong> helps with business plans and cooperative registration. Your <strong>LED officer</strong> at the local municipality can connect you to training, funding, and workshops.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>SEDA Mpumalanga:</strong> <a href="tel:0137556046">013 755 6046</a> &middot; See <a href="support.html">Support page</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA BANNER ===== -->
+      <section class="section section--sm">
+        <div class="container">
+          <div class="cta-banner reveal">
+            <h2 class="cta-banner__title">Ready to Apply for Livestock Support?</h2>
+            <p class="cta-banner__text">Complete your Masibuyele Esibayeni application online. Have your documents ready and register or log in to get started.</p>
+            <a href="Application/index.html" class="btn btn--white btn--lg">Apply for Livestock Grant</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
+    </footer>
+
+  </div>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>

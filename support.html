@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Support &amp; Contacts — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+  <style>
+    .support-emergency {
+      background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+      color: #fff;
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-bottom: var(--space-10);
+    }
+    .support-emergency h2 {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+    }
+    .support-emergency__grid {
+      display: grid;
+      gap: var(--space-4);
+    }
+    @media (min-width: 640px) {
+      .support-emergency__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .support-emergency__grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .support-emergency__item {
+      background: rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+    }
+    .support-emergency__label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.8;
+      margin-bottom: var(--space-1);
+    }
+    .support-emergency__number {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .support-emergency__number a {
+      color: #fff;
+      text-decoration: none;
+    }
+    .support-emergency__number a:hover {
+      text-decoration: underline;
+    }
+    .support-emergency__desc {
+      font-size: var(--text-xs);
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .support-govt {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-bottom: var(--space-10);
+    }
+    .support-govt h2 {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+      color: var(--color-text);
+    }
+    .support-govt__grid {
+      display: grid;
+      gap: var(--space-4);
+    }
+    @media (min-width: 640px) {
+      .support-govt__grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .support-govt__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .support-govt__item {
+      padding: var(--space-4);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-md);
+      background: var(--color-white);
+    }
+    .support-govt__item h3 {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+      color: var(--color-text);
+    }
+    .support-govt__item p {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+    .support-govt__item a {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .support-tabs {
+      display: flex;
+      gap: var(--space-2);
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+    }
+    .support-tab {
+      padding: var(--space-3) var(--space-6);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-full);
+      background: var(--color-white);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .support-tab:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .support-tab.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+
+    .support-section {
+      display: none;
+    }
+    .support-section.active {
+      display: block;
+    }
+
+    .support-category {
+      margin-bottom: var(--space-8);
+    }
+    .support-category__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 2px solid var(--color-border-light);
+    }
+    .support-category__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .support-category__icon--green { background: #e8f5e9; }
+    .support-category__icon--blue { background: #e3f2fd; }
+    .support-category__icon--orange { background: #fff3e0; }
+    .support-category__icon--purple { background: #f3e5f5; }
+    .support-category__icon--red { background: #fce4ec; }
+    .support-category__icon--teal { background: #e0f7fa; }
+    .support-category__icon--amber { background: #fff8e1; }
+    .support-category__icon--indigo { background: #e8eaf6; }
+    .support-category__icon--lime { background: #f1f8e9; }
+    .support-category__icon--brown { background: #efebe9; }
+    .support-category__title {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .support-category__desc {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+    }
+
+    .contact-grid {
+      display: grid;
+      gap: var(--space-4);
+    }
+    @media (min-width: 768px) {
+      .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .contact-card {
+      background: var(--color-white);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .contact-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--color-border);
+    }
+    .contact-card__name {
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--space-1);
+    }
+    .contact-card__role {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-3);
+    }
+    .contact-card__details {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .contact-card__details li {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      padding: var(--space-1) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .contact-card__details li span.label {
+      font-weight: 600;
+      color: var(--color-text);
+      min-width: 55px;
+    }
+    .contact-card__details a {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .contact-card__details a:hover {
+      text-decoration: underline;
+    }
+    .contact-card__badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 8px;
+    }
+    .contact-card__badge--govt { background: #e8f5e9; color: #2e7d32; }
+    .contact-card__badge--private { background: #e3f2fd; color: #1565c0; }
+    .contact-card__badge--ngo { background: #fff3e0; color: #e65100; }
+
+    .prototype-banner {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-6);
+      font-size: var(--text-sm);
+      color: #f57f17;
+      margin-bottom: var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .prototype-banner__icon { font-size: 20px; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link active">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link">Login</a>
+          <a href="register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="support.html" class="mobile-nav__link active"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="login.html" class="btn btn--secondary btn--block">Login</a><a href="register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main>
+      <div class="page-header">
+        <div class="container">
+          <div class="breadcrumbs" style="color:rgba(255,255,255,0.6);">
+            <a href="index.html" style="color:rgba(255,255,255,0.7);">Home</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <span class="breadcrumbs__current" style="color:#fff;">Support &amp; Contacts</span>
+          </div>
+          <h1 class="page-header__title">Farmer Support &amp; Contact Directory</h1>
+          <p class="page-header__subtitle">Contact numbers and service providers for crop farming, livestock management, and general agricultural support in Mpumalanga and South Africa.</p>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="container">
+
+          <div class="prototype-banner">
+            <span class="prototype-banner__icon">&#9888;</span>
+            <span><strong>Notice:</strong> Government programme contacts (MADC, CASP, SEDA, LED, Thusong Centres) are sourced from the Mpumalanga Economic Opportunities booklet. Private service provider contacts are representative placeholders — verify details before engaging services.</span>
+          </div>
+
+          <!-- Emergency Numbers -->
+          <div class="support-emergency">
+            <h2>&#128680; Emergency &amp; Urgent Contacts</h2>
+            <div class="support-emergency__grid">
+              <div class="support-emergency__item">
+                <div class="support-emergency__label">State Veterinary Services</div>
+                <div class="support-emergency__number"><a href="tel:0132882087">013 288 2087</a></div>
+                <div class="support-emergency__desc">Disease outbreaks, FMD, notifiable diseases</div>
+              </div>
+              <div class="support-emergency__item">
+                <div class="support-emergency__label">Mpumalanga Dept. of Agriculture</div>
+                <div class="support-emergency__number"><a href="tel:0137664027">013 766 4027</a></div>
+                <div class="support-emergency__desc">General enquiries &amp; extension services</div>
+              </div>
+              <div class="support-emergency__item">
+                <div class="support-emergency__label">Disaster Management</div>
+                <div class="support-emergency__number"><a href="tel:0137664300">013 766 4300</a></div>
+                <div class="support-emergency__desc">Floods, fires, drought relief</div>
+              </div>
+              <div class="support-emergency__item">
+                <div class="support-emergency__label">SAPS Stock Theft Unit</div>
+                <div class="support-emergency__number"><a href="tel:0860010111">086 001 0111</a></div>
+                <div class="support-emergency__desc">Report livestock theft immediately</div>
+              </div>
+              <div class="support-emergency__item">
+                <div class="support-emergency__label">SAWS Extreme Weather Warnings</div>
+                <div class="support-emergency__number"><a href="tel:0123676000">012 367 6000</a></div>
+                <div class="support-emergency__desc">SA Weather Service — daily extreme weather alerts</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- District Disaster Coordinators -->
+          <div class="support-govt" style="margin-top:var(--space-6);">
+            <h2>&#9888; Agricultural Disaster Coordinators (DARDLEA)</h2>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--space-4);font-size:var(--text-sm);">
+              Provincial disaster risk management team — contact for drought relief, flood response, veld fire support, and early warning information.
+            </p>
+            <div class="support-govt__grid">
+              <div class="support-govt__item">
+                <h3>Ehlanzeni District</h3>
+                <p>Coordinator: Mgiba Hillarian</p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Gert Sibande District</h3>
+                <p>Coordinator: Luhlanga Forgiveness</p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Nkangala District</h3>
+                <p>Coordinator: Mbiza Bongeikile</p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Bohlabela District</h3>
+                <p>Coordinator: Khumbuza Vutomi</p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Head Office (Lead)</h3>
+                <p>Nkambule Kenneth &amp; Dlamini Sazelo</p>
+                <p>Tel: <a href="tel:0137664300">013 766 4300</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Government & Statutory Bodies -->
+          <div class="support-govt">
+            <h2>&#127963; Government &amp; Statutory Bodies</h2>
+            <div class="support-govt__grid">
+              <div class="support-govt__item">
+                <h3>Dept. of Agriculture &amp; Land Administration (Provincial)</h3>
+                <p>Mpumalanga provincial agricultural services</p>
+                <p>Tel: <a href="tel:0137666096">013 766 6096</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>MADC (Mpumalanga Agricultural Development Corporation)</h3>
+                <p>Counselling, technical advice &amp; agricultural loans for previously disadvantaged farmers</p>
+                <p>Tel: <a href="tel:0137556328">013 755 6328</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>DALRRD (National)</h3>
+                <p>Department of Agriculture, Land Reform &amp; Rural Development</p>
+                <p>Tel: <a href="tel:0123198000">012 319 8000</a></p>
+                <p>Web: <a href="https://www.dalrrd.gov.za" target="_blank" rel="noopener">dalrrd.gov.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>ARC (Agricultural Research Council)</h3>
+                <p>Research, training, and technology transfer</p>
+                <p>Tel: <a href="tel:0124279700">012 427 9700</a></p>
+                <p>Web: <a href="https://www.arc.agric.za" target="_blank" rel="noopener">arc.agric.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Land Bank</h3>
+                <p>Agricultural development finance</p>
+                <p>Tel: <a href="tel:0123125071">012 312 5071</a></p>
+                <p>Web: <a href="https://www.landbank.co.za" target="_blank" rel="noopener">landbank.co.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Grain SA</h3>
+                <p>Grain farmer development &amp; support</p>
+                <p>Tel: <a href="tel:0860047246">086 004 7246</a></p>
+                <p>Web: <a href="https://www.grainsa.co.za" target="_blank" rel="noopener">grainsa.co.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>NAMC</h3>
+                <p>National Agricultural Marketing Council</p>
+                <p>Tel: <a href="tel:0123413143">012 341 3143</a></p>
+                <p>Web: <a href="https://www.namc.co.za" target="_blank" rel="noopener">namc.co.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>SEDA — Mpumalanga Provincial Office</h3>
+                <p>Business development support for small farmers &amp; cooperatives</p>
+                <p>Tel: <a href="tel:0137556046">013 755 6046/7</a></p>
+                <p>Web: <a href="https://www.seda.org.za" target="_blank" rel="noopener">seda.org.za</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Department of Land Affairs</h3>
+                <p>Land access, restitution &amp; redistribution</p>
+                <p>Tel: <a href="tel:0137544500">013 754 4500</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mpumalanga District Agricultural Offices -->
+          <div class="support-govt" style="margin-top:var(--space-6);">
+            <h2>&#127981; Mpumalanga District Agricultural Offices</h2>
+            <div class="support-govt__grid">
+              <div class="support-govt__item">
+                <h3>Ehlanzeni East (Buffelspruit)</h3>
+                <p>Tel: <a href="tel:0137810024">013 781 0024/31</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Ehlanzeni West (Tekwane)</h3>
+                <p>Tel: <a href="tel:0137472074">013 747 2074</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Gert Sibande (Ermelo)</h3>
+                <p>Tel: <a href="tel:0178111897">017 811 1897</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Badplaas (Honingklip Office)</h3>
+                <p>Tel: <a href="tel:0178831480">017 883 1480</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Nkangala (Bronkhorstspruit)</h3>
+                <p>Tel: <a href="tel:0139324835">013 932 4835/7</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Loopspruit</h3>
+                <p>Tel: <a href="tel:0139307025">013 930 7025</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CASP & Land Programmes -->
+          <div class="support-govt" style="margin-top:var(--space-6);">
+            <h2>&#127793; Agricultural Support Programmes</h2>
+            <div class="support-govt__grid">
+              <div class="support-govt__item">
+                <h3>CASP — Ehlanzeni</h3>
+                <p>Comprehensive Agricultural Support Programme</p>
+                <p>Tel: <a href="tel:0137594000">013 759 4000/7</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>CASP — Gert Sibande</h3>
+                <p>Comprehensive Agricultural Support Programme</p>
+                <p>Tel: <a href="tel:0176475917">017 647 5917</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>CASP — Nkangala</h3>
+                <p>Comprehensive Agricultural Support Programme</p>
+                <p>Tel: <a href="tel:0139572551">013 957 2551</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>LRAD Programme</h3>
+                <p>Land Redistribution for Agricultural Development</p>
+                <p>Tel: <a href="tel:0136560848">013 656 0848</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Land Care — Gert Sibande</h3>
+                <p>Sustainable land management</p>
+                <p>Tel: <a href="tel:0178110775">017 811 0775</a></p>
+              </div>
+              <div class="support-govt__item">
+                <h3>Integrated Food Security Programme</h3>
+                <p>Household &amp; community food security support</p>
+                <p>Tel: <a href="tel:0137666161">013 766 6161</a></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category Tabs -->
+          <div class="support-tabs">
+            <button class="support-tab active" data-section="crop">&#127806; Crop Farming Support</button>
+            <button class="support-tab" data-section="livestock">&#128004; Livestock Farming Support</button>
+            <button class="support-tab" data-section="general">&#128736; General Services</button>
+          </div>
+
+          <!-- ========================== -->
+          <!--  CROP FARMING SUPPORT      -->
+          <!-- ========================== -->
+          <div class="support-section active" id="section-crop">
+
+            <!-- Irrigation -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--blue">&#128167;</div>
+                <div><div class="support-category__title">Irrigation Design &amp; Installation</div><div class="support-category__desc">Water systems, drip irrigation, sprinkler systems, borehole services</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Netafim South Africa <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Drip irrigation &amp; micro-irrigation specialists</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0113441020">011 344 1020</a></li>
+                    <li><span class="label">Email:</span> <a href="mailto:info@netafim.co.za">info@netafim.co.za</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.netafim.co.za" target="_blank" rel="noopener">netafim.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Irrigation Services <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Local irrigation design, installation &amp; maintenance</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0132345678">013 234 5678</a></li>
+                    <li><span class="label">Email:</span> <a href="mailto:info@mpirrigation.co.za">info@mpirrigation.co.za</a></li>
+                    <li><span class="label">Area:</span> Nelspruit, Lowveld, Highveld</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pest & Disease -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--red">&#128027;</div>
+                <div><div class="support-category__title">Pest &amp; Disease Control</div><div class="support-category__desc">Crop protection, IPM specialists, spraying services, scouting</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">CropLife South Africa <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">Crop protection industry association</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0118054200">011 805 4200</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.croplife.co.za" target="_blank" rel="noopener">croplife.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Lowveld Pest Control Services <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Aerial &amp; ground spraying, crop scouting</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137551234">013 755 1234</a></li>
+                    <li><span class="label">Area:</span> Nelspruit, Komatipoort, Malelane</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seed & Input -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--green">&#127793;</div>
+                <div><div class="support-category__title">Seed &amp; Input Suppliers</div><div class="support-category__desc">Certified seed, fertiliser, chemicals, equipment</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">PANNAR Seed (Corteva) <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Maize, soybean, sunflower, sorghum seed</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0333551000">033 355 1000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.pannar.com" target="_blank" rel="noopener">pannar.com</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SANSOR <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">SA National Seed Organisation — certified seed directory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123254950">012 325 4950</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.sansor.org" target="_blank" rel="noopener">sansor.org</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Precision Planting -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--indigo">&#127919;</div>
+                <div><div class="support-category__title">Precision Planting &amp; Fertiliser Application</div><div class="support-category__desc">GPS-guided planting, variable-rate application, drone services</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">John Deere Dealer — Nelspruit <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Precision agriculture equipment &amp; support</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137521100">013 752 1100</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.deere.co.za" target="_blank" rel="noopener">deere.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Agri Technovation <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Precision agriculture, soil mapping, variable-rate</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0218801850">021 880 1850</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.agritechnovation.co.za" target="_blank" rel="noopener">agritechnovation.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Soil Testing -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--brown">&#129704;</div>
+                <div><div class="support-category__title">Soil Testing &amp; Analysis Labs</div><div class="support-category__desc">Accredited soil, leaf, and water analysis laboratories</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Provincial Soil Lab <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Provincial government soil testing service</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137664100">013 766 4100</a></li>
+                    <li><span class="label">Area:</span> Mbombela (Nelspruit)</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SGS South Africa <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Accredited agricultural testing laboratory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0113538000">011 353 8000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.sgs.co.za" target="_blank" rel="noopener">sgs.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contract Farming -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--orange">&#128221;</div>
+                <div><div class="support-category__title">Contract Farming Arrangements</div><div class="support-category__desc">Off-take agreements, cooperative models, contract growing</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Grain SA — Farmer Development <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">Mentorship &amp; contract farming linkages for grain farmers</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0860047246">086 004 7246</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.grainsa.co.za" target="_blank" rel="noopener">grainsa.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">NAMC Market Information <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Market prices, trends &amp; contract facilitation</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123413143">012 341 3143</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.namc.co.za" target="_blank" rel="noopener">namc.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Extension & Advisory -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--teal">&#127891;</div>
+                <div><div class="support-category__title">Extension &amp; Advisory Services</div><div class="support-category__desc">Government extension officers, agricultural advisors, training</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Extension Services <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Provincial agricultural extension officers</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137664027">013 766 4027</a></li>
+                    <li><span class="label">Area:</span> All Mpumalanga districts</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Lima Rural Development Foundation <span class="contact-card__badge contact-card__badge--ngo">NGO</span></div>
+                  <div class="contact-card__role">Small-scale farmer training &amp; extension</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0152911310">015 291 1310</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.lima.org.za" target="_blank" rel="noopener">lima.org.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Financial -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--amber">&#128176;</div>
+                <div><div class="support-category__title">Financial Services (Loans &amp; Microfinance)</div><div class="support-category__desc">Agricultural loans, development finance, crop insurance</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">MADC — Seasonal Loans <span class="contact-card__badge contact-card__badge--govt">Provincial</span></div>
+                  <div class="contact-card__role">Covers production inputs (seeds, fertiliser, chemicals) — repaid within the same production year</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137556328">013 755 6328</a></li>
+                    <li><span class="label">Note:</span> For previously disadvantaged farmers in Mpumalanga</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">MADC — Business Loans <span class="contact-card__badge contact-card__badge--govt">Provincial</span></div>
+                  <div class="contact-card__role">For extending or improving existing farm operations &amp; infrastructure</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137556328">013 755 6328</a></li>
+                    <li><span class="label">Note:</span> Also offers revolving credit for established agribusinesses</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Land Bank <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Agricultural development finance</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123125071">012 312 5071</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.landbank.co.za" target="_blank" rel="noopener">landbank.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">MAFISA (Micro Agricultural Finance) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Microfinance for small-scale farmers</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123198000">012 319 8000</a></li>
+                    <li><span class="label">Note:</span> Apply through DALRRD or provincial agriculture dept.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Harvesting & Post-Harvest -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--lime">&#127807;</div>
+                <div><div class="support-category__title">Harvesting &amp; Post-Harvest Handling</div><div class="support-category__desc">Combine harvesting, drying, storage, grain handling</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">AFGRI Equipment <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Harvesting equipment, grain storage, silo management</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0118630681">011 863 0681</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.afgri.co.za" target="_blank" rel="noopener">afgri.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Senwes Grainlink <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Grain storage, handling &amp; marketing</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0184648000">018 464 8000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.senwes.co.za" target="_blank" rel="noopener">senwes.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Marketing & Supply Chain -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--purple">&#128230;</div>
+                <div><div class="support-category__title">Marketing &amp; Supply Chain Linkages</div><div class="support-category__desc">Fresh produce markets, commodity trading, export facilitation</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Fresh Produce Market <span class="contact-card__badge contact-card__badge--govt">Municipal</span></div>
+                  <div class="contact-card__role">Nelspruit fresh produce market</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137530012">013 753 0012</a></li>
+                    <li><span class="label">Area:</span> Mbombela (Nelspruit)</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SAFEX / JSE Commodity Market <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Grain commodity trading platform</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0115208000">011 520 8000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.jse.co.za" target="_blank" rel="noopener">jse.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========================== -->
+          <!--  LIVESTOCK FARMING SUPPORT -->
+          <!-- ========================== -->
+          <div class="support-section" id="section-livestock">
+
+            <!-- Veterinary -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--red">&#129658;</div>
+                <div><div class="support-category__title">Veterinary Services</div><div class="support-category__desc">Animal health, vaccinations, surgery, disease diagnosis</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga State Vet Services <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">State veterinary &amp; animal health services</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0132882087">013 288 2087</a></li>
+                    <li><span class="label">Area:</span> All Mpumalanga districts</li>
+                    <li><span class="label">Note:</span> Free vaccinations for notifiable diseases</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SA Veterinary Association (SAVA) <span class="contact-card__badge contact-card__badge--ngo">Professional Body</span></div>
+                  <div class="contact-card__role">Find a private vet in your area</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123461150">012 346 1150</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.sava.co.za" target="_blank" rel="noopener">sava.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feed & Nutrition -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--orange">&#127805;</div>
+                <div><div class="support-category__title">Feed &amp; Nutrition Suppliers</div><div class="support-category__desc">Animal feed, licks, supplements, TMR formulation</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Voermol Feeds <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Animal feed &amp; lick supplements</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0323933504">032 393 3504</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.voermol.co.za" target="_blank" rel="noopener">voermol.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Meadow Feeds <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Commercial livestock &amp; poultry feed</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0113782040">011 378 2040</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.meadowfeeds.co.za" target="_blank" rel="noopener">meadowfeeds.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Breeding & Genetics -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--purple">&#129516;</div>
+                <div><div class="support-category__title">Breeding &amp; Genetics Experts</div><div class="support-category__desc">AI services, bull evaluation, stud breeders, genetic improvement</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">SA Stud Book <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">Animal recording, genetic evaluation, breed society admin</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0514101900">051 410 1900</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.studbook.co.za" target="_blank" rel="noopener">studbook.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">ARC-Animal Production <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Livestock research, AI semen distribution</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0126729111">012 672 9111</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.arc.agric.za" target="_blank" rel="noopener">arc.agric.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auctioneers -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--amber">&#128176;</div>
+                <div><div class="support-category__title">Livestock Auctioneers &amp; Marketers</div><div class="support-category__desc">Livestock auctions, sales, market agents</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Vleissentraal <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Livestock auctioneers — Mpumalanga &amp; surrounds</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0514471713">051 447 1713</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.vleissentraal.co.za" target="_blank" rel="noopener">vleissentraal.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">BKB Ltd <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Livestock marketing, wool, mohair</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0418312200">041 831 2200</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.bkb.co.za" target="_blank" rel="noopener">bkb.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Insurance -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--indigo">&#128737;</div>
+                <div><div class="support-category__title">Insurance Providers</div><div class="support-category__desc">Livestock insurance, crop insurance, multi-peril cover</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Santam Agriculture <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Crop &amp; livestock insurance</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0860726826">086 072 6826</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.santam.co.za" target="_blank" rel="noopener">santam.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mutual &amp; Federal (Old Mutual Insure) <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Agricultural insurance products</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0860234234">086 023 4234</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.oldmutualinsure.co.za" target="_blank" rel="noopener">oldmutualinsure.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Extension Training -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--teal">&#127891;</div>
+                <div><div class="support-category__title">Extension Training for Management</div><div class="support-category__desc">Livestock management courses, farmer training, mentorship</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">National Wool Growers' Association <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">Sheep &amp; wool farmer training programmes</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0414851024">041 485 1024</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.nwga.co.za" target="_blank" rel="noopener">nwga.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Red Meat Producers' Organisation (RPO) <span class="contact-card__badge contact-card__badge--ngo">Industry Body</span></div>
+                  <div class="contact-card__role">Beef &amp; small stock farmer development</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123498750">012 349 8750</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.rpo.co.za" target="_blank" rel="noopener">rpo.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Disease Monitoring -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--red">&#128300;</div>
+                <div><div class="support-category__title">Disease Monitoring &amp; Labs</div><div class="support-category__desc">Diagnostic laboratories, disease surveillance, sample testing</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Onderstepoort Veterinary Institute (OVI) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">National reference laboratory for animal diseases</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0125299111">012 529 9111</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.arc.agric.za" target="_blank" rel="noopener">arc.agric.za/ovi</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Veterinary Lab <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Provincial diagnostic laboratory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0132882090">013 288 2090</a></li>
+                    <li><span class="label">Area:</span> Ermelo, Mpumalanga</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fencing & Infrastructure -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--brown">&#128736;</div>
+                <div><div class="support-category__title">Fencing &amp; Infrastructure Contractors</div><div class="support-category__desc">Stock fencing, kraals, handling facilities, water systems</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Betafence SA <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Agricultural &amp; security fencing</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0117648000">011 764 8000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.betafence.co.za" target="_blank" rel="noopener">betafence.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Farm Infrastructure <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Kraals, handling facilities, water troughs, fencing</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137555678">013 755 5678</a></li>
+                    <li><span class="label">Area:</span> Nelspruit, Ermelo, Middelburg</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transport -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--blue">&#128666;</div>
+                <div><div class="support-category__title">Transport &amp; Logistics</div><div class="support-category__desc">Livestock transport, cold chain, produce logistics</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpumalanga Livestock Transport <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Licensed livestock transport — cattle, sheep, goats, pigs</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137529876">013 752 9876</a></li>
+                    <li><span class="label">Area:</span> Mpumalanga province-wide</li>
+                    <li><span class="label">Note:</span> Vehicles must comply with NSPCA transport standards</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Imperial Logistics (Agriculture) <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Cold chain &amp; agricultural produce logistics</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0116779000">011 677 9000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.imperiallogistics.com" target="_blank" rel="noopener">imperiallogistics.com</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Financial -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--green">&#128179;</div>
+                <div><div class="support-category__title">Financial &amp; Credit Services</div><div class="support-category__desc">Livestock financing, production credit, development loans</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">MADC — Business &amp; Seasonal Loans <span class="contact-card__badge contact-card__badge--govt">Provincial</span></div>
+                  <div class="contact-card__role">Loans for production inputs, farm improvements &amp; revolving credit for agribusiness</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137556328">013 755 6328</a></li>
+                    <li><span class="label">Note:</span> For previously disadvantaged farmers in Mpumalanga</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Land Bank <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Agricultural development finance</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0123125071">012 312 5071</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.landbank.co.za" target="_blank" rel="noopener">landbank.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Standard Bank Agriculture <span class="contact-card__badge contact-card__badge--private">Private</span></div>
+                  <div class="contact-card__role">Agricultural banking &amp; production loans</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0860123000">086 012 3000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.standardbank.co.za" target="_blank" rel="noopener">standardbank.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ========================== -->
+          <!--  GENERAL SERVICES          -->
+          <!-- ========================== -->
+          <div class="support-section" id="section-general">
+
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--blue">&#127760;</div>
+                <div><div class="support-category__title">Useful Online Resources</div><div class="support-category__desc">Websites, databases, and online tools for farmers</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Farmer's Weekly SA</div>
+                  <div class="contact-card__role">SA's leading agricultural publication</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Web:</span> <a href="https://www.farmersweekly.co.za" target="_blank" rel="noopener">farmersweekly.co.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Food For Mzansi</div>
+                  <div class="contact-card__role">Agricultural news for emerging farmers</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Web:</span> <a href="https://www.foodformzansi.co.za" target="_blank" rel="noopener">foodformzansi.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--teal">&#128218;</div>
+                <div><div class="support-category__title">Training &amp; Education</div><div class="support-category__desc">Agricultural colleges, short courses, farmer training centres</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Lowveld College of Agriculture <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Diploma in agriculture — Nelspruit</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137521013">013 752 1013</a></li>
+                    <li><span class="label">Area:</span> Mbombela (Nelspruit)</li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">University of Mpumalanga — Agriculture <span class="contact-card__badge contact-card__badge--govt">Public</span></div>
+                  <div class="contact-card__role">BSc Agriculture &amp; related degrees</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137024000">013 702 4000</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.ump.ac.za" target="_blank" rel="noopener">ump.ac.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--green">&#127795;</div>
+                <div><div class="support-category__title">Environmental &amp; Conservation Support</div><div class="support-category__desc">Invasive species, conservation, Working for Water, DFFE</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Working for Water / Working on Fire — Mpumalanga <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Invasive alien plant clearing &amp; fire management programmes</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137597300">013 759 7300</a> (Mpumalanga)</li>
+                    <li><span class="label">Tel:</span> <a href="tel:0123103911">012 310 3911</a> (National)</li>
+                    <li><span class="label">Web:</span> <a href="https://www.dffe.gov.za" target="_blank" rel="noopener">dffe.gov.za</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">MTPA (Mpumalanga Tourism &amp; Parks Agency) <span class="contact-card__badge contact-card__badge--govt">Provincial</span></div>
+                  <div class="contact-card__role">Conservation, biodiversity &amp; protected areas</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137591500">013 759 1500</a></li>
+                    <li><span class="label">Web:</span> <a href="https://www.mtpa.co.za" target="_blank" rel="noopener">mtpa.co.za</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- SEDA Regional Offices -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--purple">&#128188;</div>
+                <div><div class="support-category__title">SEDA Regional Offices (Mpumalanga)</div><div class="support-category__desc">Business advice, cooperative support, and enterprise development — walk-in or phone</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">SEDA — Nelspruit (Ehlanzeni) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Enterprise development advisory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137544380">013 754 4380</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SEDA — Bushbuckridge <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Enterprise development advisory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137991961">013 799 1961</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SEDA — Secunda (Gert Sibande) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Enterprise development advisory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0176344339">017 634 4339</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SEDA — Witbank (Nkangala) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Enterprise development advisory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0136556970">013 655 6970</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">SEDA — Malelane (Nkomazi) <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Enterprise development advisory</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137901183">013 790 1183</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Dept. of Economic Dev. &amp; Planning <span class="contact-card__badge contact-card__badge--govt">Provincial</span></div>
+                  <div class="contact-card__role">Enterprise development, finance access, cooperative support</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137664482">013 766 4482</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thusong Centres -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--orange">&#127970;</div>
+                <div><div class="support-category__title">Thusong Service Centres (Walk-In)</div><div class="support-category__desc">Multi-purpose government centres offering advice on income-generating projects, programme information, and referrals</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Casteel Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">KaMthakathi Station, Casteel</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137776113">013 777 6113</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Matsamo Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Matsamo Tribal Office, R570 Jeppiesreef, Shongwe Mission</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137810659">013 781 0659</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mpuluzi Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">E 1340, Fernie</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0178880300">017 888 0300</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Tholulwazi Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">307 Shaka Maseko Street, Leandra</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0176831031">017 683 1031</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Thuthukani Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">New Denmark Hostel, Standerton</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0177971370">017 797 1370</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Marapyane Thusong Centre <span class="contact-card__badge contact-card__badge--govt">Government</span></div>
+                  <div class="contact-card__role">Khutsong Shopping Centre, Marapyane</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0127243812">012 724 3812</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- LED Municipal Contacts -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--teal">&#127963;</div>
+                <div><div class="support-category__title">Local Economic Development (LED) Officers</div><div class="support-category__desc">Municipal LED managers for business plans, training referrals, funding links, and local economic support</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Ehlanzeni District <span class="contact-card__badge contact-card__badge--govt">District</span></div>
+                  <div class="contact-card__role">Ms Nontobeko Mahlalela</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137598583">013 759 8583</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Gert Sibande District <span class="contact-card__badge contact-card__badge--govt">District</span></div>
+                  <div class="contact-card__role">Ms Busi Alley</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0176203113">017 620 3113</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Nkangala District <span class="contact-card__badge contact-card__badge--govt">District</span></div>
+                  <div class="contact-card__role">Mr Ernest Pasha</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0133492239">013 349 2239</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Nkomazi Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr S E Mahlangu</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137850391">013 785 0391</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mbombela Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr Mannie Ferreira</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137592029">013 759 2029</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Bushbuckridge Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr Charles Mnisi</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0137086018">013 708 6018</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Govan Mbeki Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr S Vilakazi</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0176206000">017 620 6000</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Albert Luthuli Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Ms Wanda Mkwanazi</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0178431753">017 843 1753</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Emalahleni Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr Peter Mahlangu</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0136906462">013 690 6462</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Steve Tshwete Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Ms E Legabi</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0132497000">013 249 7000</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Thembisile Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr N Ndlala</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0139869160">013 986 9160</a></li>
+                  </ul>
+                </div>
+                <div class="contact-card">
+                  <div class="contact-card__name">Mkhondo Local Municipality <span class="contact-card__badge contact-card__badge--govt">Local</span></div>
+                  <div class="contact-card__role">Mr Musa Shongwe</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:0178268100">017 826 8100</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toll-Free Info Line -->
+            <div class="support-category">
+              <div class="support-category__header">
+                <div class="support-category__icon support-category__icon--red">&#128222;</div>
+                <div><div class="support-category__title">Government Hotline</div><div class="support-category__desc">Toll-free information line for government programmes and services</div></div>
+              </div>
+              <div class="contact-grid">
+                <div class="contact-card">
+                  <div class="contact-card__name">Government Information Hotline <span class="contact-card__badge contact-card__badge--govt">Toll-Free</span></div>
+                  <div class="contact-card__role">General enquiries about all government programmes and economic opportunities</div>
+                  <ul class="contact-card__details">
+                    <li><span class="label">Tel:</span> <a href="tel:1020">1020</a> (toll-free from landline)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section section--sm">
+        <div class="container">
+          <div class="cta-banner">
+            <h2 class="cta-banner__title">Can't Find What You Need?</h2>
+            <p class="cta-banner__text">Contact your local Mpumalanga agricultural extension officer or visit your nearest Thusong Service Centre for personalised referrals to service providers in your area.</p>
+            <div style="display:flex;gap:var(--space-4);justify-content:center;flex-wrap:wrap;">
+              <a href="tel:0137664027" class="btn btn--white">&#128222; Call Extension Office</a>
+              <a href="guides.html" class="btn btn--white">Browse Guides</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
+    </footer>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll('.support-tab');
+      var sections = document.querySelectorAll('.support-section');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) { t.classList.remove('active'); });
+          sections.forEach(function (s) { s.classList.remove('active'); });
+          tab.classList.add('active');
+          var target = document.getElementById('section-' + tab.getAttribute('data-section'));
+          if (target) target.classList.add('active');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

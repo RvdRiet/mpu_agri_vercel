@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Weather Data — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link">Login</a>
+          <a href="register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="login.html" class="btn btn--secondary btn--block">Login</a><a href="register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main>
+      <!-- ===== PAGE HEADER ===== -->
+      <section class="page-header">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <span class="breadcrumbs__current">Weather</span>
+          </nav>
+          <h1 class="page-header__title">Weather Dashboard</h1>
+          <p class="page-header__subtitle">Real-time weather data for Mpumalanga farming regions</p>
+        </div>
+      </section>
+
+      <!-- ===== LOCATION SELECTOR ===== -->
+      <section class="section">
+        <div class="container">
+          <div class="form-group reveal">
+            <label for="locationSelect">Select Location</label>
+            <div style="display: flex; gap: var(--space-4); flex-wrap: wrap; align-items: flex-end;">
+              <select id="locationSelect" class="form-select" style="min-width: 280px;">
+                <option value="nelspruit">Nelspruit (Mbombela)</option>
+                <option value="white-river">White River</option>
+                <option value="barberton">Barberton</option>
+                <option value="ermelo">Ermelo</option>
+                <option value="standerton">Standerton</option>
+                <option value="secunda">Secunda</option>
+                <option value="lydenburg">Lydenburg (Mashishing)</option>
+                <option value="sabie">Sabie</option>
+                <option value="hazyview">Hazyview</option>
+                <option value="komatipoort">Komatipoort</option>
+                <option value="malelane">Malelane</option>
+                <option value="bethal">Bethal</option>
+                <option value="middelburg">Middelburg</option>
+                <option value="witbank">Witbank (eMalahleni)</option>
+                <option value="piet-retief">Piet Retief</option>
+                <option value="volksrust">Volksrust</option>
+              </select>
+              <button type="button" id="getWeatherBtn" class="btn btn--primary">Get Weather</button>
+            </div>
+          </div>
+
+          <!-- ===== WEATHER DISPLAY ===== -->
+          <div id="weatherDisplay" class="reveal">
+            <div style="display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-6);flex-wrap:wrap;">
+              <div id="weatherCondIcon" style="flex-shrink:0;"></div>
+              <div>
+                <h2 style="margin:0;font-size:var(--text-2xl);font-weight:var(--weight-bold);" id="weatherLocationLabel">Nelspruit</h2>
+                <p style="margin:0;color:var(--color-text-secondary);" id="weatherCondition">Loading...</p>
+                <p style="margin:0;font-size:var(--text-xs);color:var(--color-text-muted);" id="weatherLastUpdated"></p>
+              </div>
+            </div>
+            <div class="card-grid card-grid--4" style="margin-bottom: var(--space-6);">
+              <div class="weather-card">
+                <div class="weather-card__icon" aria-hidden="true">&#127777;&#65039;</div>
+                <div class="weather-card__value" id="weatherTemp">--</div>
+                <div class="weather-card__label">Temperature</div>
+              </div>
+              <div class="weather-card">
+                <div class="weather-card__icon" aria-hidden="true">&#127783;&#65039;</div>
+                <div class="weather-card__value" id="weatherRain">--</div>
+                <div class="weather-card__label">Rainfall</div>
+              </div>
+              <div class="weather-card">
+                <div class="weather-card__icon" aria-hidden="true">&#128167;</div>
+                <div class="weather-card__value" id="weatherHumidity">--</div>
+                <div class="weather-card__label">Humidity</div>
+              </div>
+              <div class="weather-card">
+                <div class="weather-card__icon" aria-hidden="true">&#128168;</div>
+                <div class="weather-card__value" id="weatherWind">--</div>
+                <div class="weather-card__label">Wind Speed</div>
+              </div>
+            </div>
+            <div class="info-banner info-banner--info" id="weatherStatus" style="margin-bottom: var(--space-8);" hidden></div>
+          </div>
+
+          <!-- ===== 5-DAY FORECAST ===== -->
+          <div class="reveal reveal--delay-1">
+            <span class="section-label">5-Day Forecast</span>
+            <h2 class="section-title">Extended Forecast</h2>
+            <div class="table-wrapper" style="margin-top: var(--space-4);">
+              <table class="data-table" id="forecastTable">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Conditions</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Rainfall</th>
+                  </tr>
+                </thead>
+                <tbody id="forecastBody">
+                  <tr><td>Wed</td><td>Partly cloudy</td><td>26°C</td><td>16°C</td><td>2mm</td></tr>
+                  <tr><td>Thu</td><td>Sunny</td><td>28°C</td><td>15°C</td><td>0mm</td></tr>
+                  <tr><td>Fri</td><td>Scattered showers</td><td>24°C</td><td>17°C</td><td>8mm</td></tr>
+                  <tr><td>Sat</td><td>Partly cloudy</td><td>27°C</td><td>16°C</td><td>0mm</td></tr>
+                  <tr><td>Sun</td><td>Thunderstorms possible</td><td>25°C</td><td>18°C</td><td>15mm</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SEASONAL FARMING GUIDE ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Mpumalanga Seasons</span>
+          <h2 class="section-title">Seasonal Farming Calendar</h2>
+          <p class="section-subtitle" style="margin-bottom:var(--space-4);">Mpumalanga spans subtropical Lowveld (200–600m), temperate Highveld (1 400–1 800m), and the misty Escarpment between them. Each season brings distinct conditions that shape crop and livestock management across these zones.</p>
+
+          <!-- Season tabs -->
+          <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-6);" role="tablist" aria-label="Seasons">
+            <button class="btn btn--primary season-tab active" data-season="summer" role="tab" aria-selected="true" style="flex:1;min-width:120px;">&#9728; Summer</button>
+            <button class="btn btn--outline season-tab" data-season="autumn" role="tab" aria-selected="false" style="flex:1;min-width:120px;">&#127810; Autumn</button>
+            <button class="btn btn--outline season-tab" data-season="winter" role="tab" aria-selected="false" style="flex:1;min-width:120px;">&#10052; Winter</button>
+            <button class="btn btn--outline season-tab" data-season="spring" role="tab" aria-selected="false" style="flex:1;min-width:120px;">&#127800; Spring</button>
+          </div>
+
+          <!-- ===== SUMMER ===== -->
+          <div class="season-panel active" id="season-summer" role="tabpanel">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-6);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#127777; Climate Overview</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Months:</strong> October – March</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Lowveld:</strong> 28–38°C, very hot and humid. 600–1 000mm rainfall concentrated in thunderstorms. Occasional hail.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Highveld:</strong> 22–30°C, warm days with cool evenings. 600–800mm rainfall, mostly afternoon thunderstorms with hail risk from October–January.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Escarpment:</strong> 20–28°C, high humidity and regular mist/rain. 1 000–1 500mm — the wettest zone.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#9888; Key Risks</h4>
+                <ul style="font-size:var(--text-sm);color:var(--color-text-secondary);padding-left:var(--space-4);margin:0;">
+                  <li style="margin-bottom:var(--space-1);">Hailstorms — crop damage to maize, vegetables, and fruit. Use hail nets on high-value horticultural crops.</li>
+                  <li style="margin-bottom:var(--space-1);">Flash flooding in river valleys and low-lying areas. Avoid planting near flood lines.</li>
+                  <li style="margin-bottom:var(--space-1);">Waterlogging on clay soils — delays planting and damages root systems.</li>
+                  <li style="margin-bottom:var(--space-1);">Mid-season drought ("dry spells" of 2–4 weeks during Jan/Feb) during critical grain filling.</li>
+                  <li>Lightning strikes — leading cause of livestock death in summer on the Highveld.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-5);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #43a047;border:1px solid var(--color-border-light);border-left:4px solid #43a047;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#127806; Crop Farming in Summer</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>This is the main planting and growing season.</strong> The majority of Mpumalanga's crop production happens in summer.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Maize (Highveld):</strong> Plant mid-October to end November for optimal yields. Peak water demand at tasselling (8–10 weeks after emergence) — a dry spell here reduces yield by 40–60%. Stalk borer pressure peaks in December.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Soybean &amp; sunflower:</strong> Plant November–December. Soybean needs good moisture at flowering (Jan/Feb). Sunflower is more drought-tolerant and can be planted as late as mid-January.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Vegetables (Lowveld):</strong> Summer is too hot for cool-season crops (lettuce, cabbage). Focus on tomatoes, peppers, cucurbits, sweet potatoes. Use shade net and drip irrigation to manage heat stress.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Sugarcane (Lowveld):</strong> Rapid growth phase. High water demand. Manage eldana (sugarcane borer) and apply nitrogen fertiliser early in the season.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Citrus &amp; subtropical fruit:</strong> Flowering and fruit set (Oct–Dec). Ensure adequate irrigation. Monitor citrus psylla, false codling moth, and fruit fly — trapping should be active from November.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #8d6e63;border:1px solid var(--color-border-light);border-left:4px solid #8d6e63;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#128004; Livestock Farming in Summer</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Grazing peaks</strong> but so do disease, parasite, and heat stress challenges.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Tick-borne diseases peak:</strong> Heartwater, redwater (babesiosis), and gallsickness (anaplasmosis) are most active November–March. Maintain a strict dipping/pour-on programme every 2–3 weeks. Monitor animals daily for tick loads.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Internal parasites:</strong> Warm, wet conditions cause roundworm and liver fluke larvae to flourish on pastures. Drench strategically — avoid resistance by rotating active ingredients and using faecal egg counts to guide treatment.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Calving/lambing season:</strong> Most herds calve October–January. Keep calving camps clean, close to homestead for monitoring. Ensure colostrum intake within 6 hours. Navel spray with iodine to prevent infection.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Heat stress:</strong> Cattle reduce feed intake above 30°C. Provide shade (natural trees or structures) and unlimited water — a lactating cow drinks 60–80 litres/day in summer. Avoid moving animals in the heat of the day.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Vaccinations:</strong> Administer lumpy skin disease and Rift Valley fever vaccines before the wet season begins (September/October). Blackquarter and anthrax boosters during the rainy months.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== AUTUMN ===== -->
+          <div class="season-panel" id="season-autumn" role="tabpanel" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-6);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#127777; Climate Overview</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Months:</strong> April – May</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Lowveld:</strong> 22–30°C, pleasant and dry. Last scattered showers in April. Humidity drops significantly.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Highveld:</strong> 14–24°C, first frost possible from late April in low-lying areas (Ermelo, Volksrust). Rapid temperature drop, especially at night.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Escarpment:</strong> 16–24°C, mist and occasional light rain still possible. Transitional period.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#9888; Key Risks</h4>
+                <ul style="font-size:var(--text-sm);color:var(--color-text-secondary);padding-left:var(--space-4);margin:0;">
+                  <li style="margin-bottom:var(--space-1);">Early frost on the Highveld — can damage late-maturing maize and sensitive crops if harvest is delayed.</li>
+                  <li style="margin-bottom:var(--space-1);">Aflatoxin in groundnuts — delayed harvest in damp conditions increases contamination risk.</li>
+                  <li style="margin-bottom:var(--space-1);">Veld starts losing nutritional value rapidly as grasses mature and dry.</li>
+                  <li>Post-harvest grain storage losses — weevils and moisture if grain is not dried to below 13%.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-5);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #43a047;border:1px solid var(--color-border-light);border-left:4px solid #43a047;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#127806; Crop Farming in Autumn</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Harvest season.</strong> Focus shifts from growing to harvesting, drying, storage, and planning the next cycle.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Maize harvest (Highveld):</strong> April–June. Harvest at 14% moisture or below to prevent ear rot and aflatoxin. If drying in the field, don't delay past the first frost — frozen stalks lodge and combine losses increase dramatically.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Soybean harvest:</strong> April–May. Beans shatter if too dry (&lt;10%) — harvest early morning when slight dew reduces shattering losses. Thresh promptly.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Vegetables (Lowveld):</strong> Ideal planting time for cool-season crops — cabbage, broccoli, cauliflower, lettuce, spinach, onions. Transplant in April–May for winter harvest. Frost-free Lowveld allows year-round production.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Citrus harvest:</strong> Navel oranges (April–July), Valencia oranges (June–October), grapefruit (March–August). Pick carefully to avoid rind damage. Cold chain is critical for export quality.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Soil sampling:</strong> Autumn is the best time to take soil samples for the next season. Results take 2–4 weeks — plan lime and fertiliser applications based on lab recommendations.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #8d6e63;border:1px solid var(--color-border-light);border-left:4px solid #8d6e63;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#128004; Livestock Farming in Autumn</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Transition period.</strong> Prepare livestock for winter while veld still has some nutrition.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Weaning:</strong> March–April is the optimal time to wean calves (6–8 months). This allows cows to recover body condition before winter. Weaning weight is a key indicator of herd productivity.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Condition scoring:</strong> Assess body condition of breeding stock now. Cows below condition score 3 (on a 1–5 scale) will not cycle in spring. Supplement thin animals immediately rather than waiting for winter.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Winter lick planning:</strong> Order phosphate-based summer licks to transition to protein/energy winter licks by May. Ensure adequate lick trough space — 1 trough per 30–40 animals, placed near water.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Vaccinations:</strong> Administer botulism and blackquarter boosters before winter. Clostridial diseases peak when animals graze dry, contaminated pastures.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Haymaking:</strong> Last opportunity to bale surplus grass before it loses nutritional value. Eragrostis (teff) hay — cut at early flower stage for best quality (10–12% crude protein). Every bale stored now saves money in winter.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== WINTER ===== -->
+          <div class="season-panel" id="season-winter" role="tabpanel" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-6);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#127777; Climate Overview</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Months:</strong> June – August</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Lowveld:</strong> 12–26°C, dry and mild. No frost in most areas. Pleasant daytime temperatures but cool at night. Zero to negligible rainfall.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Highveld:</strong> -5 to 18°C. Severe frost — up to 80 frost days in the Ermelo/Volksrust area. Dry, cold nights with sunny days. No rain. Ground freezes in low-lying hollows.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Escarpment:</strong> 2–18°C, cold with occasional frost. Berg winds may bring brief warmth. Very dry with little mist.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#9888; Key Risks</h4>
+                <ul style="font-size:var(--text-sm);color:var(--color-text-secondary);padding-left:var(--space-4);margin:0;">
+                  <li style="margin-bottom:var(--space-1);">Veld fires — dry grass is highly flammable. Mpumalanga's worst fire season is June–September.</li>
+                  <li style="margin-bottom:var(--space-1);">Livestock losses from cold stress, especially newborn calves/lambs and thin animals without shelter.</li>
+                  <li style="margin-bottom:var(--space-1);">Nutritional stress — dry veld has &lt;5% crude protein, insufficient to maintain livestock without supplementation.</li>
+                  <li style="margin-bottom:var(--space-1);">Frost damage to citrus fruit on the Highveld fringes and escarpment.</li>
+                  <li>Dam and borehole levels drop. Pipes freeze and crack on the Highveld.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-5);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #43a047;border:1px solid var(--color-border-light);border-left:4px solid #43a047;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#127806; Crop Farming in Winter</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Dormant season for dryland crops.</strong> Focus on irrigated winter crops, planning, and land preparation.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Irrigated wheat (Highveld):</strong> Plant under irrigation April–July, harvest October–December. Needs 450–600mm supplementary irrigation. Only viable with reliable water supply.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Vegetables (Lowveld):</strong> Winter is peak production season for cool-season crops — tomatoes, green beans, peppers, baby spinach, herbs. The Lowveld's frost-free climate gives it a huge advantage for winter vegetables heading to Joburg markets.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Citrus harvest continues:</strong> Valencia oranges, lemons, and soft citrus through winter. Cold-tolerant rootstocks are essential on the Highveld/Escarpment margins.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Land preparation:</strong> Lime applications for next season (lime needs 3–6 months to react with soil). Repair fences, contours, and irrigation systems. Service equipment before the spring rush.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Planning:</strong> Order seed, fertiliser, and chemicals for the coming season NOW. Prices are often lower in winter. Review soil test results and plan rotations.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #8d6e63;border:1px solid var(--color-border-light);border-left:4px solid #8d6e63;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#128004; Livestock Farming in Winter</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>The most critical season for livestock.</strong> Nutritional stress kills more animals than disease.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Supplementary feeding:</strong> Dry winter veld drops below 5% crude protein — cattle need at least 7% to maintain body weight. Provide a protein/energy lick (e.g., urea-based or meal lick) and hay (8–10 kg/day for cattle). Pregnant and lactating cows need priority.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Cold stress:</strong> Newborn calves and lambs are extremely vulnerable. Provide windbreaks/shelters, especially on the Highveld. Hypothermia kills more calves than disease in Ermelo and Volksrust areas. Kraal young stock at night.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Water:</strong> Ensure water troughs and pipes don't freeze. Insulate exposed piping. Break ice on troughs daily. Cattle still need 30–50 litres/day in winter.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Veld fire preparedness:</strong> Create and maintain fire belts (minimum 10m, ideally 30m around infrastructure). Burn firebreaks before the fire season. Register with your local Fire Protection Association. Report fires immediately: 013 759 7300 (Working on Fire).</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Destock strategically:</strong> If feed reserves are insufficient, sell cull animals early. The biggest mistake is waiting too long — emaciated animals fetch bottom prices and die in late winter. One well-fed cow is worth more than three thin ones.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== SPRING ===== -->
+          <div class="season-panel" id="season-spring" role="tabpanel" style="display:none;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-6);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#127777; Climate Overview</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Months:</strong> September – October</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Lowveld:</strong> 24–34°C, rapid warming. First thundershowers from October. Hot berg winds in September can spike temperatures above 38°C.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Highveld:</strong> 12–26°C, warming rapidly. Last frost typically mid-September (Ermelo) to early October. First meaningful rains usually mid-October but highly variable. Day/night temperature swings of 15–20°C.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Escarpment:</strong> 16–26°C, warming with early showers. Spring mist and intermittent rain begin.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border:1px solid var(--color-border-light);">
+                <h4 style="font-size:var(--text-sm);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-2);">&#9888; Key Risks</h4>
+                <ul style="font-size:var(--text-sm);color:var(--color-text-secondary);padding-left:var(--space-4);margin:0;">
+                  <li style="margin-bottom:var(--space-1);">False starts — early rains followed by dry spells cause planted seed to die. Wait for 25mm+ of rain within a week before planting.</li>
+                  <li style="margin-bottom:var(--space-1);">Late frost (Highveld) — can kill tender seedlings if planting is too early.</li>
+                  <li style="margin-bottom:var(--space-1);">Berg winds — hot, dry winds in September/October dramatically increase veld fire risk. Stay alert.</li>
+                  <li style="margin-bottom:var(--space-1);">Tick-borne diseases resurge as temperatures rise and tick activity restarts.</li>
+                  <li>Animals at their weakest after winter — poor condition makes them vulnerable to disease.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-5);">
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #43a047;border:1px solid var(--color-border-light);border-left:4px solid #43a047;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#127806; Crop Farming in Spring</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Preparation and planting season.</strong> Success in summer starts with decisions made now.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Land preparation:</strong> Final seedbed preparation. Apply pre-plant herbicides. Calibrate planters. Check planting depth settings. For no-till: spray with glyphosate to control weeds 2–3 weeks before planting.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Maize planting (Highveld):</strong> Optimal window opens mid-October (once soil temperature at 10cm exceeds 12°C for 3 consecutive days). Don't chase the first rain — wait for established moisture. Late planting after mid-December reduces yield potential by 30–50%.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Soybean &amp; sorghum:</strong> Plant after maize when soil temperature is above 15°C (usually November). Inoculate soybean seed with rhizobium for nitrogen fixation.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Fruit &amp; subtropical crops (Lowveld):</strong> Flowering begins on citrus, mango, avocado, litchi. Don't spray insecticides during flowering — protect pollinators. Apply post-bloom fungicides for citrus black spot.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Pasture establishment:</strong> September is the time to plant new pastures (Eragrostis, Smutsfinger grass, Panicum). Ensure good seed-to-soil contact and roll after planting.</p>
+              </div>
+              <div style="background:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-5);border-left:4px solid #8d6e63;border:1px solid var(--color-border-light);border-left:4px solid #8d6e63;">
+                <h4 style="font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-3);">&#128004; Livestock Farming in Spring</h4>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-3);"><strong>Recovery and breeding season.</strong> Animals emerge from winter — focus on health, nutrition, and reproduction.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Pre-breeding vaccinations:</strong> Administer lumpy skin disease, Rift Valley fever, and brucellosis (heifers only) vaccines before the breeding season. Also: 3-day stiff sickness and bovine viral diarrhoea where relevant.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Bull fertility testing:</strong> Test bulls 6–8 weeks before the breeding season (October for spring mating). A 4% failure rate sounds low — but one infertile bull serving 30 cows means 30 open cows and zero calves from that group.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Tick control restart:</strong> As temperatures rise above 15°C, tick activity resumes aggressively. Resume dipping/pour-on programme. Animals weakened by winter are most vulnerable to tick-borne diseases now.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);margin-bottom:var(--space-2);"><strong>Green grass danger:</strong> The first flush of green grass is high in moisture and low in fibre. Cattle gorging on lush spring grass can develop bloat (especially on legume pastures) and grass tetany (magnesium deficiency). Provide a magnesium-enriched lick and don't turn hungry cattle onto lush pastures without adaptation.</p>
+                <p style="font-size:var(--text-sm);color:var(--color-text-secondary);"><strong>Transition licks:</strong> Switch from winter protein lick to a phosphate-based summer lick as the veld greens up. The transition period (September–October) is when phosphorus deficiency is most acute — supplement to support bone health and fertility.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== AGRICULTURAL ADVISORY ===== -->
+      <section class="section section--alt">
+        <div class="container">
+          <span class="section-label">Farming Advisory</span>
+          <h2 class="section-title">Weather-Based Agricultural Tips</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">General advice based on typical Mpumalanga weather conditions. Plan your farming activities around seasonal patterns.</p>
+          <div class="card-grid card-grid--3">
+            <div class="card reveal">
+              <div class="card__body">
+                <div class="card__icon">☀️</div>
+                <h3 class="card__title">Hot &amp; Dry Conditions</h3>
+                <p class="card__text">Increase irrigation frequency during heat waves. Schedule spraying and fieldwork for early morning or late afternoon. Ensure livestock have shade and adequate water. Consider mulching to retain soil moisture.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-1">
+              <div class="card__body">
+                <div class="card__icon">🌧️</div>
+                <h3 class="card__title">Rainy Periods</h3>
+                <p class="card__text">Avoid planting or heavy fieldwork during wet soil conditions. Postpone spraying — rain reduces pesticide effectiveness. Check drainage and fix waterlogging. Plan crop spraying for dry windows between showers.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-2">
+              <div class="card__body">
+                <div class="card__icon">🌡️</div>
+                <h3 class="card__title">Temperature &amp; Frost</h3>
+                <p class="card__text">Monitor frost warnings on the Highveld — protect tender crops and young citrus. In the Lowveld, heat stress can affect crops; use shade nets where appropriate. Time planting to avoid frost damage in colder regions.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Early Warning Info -->
+          <div style="margin-top:var(--space-8);padding:var(--space-6);background:var(--color-white);border-radius:var(--radius-lg);border:1px solid var(--color-border-light);" class="reveal">
+            <h3 style="font-size:var(--text-lg);font-weight:700;margin-bottom:var(--space-3);">&#9888; DARDLEA Early Warning System</h3>
+            <p style="color:var(--color-text-secondary);margin-bottom:var(--space-4);font-size:var(--text-sm);">
+              The Mpumalanga Department of Agriculture issues <strong>monthly agro-meteorological advisories</strong> via bulk SMS, email, and fax — with daily extreme weather warnings relayed from SAWS. Register with your district agricultural office to receive alerts.
+            </p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--space-4);">
+              <div style="padding:var(--space-4);background:var(--color-bg-light);border-radius:var(--radius-md);">
+                <strong style="display:block;margin-bottom:var(--space-1);font-size:var(--text-sm);">&#127786; Flood Warning</strong>
+                <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Move livestock to high ground. Lift pumps above flood line. Close irrigation systems. Open spillways on earth dams.</p>
+              </div>
+              <div style="padding:var(--space-4);background:var(--color-bg-light);border-radius:var(--radius-md);">
+                <strong style="display:block;margin-bottom:var(--space-1);font-size:var(--text-sm);">&#9748; Drought Alert</strong>
+                <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Conserve water. Select drought-tolerant cultivars. Reduce planting area. Keep livestock in balance with grazing. Provide licks.</p>
+              </div>
+              <div style="padding:var(--space-4);background:var(--color-bg-light);border-radius:var(--radius-md);">
+                <strong style="display:block;margin-bottom:var(--space-1);font-size:var(--text-sm);">&#128293; Veld Fire Risk</strong>
+                <p style="font-size:var(--text-xs);color:var(--color-text-muted);">Maintain fire belts. Adhere to SAWS fire warnings. Prepare for winter drying of veld in summer rainfall areas.</p>
+              </div>
+              <div style="padding:var(--space-4);background:var(--color-bg-light);border-radius:var(--radius-md);">
+                <strong style="display:block;margin-bottom:var(--space-1);font-size:var(--text-sm);">&#128214; Full Mitigation Guides</strong>
+                <p style="font-size:var(--text-xs);color:var(--color-text-muted);"><a href="guides.html" style="color:var(--color-primary);font-weight:600;">View Disaster Risk Management guides</a> for detailed drought categories (D0–D4), flood, winter, and fire mitigation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
+    </footer>
+
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script src="js/weather.js"></script>
+  <script>
+  (function(){
+    var tabs = document.querySelectorAll('.season-tab');
+    var panels = document.querySelectorAll('.season-panel');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        tabs.forEach(function(t){
+          t.classList.remove('active','btn--primary');
+          t.classList.add('btn--outline');
+          t.setAttribute('aria-selected','false');
+        });
+        tab.classList.add('active','btn--primary');
+        tab.classList.remove('btn--outline');
+        tab.setAttribute('aria-selected','true');
+        var target = tab.getAttribute('data-season');
+        panels.forEach(function(p){
+          p.style.display = p.id === 'season-' + target ? 'block' : 'none';
+          p.classList.toggle('active', p.id === 'season-' + target);
+        });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

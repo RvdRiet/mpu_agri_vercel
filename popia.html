@@ -4,73 +4,130 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#2d5a27">
-  <title>POPIA Compliance - Mpumalanga Livestock Development Programme</title>
+  <title>POPIA Compliance — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
 </head>
 <body>
   <div class="page-wrapper">
-    <header class="site-header">
-      <div class="header-inner">
-        <a href="index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
-        <a href="index.html" class="site-title-link">
-          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
         </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link">Login</a>
+          <a href="register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
       </div>
-    </header>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="login.html" class="btn btn--secondary btn--block">Login</a><a href="register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
 
-    <div class="header-image-wrap">
-      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
-    </div>
+    <!-- ===== PAGE HEADER ===== -->
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html" style="color:rgba(255,255,255,0.6);">Home</a>
+          <span class="breadcrumbs__sep" aria-hidden="true" style="color:rgba(255,255,255,0.4);">/</span>
+          <span class="breadcrumbs__current" style="color:#fff;">POPIA Compliance</span>
+        </nav>
+        <h1 class="page-header__title">POPIA Compliance</h1>
+        <p class="page-header__subtitle">How we protect and use your personal information under South African law.</p>
+      </div>
+    </section>
 
-    <main class="main-content">
-      <section class="content-section">
-      <h2>POPIA Compliance</h2>
-      <p>The Mpumalanga Livestock Development Programme and the Department of Agriculture, Rural Development Land and Environmental Affairs are committed to compliance with the <strong>Protection of Personal Information Act 4 of 2013 (POPIA)</strong>.</p>
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+      <section class="section">
+        <div class="container container--narrow">
+          <p>The Mpumalanga Agricultural Decision Support System and the Department of Agriculture, Rural Development Land and Environmental Affairs are committed to compliance with the <strong>Protection of Personal Information Act 4 of 2013 (POPIA)</strong>.</p>
 
-      <h3>How we use your personal information</h3>
-      <p>Personal information collected through this website and application process (including but not limited to your name, South African ID number, contact details, address, and information relating to your farming operation) is used solely for the purpose of administering the Masibuyele Esibayeni Programme, assessing applications, and communicating with you regarding your application.</p>
+          <h3>How we use your personal information</h3>
+          <p>Personal information collected through this website and application process (including but not limited to your name, South African ID number, contact details, address, and information relating to your farming operation) is used solely for the purpose of administering agricultural support programmes, assessing applications, and communicating with you regarding your application.</p>
 
-      <h3>Lawful processing</h3>
-      <p>We process your personal information in accordance with POPIA on the basis of:</p>
-      <ul>
-        <li>Your consent, where you provide information voluntarily in your application;</li>
-        <li>Performance of a contract or steps prior to entering into a contract (programme participation);</li>
-        <li>Compliance with a legal obligation; and</li>
-        <li>Legitimate interests of the Department in delivering the programme.</li>
-      </ul>
+          <h3>Lawful processing</h3>
+          <p>We process your personal information in accordance with POPIA on the basis of:</p>
+          <ul style="list-style:disc;padding-left:1.5rem;margin:0.75rem 0 1.25rem;">
+            <li>Your consent, where you provide information voluntarily in your application;</li>
+            <li>Performance of a contract or steps prior to entering into a contract (programme participation);</li>
+            <li>Compliance with a legal obligation; and</li>
+            <li>Legitimate interests of the Department in delivering the programme.</li>
+          </ul>
 
-      <h3>Your rights</h3>
-      <p>In terms of POPIA you have the right to:</p>
-      <ul>
-        <li>Know what personal information we hold about you;</li>
-        <li>Request correction of inaccurate or outdated information;</li>
-        <li>Object to the processing of your personal information in certain circumstances;</li>
-        <li>Lodge a complaint with the Information Regulator.</li>
-      </ul>
+          <h3>Your rights</h3>
+          <p>In terms of POPIA you have the right to:</p>
+          <ul style="list-style:disc;padding-left:1.5rem;margin:0.75rem 0 1.25rem;">
+            <li>Know what personal information we hold about you;</li>
+            <li>Request correction of inaccurate or outdated information;</li>
+            <li>Object to the processing of your personal information in certain circumstances;</li>
+            <li>Lodge a complaint with the Information Regulator.</li>
+          </ul>
 
-      <h3>Security and retention</h3>
-      <p>We take reasonable technical and organisational measures to protect your personal information against unauthorised access, loss or misuse. Personal information is retained only for as long as necessary for the purposes for which it was collected or as required by law.</p>
+          <h3>Security and retention</h3>
+          <p>We take reasonable technical and organisational measures to protect your personal information against unauthorised access, loss or misuse. Personal information is retained only for as long as necessary for the purposes for which it was collected or as required by law.</p>
 
-      <h3>Contact</h3>
-      <p>For any queries regarding the processing of your personal information or to exercise your rights, please contact the Department using the contact details provided on the programme information page.</p>
+          <h3>Contact</h3>
+          <p>For any queries regarding the processing of your personal information or to exercise your rights, please contact the Department using the contact details provided on the programme information page.</p>
 
-      <p><a href="index.html" class="btn-start-application">← Back to programme</a></p>
+          <p style="margin-top:2rem;"><a href="index.html" class="btn btn--secondary">&larr; Back to home</a></p>
+        </div>
       </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
-      <div class="footer-image-wrap">
-        <img src="public/footer.jpg" alt="" class="footer-image" />
-      </div>
-      <div class="footer-inner">
-        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
-        <div class="footer-links">
-          <a href="popia.html" class="footer-btn">POPIA compliance</a>
-          <a href="terms.html" class="footer-btn">Terms of service</a>
-          <a href="staff-login.html" class="footer-btn">Admin login</a>
-        </div>
-      </div>
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
     </footer>
+
   </div>
+
+  <script src="js/nav.js"></script>
 </body>
 </html>

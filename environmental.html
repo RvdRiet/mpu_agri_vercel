@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Environmental Enrichment — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link">Login</a>
+          <a href="register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="login.html" class="btn btn--secondary btn--block">Login</a><a href="register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main>
+      <!-- ===== PAGE HEADER ===== -->
+      <section class="page-header">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <a href="index.html#programmes">Programmes</a>
+            <span class="breadcrumbs__sep">&#8250;</span>
+            <span class="breadcrumbs__current">Environmental Enrichment</span>
+          </nav>
+          <h1 class="page-header__title">Environmental Enrichment Programme</h1>
+          <p class="page-header__subtitle">Government grants and programmes for environmental conservation and sustainability in agriculture. Support soil rehabilitation, water resource management, biodiversity protection, and sustainable farming practices across Mpumalanga.</p>
+        </div>
+      </section>
+
+      <!-- ===== PROGRAMME OVERVIEW ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Programme Overview</span>
+          <h2 class="section-title">What Environmental Enrichment Covers</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Mpumalanga&rsquo;s diverse landscapes&mdash;from the Drakensberg escarpment and Highveld grasslands to the Lowveld bushveld and river valleys&mdash;face growing pressure from soil erosion, water scarcity, and loss of indigenous vegetation. The Environmental Enrichment Programme supports farmers in adopting conservation practices that protect natural resources while improving agricultural resilience. Funding covers soil conservation measures, water efficiency infrastructure, erosion barriers, wetland protection, indigenous planting, invasive species control, and biodiversity corridors. By investing in environmental sustainability, farmers strengthen long-term productivity and contribute to the province&rsquo;s conservation goals under the National Environmental Management Act (NEMA) and provincial land care initiatives.</p>
+          <div class="card-grid card-grid--3">
+            <div class="card reveal">
+              <div class="card__body">
+                <div class="card__icon">&#127793;</div>
+                <h3 class="card__title">Soil Rehabilitation</h3>
+                <p class="card__text">Erosion control through contour banks, gabions, and vegetative barriers. Soil testing and rehabilitation of degraded land. Support for organic matter improvement, cover cropping, and conservation tillage to combat erosion on steep escarpment slopes and communal grazing areas.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-1">
+              <div class="card__body">
+                <div class="card__icon">&#128167;</div>
+                <h3 class="card__title">Water Resource Management</h3>
+                <p class="card__text">Irrigation efficiency upgrades, drip systems, and rainwater harvesting structures. Wetland delineation and protection along rivers such as the Olifants, Sabie, and Crocodile. Dam rehabilitation and water storage for sustainable use in water-stressed areas.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-2">
+              <div class="card__body">
+                <div class="card__icon">&#127794;</div>
+                <h3 class="card__title">Biodiversity &amp; Conservation</h3>
+                <p class="card__text">Indigenous vegetation restoration, wildlife corridors, and buffer zones. Invasive alien plant control (e.g. wattle, gums, lantana) that threaten water yield and grazing land. Support for veld management and stewardship of natural habitats.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== GRANT INFORMATION ===== -->
+      <section class="section section--alt">
+        <div class="container">
+          <span class="section-label">Grant Information</span>
+          <h2 class="section-title">Farmer Categories and Grant Support</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Grants are tailored to your farmer category. Eligible costs include fencing for conservation, erosion barriers, water infrastructure, soil testing, indigenous planting, and conservation plan development.</p>
+          <div class="table-wrapper reveal">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Farmer Category</th>
+                  <th>Max Grant Amount</th>
+                  <th>What&rsquo;s Covered</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Subsistence</strong></td>
+                  <td>Up to R30,000</td>
+                  <td>Basic conservation measures: simple erosion barriers, contour planting, soil testing, small-scale water harvesting, indigenous seed/plants for rehabilitation, basic fencing for conservation areas</td>
+                </tr>
+                <tr>
+                  <td><strong>Smallholder</strong></td>
+                  <td>Up to R150,000</td>
+                  <td>Comprehensive environmental plans: erosion control structures (gabions, contour banks), water infrastructure (irrigation efficiency, rainwater tanks), wetland buffer fencing, indigenous planting programmes, invasive species removal, conservation fencing</td>
+                </tr>
+                <tr>
+                  <td><strong>Commercial</strong></td>
+                  <td>Up to R500,000</td>
+                  <td>Subject to assessment. Larger-scale rehabilitation, wetland restoration, biodiversity corridors, comprehensive soil and water management plans, environmental impact assessments</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REQUIREMENTS & ELIGIBILITY ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Eligibility</span>
+          <h2 class="section-title">Requirements &amp; Eligibility</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">To qualify for environmental enrichment funding, applicants must meet the following requirements:</p>
+          <div class="card-grid card-grid--2">
+            <div class="card reveal">
+              <div class="card__body">
+                <div class="card__icon">&#128100;</div>
+                <h3 class="card__title">Identity &amp; Residence</h3>
+                <p class="card__text">Valid South African ID; must be a resident of Mpumalanga province or farming land within Mpumalanga. Registration as a farmer or proof of active farming/land ownership.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-1">
+              <div class="card__body">
+                <div class="card__icon">&#127969;</div>
+                <h3 class="card__title">Land &amp; Ownership</h3>
+                <p class="card__text">Proof of land access&mdash;title deed, lease agreement, PTO (Permission to Occupy), RTO (Right to Occupy), or traditional authority letter for communal land.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-2">
+              <div class="card__body">
+                <div class="card__icon">&#128203;</div>
+                <h3 class="card__title">Conservation Plan</h3>
+                <p class="card__text">A conservation plan or environmental management plan outlining the proposed measures, area affected, and expected outcomes. Alignment with provincial land care and NEMA requirements where applicable.</p>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-3">
+              <div class="card__body">
+                <div class="card__icon">&#128200;</div>
+                <h3 class="card__title">Other Requirements</h3>
+                <p class="card__text">Not previously disqualified from departmental programmes; commitment to long-term conservation and participation in extension and monitoring; willingness to maintain conservation infrastructure.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== DOCUMENTS TABLE ===== -->
+      <section class="section section--alt">
+        <div class="container">
+          <span class="section-label">Documents</span>
+          <h2 class="section-title">Required Documents for Application</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Prepare these documents before applying. Requirements may vary by farmer category and project scale.</p>
+          <div class="table-wrapper reveal">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Document</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>South African ID</td>
+                  <td>Certified copy of valid SA ID</td>
+                  <td>Required</td>
+                </tr>
+                <tr>
+                  <td>Proof of land</td>
+                  <td>Title deed, lease, PTO, RTO, or traditional authority letter</td>
+                  <td>Required</td>
+                </tr>
+                <tr>
+                  <td>Conservation plan</td>
+                  <td>Environmental management or conservation plan outlining proposed measures</td>
+                  <td>Required</td>
+                </tr>
+                <tr>
+                  <td>Environmental Impact Assessment (EIA)</td>
+                  <td>EIA or exemption where required by NEMA for listed activities</td>
+                  <td>If applicable</td>
+                </tr>
+                <tr>
+                  <td>Farm/land map</td>
+                  <td>Sketch or map showing land boundaries and proposed conservation areas</td>
+                  <td>Required</td>
+                </tr>
+                <tr>
+                  <td>Quotes or cost estimates</td>
+                  <td>For fencing, erosion structures, water infrastructure, or planting</td>
+                  <td>If available</td>
+                </tr>
+                <tr>
+                  <td>Proof of farming activity</td>
+                  <td>Bank statements, tax returns, or proof of agricultural income</td>
+                  <td>If applicable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ADDITIONAL SUPPORT ===== -->
+      <section class="section">
+        <div class="container">
+          <span class="section-label">Beyond the Grant</span>
+          <h2 class="section-title">Additional Support &amp; Programmes</h2>
+          <p class="section-subtitle" style="margin-bottom: var(--space-8);">Provincial programmes that complement your environmental enrichment efforts.</p>
+          <div class="card-grid card-grid--3 reveal">
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#127795;</div>
+                <h3 class="card__title">Land Care Programme</h3>
+                <p class="card__text">Sustainable land management support including soil erosion control, rangeland rehabilitation, and invasive species management.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>Gert Sibande:</strong> <a href="tel:0178110775">017 811 0775</a></p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#128167;</div>
+                <h3 class="card__title">Working for Water</h3>
+                <p class="card__text">Free invasive alien plant clearing programme. Also includes Working on Fire for fire management on agricultural land.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>Mpumalanga:</strong> <a href="tel:0137597300">013 759 7300</a></p>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__body">
+                <div class="card__icon">&#127793;</div>
+                <h3 class="card__title">CASP &amp; MADC</h3>
+                <p class="card__text"><strong>CASP</strong> provides infrastructure and technical advice. <strong>MADC</strong> offers business loans for environmental farm improvements.</p>
+                <p class="card__text" style="margin-top:var(--space-2);"><strong>MADC:</strong> <a href="tel:0137556328">013 755 6328</a> &middot; See <a href="support.html">Support page</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CTA BANNER ===== -->
+      <section class="section section--sm">
+        <div class="container">
+          <div class="cta-banner reveal">
+            <h2 class="cta-banner__title">Ready to Apply for Environmental Funding?</h2>
+            <p class="cta-banner__text">Complete your environmental grant application online. Have your documents and conservation plan ready, then register or log in to get started.</p>
+            <a href="Application/environmental.html" class="btn btn--white btn--lg">Apply for Environmental Grant</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
+    </footer>
+
+  </div>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>

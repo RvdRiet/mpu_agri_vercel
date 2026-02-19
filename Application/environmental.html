@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <title>Environmental Grant Application — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../nav.css">
+  <link rel="stylesheet" href="application.css">
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="../index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="../index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="../crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span></span></a>
+              <a href="../livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span></span></a>
+              <a href="../environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="../weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="../alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="../guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="../support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
+              <a href="index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="../track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="../login.html" class="nav-link">Login</a>
+          <a href="../register.html" class="nav-cta">Register</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="../index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="../weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="../alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="../guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="../support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant</a><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant</a><a href="../track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="../login.html" class="btn btn--secondary btn--block">Login</a><a href="../register.html" class="btn btn--primary btn--block">Register</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main class="main-content app-page">
+      <div class="container">
+        <a href="../environmental.html" class="back-link">← Back to Environmental Enrichment programme</a>
+        <h2 class="app-heading">Environmental Enrichment Grant Application</h2>
+
+        <nav class="app-steps" aria-label="Application steps">
+          <ol class="app-steps-list">
+            <li class="app-step active" data-step="1"><span class="step-label">Conservation Focus</span></li>
+            <li class="app-step" data-step="2"><span class="step-label">Applicant Details</span></li>
+            <li class="app-step" data-step="3"><span class="step-label">Farm &amp; Land</span></li>
+            <li class="app-step" data-step="4"><span class="step-label">Conservation Plan</span></li>
+            <li class="app-step" data-step="5"><span class="step-label">Documents &amp; Submit</span></li>
+          </ol>
+        </nav>
+
+        <form id="applicationForm" class="app-form" novalidate>
+          <!-- Step 1: Conservation Focus -->
+          <section class="app-step-panel active" id="panel-1" data-step="1">
+            <h3 class="panel-title">Conservation Focus</h3>
+
+            <div class="form-group">
+              <label for="primaryFocus">Primary focus area <span class="label-required">*</span></label>
+              <select id="primaryFocus" name="primaryFocus" required aria-describedby="primaryFocusError">
+                <option value="">-- Select --</option>
+                <option value="Soil Rehabilitation">Soil Rehabilitation</option>
+                <option value="Water Resource Management">Water Resource Management</option>
+                <option value="Biodiversity Conservation">Biodiversity Conservation</option>
+                <option value="Invasive Species Control">Invasive Species Control</option>
+                <option value="Sustainable Farming Practices">Sustainable Farming Practices</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="field-error" id="primaryFocusError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="secondaryFocus">Secondary focus</label>
+              <select id="secondaryFocus" name="secondaryFocus">
+                <option value="">None</option>
+                <option value="Soil Rehabilitation">Soil Rehabilitation</option>
+                <option value="Water Resource Management">Water Resource Management</option>
+                <option value="Biodiversity Conservation">Biodiversity Conservation</option>
+                <option value="Invasive Species Control">Invasive Species Control</option>
+                <option value="Sustainable Farming Practices">Sustainable Farming Practices</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Farmer Category <span class="label-required">*</span></label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> Subsistence (up to R50,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Smallholder" /> Smallholder (R50,001–R1,000,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> Commercial (&gt;R1,000,000)</label>
+              </div>
+              <span class="field-error" id="farmerCategoryError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Have you previously received an environmental grant?</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="envGrantPreviously" value="No" /> No</label>
+                <label class="radio-label"><input type="radio" name="envGrantPreviously" value="Yes" /> Yes</label>
+              </div>
+            </div>
+
+            <div class="form-group env-grant-details-wrap" id="envGrantDetailsWrap" style="display: none;">
+              <label for="envGrantDetails">If yes, provide details</label>
+              <textarea id="envGrantDetails" name="envGrantDetails" rows="3" placeholder="Previous grant details"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-next" data-next="2">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 2: Applicant Details -->
+          <section class="app-step-panel" id="panel-2" data-step="2">
+            <h3 class="panel-title">Applicant Details</h3>
+
+            <div class="form-group">
+              <label for="legalEntityType">Type of Legal Entity</label>
+              <select id="legalEntityType" name="legalEntityType">
+                <option value="">-- Select --</option>
+                <option value="Individual">Individual</option>
+                <option value="Cooperative">Cooperative</option>
+                <option value="Company">Company</option>
+                <option value="Trust">Trust</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="registeredName">Registered name / applicant name <span class="label-required">*</span></label>
+              <input type="text" id="registeredName" name="registeredName" required aria-describedby="registeredNameError" />
+              <span class="field-error" id="registeredNameError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="registrationNumber">Registration number</label>
+              <input type="text" id="registrationNumber" name="registrationNumber" />
+            </div>
+
+            <div class="form-group">
+              <label for="representativeName">Representative name</label>
+              <input type="text" id="representativeName" name="representativeName" />
+            </div>
+
+            <div class="form-group">
+              <label for="representativeId">Representative SA ID (13 digits)</label>
+              <input type="text" id="representativeId" name="representativeId" maxlength="13" pattern="[0-9]{13}" placeholder="13 digits" />
+              <span class="field-error" id="representativeIdError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telephone">Telephone</label>
+                <input type="text" id="telephone" name="telephone" />
+              </div>
+              <div class="form-group">
+                <label for="mobile">Mobile</label>
+                <input type="text" id="mobile" name="mobile" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="physicalAddress">Physical address</label>
+              <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="postalCode">Postal code</label>
+              <input type="text" id="postalCode" name="postalCode" placeholder="Postal code" />
+            </div>
+
+            <div class="form-group">
+              <label for="totalMembers">Total project members</label>
+              <input type="number" id="totalMembers" name="totalMembers" min="0" />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="1">Previous</button>
+              <button type="button" class="btn-next" data-next="3">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 3: Farm & Land -->
+          <section class="app-step-panel" id="panel-3" data-step="3">
+            <h3 class="panel-title">Farm &amp; Land</h3>
+
+            <div class="form-group">
+              <label for="farmName">Farm name</label>
+              <input type="text" id="farmName" name="farmName" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="totalLandSize">Total land size (ha)</label>
+                <input type="number" id="totalLandSize" name="totalLandSize" min="0" step="0.01" />
+              </div>
+              <div class="form-group">
+                <label for="areaTargetedConservation">Area targeted for conservation (ha)</label>
+                <input type="number" id="areaTargetedConservation" name="areaTargetedConservation" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" id="district" name="district" />
+              </div>
+              <div class="form-group">
+                <label for="localMunicipality">Local municipality</label>
+                <input type="text" id="localMunicipality" name="localMunicipality" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="wardNumber">Ward number</label>
+              <input type="text" id="wardNumber" name="wardNumber" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="gpsLatitude">GPS Latitude</label>
+                <input type="text" id="gpsLatitude" name="gpsLatitude" placeholder="e.g. -25.7479" />
+              </div>
+              <div class="form-group">
+                <label for="gpsLongitude">GPS Longitude</label>
+                <input type="text" id="gpsLongitude" name="gpsLongitude" placeholder="e.g. 28.2293" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="landAccessType">Type of land access</label>
+              <select id="landAccessType" name="landAccessType">
+                <option value="">-- Select --</option>
+                <option value="Own">Own</option>
+                <option value="Lease">Lease</option>
+                <option value="PTO">PTO</option>
+                <option value="RTO">RTO</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="landCondition">Current land condition</label>
+              <select id="landCondition" name="landCondition">
+                <option value="">-- Select --</option>
+                <option value="Good">Good</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Degraded">Degraded</option>
+                <option value="Severely Degraded">Severely Degraded</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Environmental Impact Assessment done</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="eiaDone" value="No" /> No</label>
+                <label class="radio-label"><input type="radio" name="eiaDone" value="Yes" /> Yes</label>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="2">Previous</button>
+              <button type="button" class="btn-next" data-next="4">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 4: Conservation Plan -->
+          <section class="app-step-panel" id="panel-4" data-step="4">
+            <h3 class="panel-title">Conservation Plan</h3>
+
+            <div class="form-group">
+              <label for="environmentalChallenge">Describe the environmental challenge <span class="label-required">*</span></label>
+              <textarea id="environmentalChallenge" name="environmentalChallenge" rows="4" required aria-describedby="environmentalChallengeError" placeholder="Describe the environmental challenge you aim to address"></textarea>
+              <span class="field-error" id="environmentalChallengeError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Proposed conservation activities</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Erosion control barriers" /> Erosion control barriers</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Contour banks" /> Contour banks</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Gabion structures" /> Gabion structures</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Soil testing & amendment" /> Soil testing &amp; amendment</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Wetland rehabilitation" /> Wetland rehabilitation</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Water harvesting infrastructure" /> Water harvesting infrastructure</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Indigenous vegetation planting" /> Indigenous vegetation planting</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Invasive species removal" /> Invasive species removal</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Fencing for conservation" /> Fencing for conservation</label>
+                <label class="checkbox-label"><input type="checkbox" name="activity" value="Wildlife corridor establishment" /> Wildlife corridor establishment</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="expectedOutcomes">Expected outcomes</label>
+              <textarea id="expectedOutcomes" name="expectedOutcomes" rows="4" placeholder="Describe the expected outcomes of your conservation activities"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="timeline">Timeline for implementation</label>
+                <select id="timeline" name="timeline">
+                  <option value="">-- Select --</option>
+                  <option value="3 months">3 months</option>
+                  <option value="6 months">6 months</option>
+                  <option value="12 months">12 months</option>
+                  <option value="18 months">18 months</option>
+                  <option value="24 months">24 months</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="estimatedBudget">Estimated budget needed (Rand)</label>
+                <input type="number" id="estimatedBudget" name="estimatedBudget" min="0" step="1" placeholder="R" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="3">Previous</button>
+              <button type="button" class="btn-next" data-next="5">Next</button>
+            </div>
+          </section>
+
+          <!-- Step 5: Documents & Submit -->
+          <section class="app-step-panel" id="panel-5" data-step="5">
+            <h3 class="panel-title">Documents &amp; Submit</h3>
+            <p class="app-step-intro">Upload your documents and review your application before submitting.</p>
+
+            <div class="form-group">
+              <label>Certified ID copies</label>
+              <input type="file" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+            </div>
+
+            <div class="form-group">
+              <label>Proof of land</label>
+              <input type="file" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group">
+              <label>Conservation plan / EIA</label>
+              <input type="file" name="conservationPlan" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label>Farm map/sketch (optional)</label>
+              <input type="file" name="farmMap" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label>Quotes for materials (optional)</label>
+              <input type="file" name="quotesMaterials" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label>Proof of farming activity (optional)</label>
+              <input type="file" name="farmingProof" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="summary-box">
+              <p><strong>Primary Focus:</strong> <span id="summaryPrimaryFocus">—</span></p>
+              <p><strong>Farmer Category:</strong> <span id="summaryCategory">—</span></p>
+              <p><strong>Applicant:</strong> <span id="summaryApplicant">—</span></p>
+              <p><strong>Farm:</strong> <span id="summaryFarm">—</span></p>
+              <p><strong>Budget:</strong> R<span id="summaryBudget">—</span></p>
+            </div>
+
+            <div class="popia-consent-block">
+              <h4 class="popia-consent-heading">POPIA compliance and consent</h4>
+              <p>Please read the <a href="../popia.html" target="_blank" rel="noopener noreferrer">POPIA compliance page</a> (opens in a new tab). It explains how we use and protect your personal information.</p>
+              <div class="form-group popia-checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="popiaConsent" name="popiaConsent" value="yes" required />
+                  <span>I have read the POPIA compliance and consent to the processing of my personal information as described. I understand that my application cannot be accepted without this consent.</span>
+                </label>
+                <span class="field-error" id="popiaConsentError" aria-live="polite"></span>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-prev" data-prev="4">Previous</button>
+              <button type="submit" class="btn-submit" id="btnSubmitApplication">Submit Application</button>
+            </div>
+          </section>
+        </form>
+      </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="../crop.html">Crop Management</a><a href="../livestock.html">Livestock Management</a><a href="../environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="../weather.html">Weather Data</a><a href="../alerts.html">Farming Alerts</a><a href="../guides.html">Advisory Guides</a><a href="../support.html">Support Contacts</a><a href="../track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="../popia.html">POPIA Compliance</a><a href="../terms.html">Terms of Service</a><a href="../staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span></div></div></div>
+    </footer>
+  </div>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/security.js"></script>
+  <script src="../js/applications.js"></script>
+  <script src="../js/nav.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var user = window.FarmAuth && FarmAuth.requireAuth('../login.html');
+      if (!user) return;
+
+      var form = document.getElementById('applicationForm');
+      var panels = document.querySelectorAll('.app-step-panel');
+      var steps = document.querySelectorAll('.app-step');
+      var currentStep = 1;
+      var totalSteps = 5;
+      var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
+
+      function showPanel(stepNum) {
+        stepNum = parseInt(stepNum, 10);
+        if (stepNum < 1 || stepNum > totalSteps) return;
+        currentStep = stepNum;
+        panels.forEach(function (panel) {
+          var n = parseInt(panel.getAttribute('data-step'), 10);
+          panel.classList.toggle('active', n === stepNum);
+        });
+        steps.forEach(function (step) {
+          var n = parseInt(step.getAttribute('data-step'), 10);
+          step.classList.remove('active', 'completed');
+          if (n === stepNum) step.classList.add('active');
+          else if (n < stepNum) step.classList.add('completed');
+        });
+      }
+
+      function clearStepErrors(stepNum) {
+        var panel = document.getElementById('panel-' + stepNum);
+        if (!panel) return;
+        panel.querySelectorAll('.field-error').forEach(function (el) { el.textContent = ''; });
+        panel.querySelectorAll('.input-error').forEach(function (el) { el.classList.remove('input-error'); });
+      }
+
+      function setFieldError(fieldId, errorId, message) {
+        var field = fieldId ? document.getElementById(fieldId) : null;
+        var errEl = errorId ? document.getElementById(errorId) : null;
+        if (field) field.classList.toggle('input-error', !!message);
+        if (errEl) errEl.textContent = message || '';
+      }
+
+      function validateStep1() {
+        clearStepErrors(1);
+        var ok = true;
+        var primary = document.getElementById('primaryFocus');
+        if (!primary || !primary.value) {
+          setFieldError('primaryFocus', 'primaryFocusError', 'Please select a primary focus area.');
+          ok = false;
+        } else setFieldError('primaryFocus', 'primaryFocusError', '');
+        var category = document.querySelector('input[name="farmerCategory"]:checked');
+        if (!category) {
+          if (document.getElementById('farmerCategoryError')) document.getElementById('farmerCategoryError').textContent = 'Please select your farmer category.';
+          ok = false;
+        } else setFieldError(null, 'farmerCategoryError', '');
+        return ok;
+      }
+
+      function validateStep2() {
+        clearStepErrors(2);
+        var reg = document.getElementById('registeredName');
+        var val = reg ? reg.value.trim() : '';
+        if (!val) {
+          setFieldError('registeredName', 'registeredNameError', 'Registered name / applicant name is required.');
+          return false;
+        }
+        var repId = document.getElementById('representativeId');
+        if (repId && repId.value.trim()) {
+          var idVal = repId.value.replace(/\s/g, '');
+          if (!/^\d{13}$/.test(idVal)) {
+            setFieldError('representativeId', 'representativeIdError', 'SA ID must be 13 digits.');
+            return false;
+          }
+        }
+        setFieldError('registeredName', 'registeredNameError', '');
+        setFieldError('representativeId', 'representativeIdError', '');
+        return true;
+      }
+
+      function validateStep4() {
+        clearStepErrors(4);
+        var challenge = document.getElementById('environmentalChallenge');
+        var val = challenge ? challenge.value.trim() : '';
+        if (!val) {
+          setFieldError('environmentalChallenge', 'environmentalChallengeError', 'Please describe the environmental challenge.');
+          return false;
+        }
+        setFieldError('environmentalChallenge', 'environmentalChallengeError', '');
+        return true;
+      }
+
+      function validateStep(stepNum) {
+        if (stepNum === 1) return validateStep1();
+        if (stepNum === 2) return validateStep2();
+        if (stepNum === 4) return validateStep4();
+        return true;
+      }
+
+      function validatePopiaConsent() {
+        var consent = document.getElementById('popiaConsent');
+        var errEl = document.getElementById('popiaConsentError');
+        if (!consent || !consent.checked) {
+          if (errEl) errEl.textContent = 'You must read and consent to the POPIA compliance before we can accept your application.';
+          if (consent) consent.closest('.form-group') && consent.closest('.form-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return false;
+        }
+        if (errEl) errEl.textContent = '';
+        return true;
+      }
+
+      function updateSummary() {
+        var safe = function (v) { return (v != null && String(v).trim ? String(v).trim() : '') || '—'; };
+        var primary = document.getElementById('primaryFocus');
+        var category = document.querySelector('input[name="farmerCategory"]:checked');
+        var reg = document.getElementById('registeredName');
+        var farm = document.getElementById('farmName');
+        var budget = document.getElementById('estimatedBudget');
+        var budgetVal = budget && budget.value ? Number(budget.value).toLocaleString('en-ZA') : '—';
+
+        var summaryPrimaryFocus = document.getElementById('summaryPrimaryFocus');
+        var summaryCategory = document.getElementById('summaryCategory');
+        var summaryApplicant = document.getElementById('summaryApplicant');
+        var summaryFarm = document.getElementById('summaryFarm');
+        var summaryBudget = document.getElementById('summaryBudget');
+
+        if (summaryPrimaryFocus) summaryPrimaryFocus.textContent = primary && primary.value ? primary.value : '—';
+        if (summaryCategory) summaryCategory.textContent = category ? category.value : '—';
+        if (summaryApplicant) summaryApplicant.textContent = reg ? safe(reg.value) : '—';
+        if (summaryFarm) summaryFarm.textContent = farm ? safe(farm.value) : '—';
+        if (summaryBudget) summaryBudget.textContent = budgetVal;
+      }
+
+      var envGrantWrap = document.getElementById('envGrantDetailsWrap');
+      var envGrantRadios = document.querySelectorAll('input[name="envGrantPreviously"]');
+      if (envGrantWrap && envGrantRadios.length) {
+        envGrantRadios.forEach(function (r) {
+          r.addEventListener('change', function () {
+            envGrantWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
+          });
+        });
+      }
+
+      form.addEventListener('click', function (e) {
+        var nextBtn = e.target.closest('.btn-next');
+        var prevBtn = e.target.closest('.btn-prev');
+        if (nextBtn) {
+          e.preventDefault();
+          var next = nextBtn.getAttribute('data-next');
+          if (next) {
+            var nextNum = parseInt(next, 10);
+            if (!validateStep(currentStep)) return;
+            if (nextNum === 5) updateSummary();
+            showPanel(next);
+          }
+        }
+        if (prevBtn) {
+          e.preventDefault();
+          showPanel(prevBtn.getAttribute('data-prev'));
+        }
+      });
+
+      function serializeFormDetails(formEl) {
+        var details = {};
+        var els = formEl.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < els.length; i++) {
+          var el = els[i];
+          var name = el.name;
+          if (!name) continue;
+          if (el.type === 'file') continue;
+          if (el.type === 'radio') {
+            if (el.checked) details[name] = el.value;
+          } else if (el.type === 'checkbox') {
+            if (name === 'activity') {
+              if (!details[name]) details[name] = [];
+              if (el.checked) details[name].push(el.value);
+            } else if (el.checked) {
+              details[name] = el.value;
+            }
+          } else {
+            details[name] = el.value || '';
+          }
+        }
+        if (details.activity && Array.isArray(details.activity)) details.activity = details.activity.join(', ');
+        if (sanitize && typeof sanitize === 'function') details = sanitize(details);
+        return details;
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var user = window.FarmAuth && FarmAuth.getCurrentUser();
+        if (!user) {
+          alert('Session expired. Please log in again.');
+          window.location.href = '../login.html';
+          return;
+        }
+        updateSummary();
+        if (!validatePopiaConsent()) {
+          document.getElementById('panel-5').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showPanel(5);
+          return;
+        }
+
+        var details = serializeFormDetails(form);
+        details.popiaConsent = true;
+        details.popiaConsentAt = new Date().toISOString();
+
+        var primary = document.getElementById('primaryFocus');
+        var category = document.querySelector('input[name="farmerCategory"]:checked');
+        var reg = document.getElementById('registeredName');
+        var farm = document.getElementById('farmName');
+        var budget = document.getElementById('estimatedBudget');
+        var safeVal = function (v) { return (v != null && String(v).trim ? String(v).trim() : '') || '—'; };
+        var summaryPrimary = primary && primary.value ? primary.value : '—';
+        var summaryCategory = category ? category.value : '—';
+        var summaryApplicant = reg ? safeVal(reg.value) : '—';
+        var summaryFarm = farm ? safeVal(farm.value) : '—';
+        var summaryBudget = budget && budget.value ? 'R' + Number(budget.value).toLocaleString('en-ZA') : '—';
+        if (window.FarmSecurity && window.FarmSecurity.sanitizeString) {
+          summaryPrimary = window.FarmSecurity.sanitizeString(summaryPrimary);
+          summaryCategory = window.FarmSecurity.sanitizeString(summaryCategory);
+          summaryApplicant = window.FarmSecurity.sanitizeString(summaryApplicant);
+          summaryFarm = window.FarmSecurity.sanitizeString(summaryFarm);
+        }
+
+        var application = {
+          type: 'environmental',
+          status: 'Submitted',
+          submittedAt: new Date().toISOString(),
+          summary: {
+            applicationType: 'environmental',
+            primaryFocus: summaryPrimary,
+            farmerCategory: summaryCategory,
+            registeredName: summaryApplicant,
+            farmName: summaryFarm,
+            budget: summaryBudget
+          },
+          details: details
+        };
+
+        if (window.FarmApplications) {
+          FarmApplications.saveApplication(user.id, application).then(function () {
+            window.location.href = '../track.html';
+          }).catch(function () {
+            window.location.href = '../track.html';
+          });
+        } else {
+          window.location.href = '../track.html';
+        }
+      });
+
+      steps.forEach(function (step) {
+        step.addEventListener('click', function () {
+          var n = parseInt(step.getAttribute('data-step'), 10);
+          if (n <= currentStep || step.classList.contains('completed')) showPanel(n);
+        });
+      });
+
+      showPanel(1);
+    })();
+  </script>
+</body>
+</html>

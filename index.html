@@ -4,260 +4,413 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#2d5a27">
-  <title>Farm - Mpumalanga Livestock Development Programme</title>
+  <meta name="description" content="Mpumalanga Agricultural Decision Support System — Crop, livestock, and environmental enrichment management tools, weather data, advisory guides, and government grant applications.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://*.googleapis.com https://*.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; script-src 'self' https://*.gstatic.com https://*.googleapis.com 'unsafe-inline';">
+  <title>Mpumalanga Agricultural Decision Support System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+  <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
   <div class="page-wrapper">
-    <header class="site-header">
-      <div class="header-inner">
-        <a href="index.html" class="site-title-link">
-          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <span class="site-nav__logo" aria-hidden="true">MP</span>
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
         </a>
-        <nav class="header-nav" aria-label="Account">
-          <span class="header-user" id="headerUser"></span>
-          <a href="track.html" class="header-link" id="headerTrack" style="display: none;">Track Application</a>
-          <a href="login.html" class="header-link header-cta" id="headerLogin">Login</a>
-          <a href="register.html" class="header-link header-cta" id="headerRegister">Register</a>
-          <button type="button" class="header-link header-btn" id="headerLogout" style="display: none;">Logout</button>
-        </nav>
+
+        <div class="site-nav__links">
+          <div class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </div>
+
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">
+              Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span>
+            </button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#127806;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Crop Management</span>
+                  <span class="nav-dropdown__desc">Crop farming support &amp; grants</span>
+                </span>
+              </a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#128004;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Livestock Management</span>
+                  <span class="nav-dropdown__desc">Livestock development &amp; grants</span>
+                </span>
+              </a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#127795;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Environmental Enrichment</span>
+                  <span class="nav-dropdown__desc">Conservation &amp; sustainability</span>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-item">
+            <a href="weather.html" class="nav-link">Weather</a>
+          </div>
+
+          <div class="nav-item">
+            <a href="alerts.html" class="nav-link">Alerts</a>
+          </div>
+
+          <div class="nav-item">
+            <a href="guides.html" class="nav-link">Guides</a>
+          </div>
+
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">
+              Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span>
+            </button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#128196;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Crop Grant</span>
+                  <span class="nav-dropdown__desc">Apply for crop development support</span>
+                </span>
+              </a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#128196;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Livestock Grant</span>
+                  <span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span>
+                </span>
+              </a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#128196;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Environmental Grant</span>
+                  <span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span>
+                </span>
+              </a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem">
+                <span class="nav-dropdown__icon">&#128269;</span>
+                <span class="nav-dropdown__text">
+                  <span class="nav-dropdown__label">Track Application</span>
+                  <span class="nav-dropdown__desc">Check your application status</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-nav__actions">
+          <a href="login.html" class="nav-link" id="navLogin">Login</a>
+          <a href="register.html" class="nav-cta" id="navRegister">Register</a>
+        </div>
+
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+          <span class="nav-toggle__bar"></span>
+        </button>
       </div>
-    </header>
 
-    <div class="header-image-wrap">
-      <img src="/images/mainheader.jpg" alt="" class="header-image" width="100%" />
-    </div>
+      <!-- Mobile menu -->
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section">
+          <div class="mobile-nav__heading">Navigation</div>
+          <a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a>
+          <a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a>
+          <a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a>
+          <a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a>
+          <a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a>
+        </div>
+        <div class="mobile-nav__section">
+          <div class="mobile-nav__heading">Programmes</div>
+          <a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a>
+          <a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a>
+          <a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a>
+        </div>
+        <div class="mobile-nav__section">
+          <div class="mobile-nav__heading">Applications</div>
+          <a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a>
+          <a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a>
+          <a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a>
+          <a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a>
+        </div>
+        <div class="mobile-nav__actions">
+          <a href="login.html" class="btn btn--secondary btn--block" id="mobileLogin">Login</a>
+          <a href="register.html" class="btn btn--primary btn--block" id="mobileRegister">Register</a>
+        </div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
 
-    <main class="main-content">
-      <section class="welcome-section scroll-reveal">
-        <h2>Welcome to the Mpumalanga Livestock Development Programme</h2>
-        <p>The Department of Agriculture, Rural Development Land and Environmental Affairs invites interested livestock farmers in the Mpumalanga Province to apply for participating in the Masibuyele Esibayeni Program.</p>
-      </section>
-
-      <section class="content-section scroll-reveal">
-        <h3>Requirements</h3>
-        <p>Applicants must be from previously disadvantaged group residing in Mpumalanga Province, aged 18 and above.</p>
-        <p>The basic requirement for participating in the Programme is availability of sufficient land for the livestock that is being applied for to accommodate livestock numbers at the recommended carrying capacity.</p>
-        <p>Certified copies of ID of ALL applicants; valid confirmation of access to land in the form of a title deed or Permission to occupy or long term lease agreement (with 5 or more years) and a business plan or business profile.</p>
-        <p>Small holders and commercial farmers must attach proof of annual income.</p>
-        <p>Applicants must demonstrate ability to create jobs, current markets or off-take agreement and other relevant information about the farm and the applicants.</p>
-        <p>Applicants to attach relevant authorisation documents such as Environmental Impact Assessment (where applicable), biosecurity plans and animal branding/marking/identification certificates.</p>
-        <p>Applicants should demonstrate the availability of relevant infrastructure for the commodity applied for, such as boundary fencing, water troughs, loading zone, animal handling facilities and proper housing for piggery, poultry and rabbits. Vulnerable groups i.e. women, youth and people with disabilities are encouraged to apply. <strong>Other commodities funded are poultry, rabbits, fish and dairy cattle</strong>.</p>
-      </section>
-
-      <section class="content-section scroll-reveal">
-        <h3>Successfull Applicants will receive the following livestock</h3>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Farmer Category/Commodity</th>
-                <th>Subsistence</th>
-                <th>Smallholder</th>
-                <th>Commercial</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Beef Cattle</td>
-                <td>Bulls only(communal)</td>
-                <td>Up to 1 bull &amp; 25 heifers</td>
-                <td>Up to 4 bulls &amp; 100 heifers</td>
-              </tr>
-              <tr>
-                <td>Goats</td>
-                <td>Up to 1 buck &amp; 10 does</td>
-                <td>Up to 1 buck &amp; 25 does</td>
-                <td>Up to 4 bucks &amp; 100 does</td>
-              </tr>
-              <tr>
-                <td>Sheep</td>
-                <td>Up to 1 ram &amp; 10 ewes</td>
-                <td>Up to 1 ram &amp; 25 ewes</td>
-                <td>Up to 4 rams &amp; 100 ewes</td>
-              </tr>
-              <tr>
-                <td>Pigs</td>
-                <td>Up to 1 boar &amp; 5 sows</td>
-                <td>Up to 1 boar &amp; 10 sows</td>
-                <td>Up to 10 boar &amp; 100 sows</td>
-              </tr>
-            </tbody>
-          </table>
+    <main>
+      <!-- ===== HERO ===== -->
+      <section class="hero hero--full">
+        <div class="hero__bg">
+          <img src="images/mainheader.jpg" alt="" loading="eager">
+        </div>
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+          <span class="hero__label">Mpumalanga Department of Agriculture</span>
+          <h1 class="hero__title">Agricultural Decision Support System</h1>
+          <p class="hero__subtitle">Empowering farmers with crop management tools, livestock development programmes, environmental conservation guidance, and real-time weather data for informed decision making.</p>
+          <div class="hero__actions">
+            <a href="guides.html" class="btn btn--white btn--lg">Explore Guides</a>
+            <a href="#programmes" class="btn btn--accent btn--lg">View Programmes</a>
+          </div>
         </div>
       </section>
 
-      <section class="content-section scroll-reveal">
-        <h3>Selection Process</h3>
-        <p>The selection process will include short-listing of potential beneficiaries, site visits by technical team to conduct farm assessment for verification of information provided by applicants. If you have not received a response within 90 days after the closing date please consider your application unsuccessful.</p>
-      </section>
-
-      <section class="content-section scroll-reveal">
-        <h3>Exclusion</h3>
-        <p>Farmers who have received livestock through the MESP in the previous 5 years and have not yet serviced the loan, Public servants, Public Office bearers and minors are excluded</p>
-      </section>
-
-      <section class="content-section scroll-reveal">
-        <h3>Required Application Documents</h3>
-        <div class="table-wrapper">
-          <table class="data-table documents-table">
-            <thead>
-              <tr>
-                <th>Item/Document</th>
-                <th>Subsistence Farmers</th>
-                <th>Smallholder Farmers</th>
-                <th>Commercial Farmers</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Fully completed application form</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>Yes</td>
-              </tr>
-              <tr>
-                <td>Certified ID copies of all applicants</td>
-                <td>Attach</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Legal entity document (CK, Coop certificate &amp; etc if applying as a group)</td>
-                <td>Attach</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Proof of land access (Title deed/ lease contract (5 or more years)/ PTO/RTO)</td>
-                <td>Attach</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Business plan/Business profile</td>
-                <td>Profile</td>
-                <td>Plan</td>
-                <td>Plan</td>
-              </tr>
-              <tr>
-                <td>Proof of farming income</td>
-                <td>N/A</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Markets/off take agreement</td>
-                <td>N/A</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Brand mark certificate</td>
-                <td>N/A</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>EIA (Authorisation or exemption if applicable)</td>
-                <td>N/A</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-              <tr>
-                <td>Biosecurity plan (if applicable)</td>
-                <td>N/A</td>
-                <td>Attach</td>
-                <td>Attach</td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- ===== STATS BAR ===== -->
+      <section class="stats-bar">
+        <div class="container">
+          <div class="stats-bar__inner">
+            <div class="stat reveal">
+              <span class="stat__number">3</span>
+              <span class="stat__label">Grant Programmes</span>
+            </div>
+            <div class="stat reveal reveal--delay-1">
+              <span class="stat__number">8+</span>
+              <span class="stat__label">Commodity Types</span>
+            </div>
+            <div class="stat reveal reveal--delay-2">
+              <span class="stat__number">18</span>
+              <span class="stat__label">Mpumalanga Districts</span>
+            </div>
+            <div class="stat reveal reveal--delay-3">
+              <span class="stat__number">24/7</span>
+              <span class="stat__label">Weather Monitoring</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="content-section scroll-reveal">
-        <h3>Contacts</h3>
-        <p>Application forms can be collected and submitted manually at the following DARDLEA Offices:</p>
-        <ul class="contacts-list">
-          <li><strong>Bohlabela:</strong> District Office at 101 Main Road, Thulamahashe 1365; Mr. M.E Mthethwa 072 470 5088</li>
-          <li><strong>Ehlanzeni:</strong> District Office at 4 Aqua Street Block 4 Riverside Office Park Nelspruit 1200; Mr. J.E Lamula 082 696 3542</li>
-          <li><strong>Gert Sibande:</strong> District Office at 44 Church Street Ermelo 2350; Mr. D Nembilwi 082 575 2244</li>
-          <li><strong>Nkangala:</strong> District Office at Building 16, Government complex Kwamhlanga 1022; Dr. M.W Thamaga 082 309 1419</li>
-          <li><strong>General Enquiries:</strong> Ms PNZ Mpangane 082 805 1076</li>
-        </ul>
+      <!-- ===== PROGRAMMES OVERVIEW ===== -->
+      <section class="section" id="programmes">
+        <div class="container text-center">
+          <span class="section-label">Our Programmes</span>
+          <h2 class="section-title">Supporting Agricultural Growth</h2>
+          <p class="section-subtitle">Access government-backed programmes for crop farming, livestock development, and environmental conservation across Mpumalanga province.</p>
+        </div>
+        <div class="container" style="margin-top:var(--space-10)">
+          <div class="card-grid card-grid--3">
+            <!-- Crop -->
+            <div class="card reveal">
+              <div class="card__body">
+                <div class="card__icon">&#127806;</div>
+                <span class="card__label">Crop Programme</span>
+                <h3 class="card__title">Crop Management</h3>
+                <p class="card__text">Support for maize, vegetable, fruit, and sugarcane farmers. Access grants, best practices, and decision support tools tailored to Mpumalanga's agricultural zones.</p>
+                <a href="crop.html" class="btn btn--primary">Learn More</a>
+              </div>
+            </div>
+            <!-- Livestock -->
+            <div class="card reveal reveal--delay-1">
+              <div class="card__body">
+                <div class="card__icon">&#128004;</div>
+                <span class="card__label">Livestock Programme</span>
+                <h3 class="card__title">Livestock Management</h3>
+                <p class="card__text">The Masibuyele Esibayeni Programme provides livestock grants for cattle, goats, sheep, pigs, poultry, and more. Grow your herd with government support.</p>
+                <a href="livestock.html" class="btn btn--primary">Learn More</a>
+              </div>
+            </div>
+            <!-- Environmental -->
+            <div class="card reveal reveal--delay-2">
+              <div class="card__body">
+                <div class="card__icon">&#127795;</div>
+                <span class="card__label">Environmental Programme</span>
+                <h3 class="card__title">Environmental Enrichment</h3>
+                <p class="card__text">Conservation grants for soil rehabilitation, water management, biodiversity protection, and sustainable farming practices in Mpumalanga.</p>
+                <a href="environmental.html" class="btn btn--primary">Learn More</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="cta-section scroll-reveal">
-        <a href="Application/index.html" class="btn-start-application" id="btnStartApplication">Start Application</a>
+      <!-- ===== DECISION SUPPORT TOOLS ===== -->
+      <section class="section section--alt">
+        <div class="container text-center">
+          <span class="section-label">Decision Support</span>
+          <h2 class="section-title">Tools for Smarter Farming</h2>
+          <p class="section-subtitle">Real-time weather data, expert guides, and grant management tools — everything you need to make informed agricultural decisions.</p>
+        </div>
+        <div class="container" style="margin-top:var(--space-10)">
+          <div class="card-grid card-grid--4">
+            <div class="card reveal">
+              <div class="card__body">
+                <div class="card__icon">&#9925;</div>
+                <h3 class="card__title">Weather Dashboard</h3>
+                <p class="card__text">Location-based weather data for Mpumalanga municipalities. Monitor temperature, rainfall, humidity, and wind.</p>
+                <a href="weather.html" class="btn btn--secondary btn--sm">View Weather</a>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-1">
+              <div class="card__body">
+                <div class="card__icon">&#9888;</div>
+                <h3 class="card__title">Farming Alerts</h3>
+                <p class="card__text">Live updates on disease outbreaks, pest warnings, drought alerts, and critical farming news from trusted SA sources.</p>
+                <a href="alerts.html" class="btn btn--secondary btn--sm">View Alerts</a>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-2">
+              <div class="card__body">
+                <div class="card__icon">&#128214;</div>
+                <h3 class="card__title">Advisory Guides</h3>
+                <p class="card__text">Comprehensive guides on crop farming, livestock breeds, and environmental management for SA conditions.</p>
+                <a href="guides.html" class="btn btn--secondary btn--sm">Browse Guides</a>
+              </div>
+            </div>
+            <div class="card reveal reveal--delay-3">
+              <div class="card__body">
+                <div class="card__icon">&#128269;</div>
+                <h3 class="card__title">Application Tracker</h3>
+                <p class="card__text">Submit grant applications online and track their status in real time through the review process.</p>
+                <a href="track.html" class="btn btn--secondary btn--sm">Track Status</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="content-section definition-trigger-section scroll-reveal">
-        <h4 id="definition-of-farmer-category">DEFINITION OF FARMER CATEGORY</h4>
-        <button type="button" class="btn-definition" id="btnDefinition" aria-expanded="false">Definition of farmer category</button>
+      <!-- ===== HOW IT WORKS ===== -->
+      <section class="section">
+        <div class="container text-center">
+          <span class="section-label">How It Works</span>
+          <h2 class="section-title">Apply for a Grant in 4 Steps</h2>
+        </div>
+        <div class="container" style="margin-top:var(--space-10)">
+          <div class="card-grid card-grid--4">
+            <div class="card card--flat reveal">
+              <div class="card__body text-center">
+                <div class="card__icon" style="margin-left:auto;margin-right:auto;font-size:1.5rem;background:var(--color-accent-light);color:var(--color-accent-dark);">1</div>
+                <h4 class="card__title" style="font-size:var(--text-lg);">Register</h4>
+                <p class="card__text">Create an account using your South African ID number. Quick, secure, and free.</p>
+              </div>
+            </div>
+            <div class="card card--flat reveal reveal--delay-1">
+              <div class="card__body text-center">
+                <div class="card__icon" style="margin-left:auto;margin-right:auto;font-size:1.5rem;background:var(--color-accent-light);color:var(--color-accent-dark);">2</div>
+                <h4 class="card__title" style="font-size:var(--text-lg);">Choose Programme</h4>
+                <p class="card__text">Select Crop, Livestock, or Environmental Enrichment based on your farming needs.</p>
+              </div>
+            </div>
+            <div class="card card--flat reveal reveal--delay-2">
+              <div class="card__body text-center">
+                <div class="card__icon" style="margin-left:auto;margin-right:auto;font-size:1.5rem;background:var(--color-accent-light);color:var(--color-accent-dark);">3</div>
+                <h4 class="card__title" style="font-size:var(--text-lg);">Complete Application</h4>
+                <p class="card__text">Fill in your farm details, infrastructure, and upload supporting documents.</p>
+              </div>
+            </div>
+            <div class="card card--flat reveal reveal--delay-3">
+              <div class="card__body text-center">
+                <div class="card__icon" style="margin-left:auto;margin-right:auto;font-size:1.5rem;background:var(--color-accent-light);color:var(--color-accent-dark);">4</div>
+                <h4 class="card__title" style="font-size:var(--text-lg);">Track Progress</h4>
+                <p class="card__text">Monitor your application status online and receive updates on approval.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="content-section track-promo-section scroll-reveal">
-        <h4>Already submitted an application?</h4>
-        <p>If you have already submitted an application, simply log in and go to the <strong>Track Application</strong> section to check the progress of your application.</p>
-        <a href="login.html" class="btn-login-now">Login now</a>
+      <!-- ===== CTA BANNER ===== -->
+      <section class="section section--sm">
+        <div class="container">
+          <div class="cta-banner reveal">
+            <h2 class="cta-banner__title">Ready to Get Started?</h2>
+            <p class="cta-banner__text">Register today and access grant applications, farming guides, and decision support tools — all in one place.</p>
+            <div style="display:flex;gap:var(--space-4);justify-content:center;flex-wrap:wrap;">
+              <a href="register.html" class="btn btn--white btn--lg">Create Account</a>
+              <a href="guides.html" class="btn btn--accent btn--lg">Browse Guides</a>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
-      <div class="footer-image-wrap">
-        <img src="public/footer.jpg" alt="" class="footer-image" />
+      <div class="footer__top">
+        <div class="container">
+          <div class="footer__grid">
+            <div>
+              <p class="footer__brand-name">Mpumalanga AgriSupport</p>
+              <p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture. Empowering farmers with tools, knowledge, and grant access.</p>
+            </div>
+            <div>
+              <h4 class="footer__heading">Programmes</h4>
+              <div class="footer__links">
+                <a href="crop.html">Crop Management</a>
+                <a href="livestock.html">Livestock Management</a>
+                <a href="environmental.html">Environmental Enrichment</a>
+              </div>
+            </div>
+            <div>
+              <h4 class="footer__heading">Resources</h4>
+              <div class="footer__links">
+                <a href="weather.html">Weather Data</a>
+                <a href="alerts.html">Farming Alerts</a>
+                <a href="guides.html">Advisory Guides</a>
+                <a href="support.html">Support Contacts</a>
+                <a href="track.html">Track Application</a>
+              </div>
+            </div>
+            <div>
+              <h4 class="footer__heading">Legal</h4>
+              <div class="footer__links">
+                <a href="popia.html">POPIA Compliance</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="staff-login.html">Staff Portal</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer-inner">
-        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
-        <div class="footer-links">
-          <a href="popia.html" class="footer-btn">POPIA compliance</a>
-          <a href="terms.html" class="footer-btn">Terms of service</a>
-          <a href="staff-login.html" class="footer-btn">Admin login</a>
+      <div class="footer__bottom">
+        <div class="container">
+          <div class="footer__bottom-inner">
+            <span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span>
+            <div class="footer__bottom-links">
+              <a href="popia.html">Privacy</a>
+              <a href="terms.html">Terms</a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
+
   </div>
 
-  <!-- Definition of Farmer Category Modal -->
-  <div class="modal-overlay" id="definitionModal" role="dialog" aria-labelledby="definitionModalTitle" aria-modal="true" hidden>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="definitionModalTitle">DEFINITION OF FARMER CATEGORY</h2>
-        <button type="button" class="modal-close" id="modalClose" aria-label="Close">Close</button>
-      </div>
-      <div class="modal-body">
-        <p><strong>Subsistence farmer</strong> practices agriculture mainly for household food security. These producers are not classified as indigents by their municipality and they produce mainly for household consumption. They may market limited surplus production with an annual turnover of up to R50,000 per annum</p>
-        <p><strong>Smallholder farmer</strong> produces for household consumption and markets, with an annual turnover ranging from R50 001 to R1 000 000.00 per annum aspiring to produce for markets and make profit.</p>
-        <p><strong>Commercial producer</strong> a commercial operation defined as an established farming venture undertaken by an individual or business entity for the purpose of production and sale of agricultural products to make a profit. The farm income must exceed R1 000 000.00 per annum.</p>
-      </div>
-    </div>
-  </div>
+  <!-- Chatbot widget injected by chatbot.js -->
+  <div id="chatbotRoot"></div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
   <script src="js/auth.js"></script>
-  <script src="script.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/chatbot.js"></script>
   <script>
     (function () {
       var user = window.FarmAuth && FarmAuth.getCurrentUser();
-      var userEl = document.getElementById('headerUser');
-      var loginEl = document.getElementById('headerLogin');
-      var registerEl = document.getElementById('headerRegister');
-      var logoutBtn = document.getElementById('headerLogout');
+      var loginEl = document.getElementById('navLogin');
+      var regEl = document.getElementById('navRegister');
+      var mLoginEl = document.getElementById('mobileLogin');
+      var mRegEl = document.getElementById('mobileRegister');
       if (user) {
-        if (userEl) userEl.textContent = user.name + ' (' + user.id + ')';
-        if (userEl) userEl.style.display = 'inline';
-        if (loginEl) loginEl.style.display = 'none';
-        if (registerEl) registerEl.style.display = 'none';
-        if (logoutBtn) { logoutBtn.style.display = 'inline-block'; logoutBtn.onclick = function () { FarmAuth.logout(); window.location.reload(); }; }
-        var trackEl = document.getElementById('headerTrack');
-        if (trackEl) trackEl.style.display = 'inline-flex';
-      } else {
-        if (userEl) userEl.style.display = 'none';
-        if (logoutBtn) logoutBtn.style.display = 'none';
-        var trackEl = document.getElementById('headerTrack');
-        if (trackEl) trackEl.style.display = 'none';
+        if (loginEl) { loginEl.textContent = 'My Account'; loginEl.href = 'track.html'; }
+        if (regEl) { regEl.textContent = 'Logout'; regEl.href = '#'; regEl.onclick = function (e) { e.preventDefault(); FarmAuth.logout(); window.location.reload(); }; }
+        if (mLoginEl) { mLoginEl.textContent = 'My Account'; mLoginEl.href = 'track.html'; }
+        if (mRegEl) { mRegEl.textContent = 'Logout'; mRegEl.href = '#'; mRegEl.onclick = function (e) { e.preventDefault(); FarmAuth.logout(); window.location.reload(); }; }
       }
     })();
   </script>

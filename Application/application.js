@@ -3,7 +3,7 @@
   var panels = document.querySelectorAll('.app-step-panel');
   var steps = document.querySelectorAll('.app-step');
   var currentStep = 1;
-  var totalSteps = 7;
+  var totalSteps = 5;
   var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
 
   function showPanel(stepNum) {
@@ -32,8 +32,8 @@
   }
 
   function setFieldError(fieldId, errorId, message) {
-    var field = document.getElementById(fieldId);
-    var errEl = document.getElementById(errorId);
+    var field = fieldId ? document.getElementById(fieldId) : null;
+    var errEl = errorId ? document.getElementById(errorId) : null;
     if (field) field.classList.toggle('input-error', !!message);
     if (errEl) errEl.textContent = message || '';
   }
@@ -92,14 +92,17 @@
     var commodity = document.getElementById('commodity');
     var category = document.querySelector('input[name="farmerCategory"]:checked');
     var project = document.getElementById('registeredName');
+    var farmName = document.getElementById('farmName');
 
     var summaryCommodity = document.getElementById('summaryCommodity');
     var summaryCategory = document.getElementById('summaryCategory');
     var summaryProject = document.getElementById('summaryProject');
+    var summaryFarm = document.getElementById('summaryFarm');
 
     if (summaryCommodity) summaryCommodity.textContent = commodity && commodity.value ? commodity.value : '—';
     if (summaryCategory) summaryCategory.textContent = category ? category.value : '—';
     if (summaryProject) summaryProject.textContent = project && project.value ? project.value.trim() : '—';
+    if (summaryFarm) summaryFarm.textContent = farmName && farmName.value ? farmName.value.trim() : '—';
   }
 
   var legalEntityType = document.getElementById('legalEntityType');
@@ -128,7 +131,7 @@
       if (next) {
         var nextNum = parseInt(next, 10);
         if (!validateStep(currentStep)) return;
-        if (nextNum === 7) updateSummary();
+        if (nextNum === 5) updateSummary();
         showPanel(next);
       }
     }
@@ -147,8 +150,10 @@
       var name = el.name;
       if (!name) continue;
       if (el.type === 'file') continue;
-      if (el.type === 'radio' || el.type === 'checkbox') {
+      if (el.type === 'radio') {
         if (el.checked) details[name] = el.value;
+      } else if (el.type === 'checkbox') {
+        details[name] = el.checked ? (el.value || 'yes') : '';
       } else {
         details[name] = el.value || '';
       }
@@ -171,8 +176,8 @@
     var popiaConsent = document.getElementById('popiaConsent');
     if (!popiaConsent || !popiaConsent.checked) {
       validatePopiaConsent();
-      document.getElementById('panel-7').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      showPanel(7);
+      document.getElementById('panel-5').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      showPanel(5);
       return;
     }
 
@@ -198,8 +203,10 @@
     details.popiaConsentAt = new Date().toISOString();
 
     var application = {
+      type: 'livestock',
       status: 'Submitted',
       summary: {
+        type: 'livestock',
         commodity: summaryCommodity || '—',
         farmerCategory: summaryCategory || '—',
         registeredName: summaryProject || '—',
@@ -228,3 +235,4 @@
 
   showPanel(1);
 })();
+
