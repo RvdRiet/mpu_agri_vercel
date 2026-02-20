@@ -483,6 +483,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: var(--container-lg);
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid var(--color-primary);
 }
 .price-watch-card__content {
   padding: var(--space-6);
