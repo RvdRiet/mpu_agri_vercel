@@ -960,15 +960,6 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 320px;
 }
 
-.footer__brand-image {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  margin-top: var(--space-6);
-  border-radius: var(--radius-md);
-}
-
 .footer__heading {
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
