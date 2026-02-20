@@ -1104,6 +1104,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   max-width: 320px;
   margin: 0 auto;
+  min-width: 280px;
 }
 
 .onboarding-checklist__video-wrap iframe {
@@ -1111,6 +1112,21 @@ h1, h2, h3, h4, h5, h6 {
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-light);
+}
+
+.onboarding-checklist__video-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--color-border);
+  background: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: var(--space-4);
 }
 
 @media (max-width: 768px) {
