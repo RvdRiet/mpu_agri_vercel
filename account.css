@@ -1,0 +1,107 @@
+/* My Account page */
+.account-page {
+  padding: var(--space-8) 0;
+}
+
+.account-page > .container {
+  max-width: var(--container-lg);
+}
+
+.account-section {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.account-section__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-primary);
+}
+
+.account-section__desc {
+  margin: 0 0 var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.account-form .form-actions {
+  margin-top: var(--space-6);
+}
+
+.account-saved {
+  font-size: var(--text-sm);
+  color: var(--color-success);
+  margin-left: var(--space-3);
+}
+
+.account-id {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-weight: var(--weight-normal);
+}
+
+.account-docs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.account-doc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+}
+
+.account-doc__label {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text);
+}
+
+.account-doc__name {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.account-doc__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.account-doc__actions .btn {
+  font-size: var(--text-sm);
+}
+
+.account-section__link {
+  margin-top: var(--space-4);
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .account-page {
+    padding: var(--space-4) 0;
+  }
+
+  .account-section {
+    padding: var(--space-5);
+  }
+
+  .account-doc {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -412,9 +412,9 @@
       var mLoginEl = document.getElementById('mobileLogin');
       var mRegEl = document.getElementById('mobileRegister');
       if (user) {
-        if (loginEl) { loginEl.textContent = 'My Account'; loginEl.href = 'track.html'; }
+        if (loginEl) { loginEl.textContent = 'My Account'; loginEl.href = 'my-account.html'; }
         if (regEl) { regEl.textContent = 'Logout'; regEl.href = '#'; regEl.onclick = function (e) { e.preventDefault(); FarmAuth.logout(); window.location.reload(); }; }
-        if (mLoginEl) { mLoginEl.textContent = 'My Account'; mLoginEl.href = 'track.html'; }
+        if (mLoginEl) { mLoginEl.textContent = 'My Account'; mLoginEl.href = 'my-account.html'; }
         if (mRegEl) { mRegEl.textContent = 'Logout'; mRegEl.href = '#'; mRegEl.onclick = function (e) { e.preventDefault(); FarmAuth.logout(); window.location.reload(); }; }
       }
     })();
