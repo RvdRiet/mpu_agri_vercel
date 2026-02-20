@@ -1014,6 +1014,105 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-text-inverse);
 }
 
+/* --- E-learning: Onboarding checklist --- */
+.onboarding-checklist {
+  margin-top: var(--space-10);
+  padding: var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  max-width: var(--container-lg);
+}
+
+.onboarding-checklist__title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.onboarding-checklist__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+  line-height: var(--leading-relaxed);
+}
+
+.onboarding-checklist__inner {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .onboarding-checklist__inner {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+.onboarding-checklist__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.onboarding-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.onboarding-checklist__item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.onboarding-checklist__item label {
+  cursor: pointer;
+}
+
+.onboarding-checklist__item > span:last-child {
+  flex: 1;
+}
+
+.onboarding-checklist__item-helper {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+  margin-left: 28px;
+}
+
+.onboarding-checklist__item-helper a {
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
+}
+
+.onboarding-checklist__item-helper a:hover {
+  text-decoration: underline;
+}
+
+.onboarding-checklist__video-wrap {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.onboarding-checklist__video-wrap iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+}
+
 @media (max-width: 768px) {
   .footer__grid {
     grid-template-columns: 1fr 1fr;
