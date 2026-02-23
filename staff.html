@@ -4,68 +4,130 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#2d5a27">
-  <title>Staff - Applications - Farm</title>
+  <title>Staff Portal — Applications — Mpumalanga AgriSupport</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+  <link rel="stylesheet" href="track.css">
+  <link rel="stylesheet" href="account.css">
   <link rel="stylesheet" href="staff.css">
 </head>
 <body>
   <div class="page-wrapper">
-    <header class="site-header">
-      <div class="header-inner">
-        <a href="index.html" class="header-back" aria-label="Back to home"><span aria-hidden="true">←</span> Back</a>
-        <a href="index.html" class="site-title-link">
-          <h1 class="site-title">Mpumalanga Livestock Development Programme</h1>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__brand">
+          <img src="images/mpumalanga.webp" alt="" class="site-nav__logo" aria-hidden="true" />
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
         </a>
-        <nav class="header-nav staff-header-actions">
-          <span class="header-user" id="staffUser"></span>
-          <button type="button" class="header-link header-btn" id="staffLogout">Logout</button>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
+              <a href="livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
+              <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
+            </div>
+          </div>
+          <div class="nav-item"><a href="weather.html" class="nav-link">Weather</a></div>
+          <div class="nav-item"><a href="alerts.html" class="nav-link">Alerts</a></div>
+          <div class="nav-item"><a href="guides.html" class="nav-link">Guides</a></div>
+          <div class="nav-item"><a href="e-learning.html" class="nav-link">E-learning</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span><span class="nav-dropdown__desc">Apply for crop development support</span></span></a>
+              <a href="Application/index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span><span class="nav-dropdown__desc">Masibuyele Esibayeni Programme</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span><span class="nav-dropdown__desc">Conservation &amp; enrichment funding</span></span></a>
+              <div class="nav-dropdown__divider"></div>
+              <a href="track.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128269;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Track Application</span><span class="nav-dropdown__desc">Check your application status</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="staff-login.html" class="nav-link active">Staff Portal</a>
+          <a href="staff.html" class="nav-cta">Applications</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="e-learning.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128218;</span> E-learning</a><a href="support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Programmes</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127806;</span> Crop Management</a><a href="livestock.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128004;</span> Livestock Management</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127795;</span> Environmental Enrichment</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant Application</a><a href="Application/index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant Application</a><a href="Application/environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant Application</a><a href="track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__actions"><a href="staff-login.html" class="btn btn--secondary btn--block">Staff Portal</a><button type="button" class="btn btn--primary btn--block" id="mobileStaffLogout">Logout</button></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumbs__sep" aria-hidden="true">/</span>
+          <span class="breadcrumbs__current">Staff Portal</span>
         </nav>
+        <h1 class="page-header__title">Staff Portal</h1>
+        <p class="page-header__subtitle">Review and manage submitted applications. View details, approve or deny claims.</p>
       </div>
-    </header>
+    </section>
 
-    <div class="header-image-wrap">
-      <img src="/images/mainmenu.webp" alt="" class="header-image" width="100%" />
-    </div>
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="account-page">
+      <div class="container">
+        <div class="track-user-bar" id="staffUserBar">
+          <span class="track-user-info">Signed in as <strong id="staffUserName"></strong></span>
+          <button type="button" class="track-logout-btn" id="staffLogout">Logout</button>
+        </div>
 
-    <main class="main-content staff-page">
-      <h2 class="staff-heading">Applications</h2>
-      <p class="staff-intro">Review all submitted applications. View full details, then approve or deny each claim.</p>
+        <section class="account-section" id="staffSection">
+          <h2 class="account-section__title">Applications</h2>
+          <p class="account-section__desc">All submitted applications. View full details, then approve or deny each claim.</p>
 
-      <div id="staffList" class="staff-table-wrap">
-        <table class="staff-table">
-          <thead>
-            <tr>
-              <th>Reference</th>
-              <th>Applicant ID</th>
-              <th>Submitted</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="staffTableBody"></tbody>
-        </table>
-      </div>
-      <div id="staffEmpty" class="staff-empty" hidden>
-        <p>No applications have been submitted yet.</p>
+          <div id="staffList" class="staff-table-wrap">
+            <table class="staff-table">
+              <thead>
+                <tr>
+                  <th>Reference</th>
+                  <th>Applicant ID</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody"></tbody>
+            </table>
+          </div>
+          <div id="staffEmpty" class="staff-empty" hidden>
+            <p>No applications have been submitted yet.</p>
+          </div>
+        </section>
       </div>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="site-footer">
-      <div class="footer-image-wrap">
-        <img src="public/footer.jpg" alt="" class="footer-image" />
-      </div>
-      <div class="footer-inner">
-        <p class="footer-copyright">&copy; Mpumalanga Livestock Development Programme</p>
-        <div class="footer-links">
-          <a href="popia.html" class="footer-btn">POPIA compliance</a>
-          <a href="terms.html" class="footer-btn">Terms of service</a>
-          <a href="staff-login.html" class="footer-btn">Admin login</a>
-        </div>
-      </div>
+      <div class="footer__top"><div class="container"><div class="footer__grid">
+        <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="crop.html">Crop Management</a><a href="livestock.html">Livestock Management</a><a href="environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="weather.html">Weather Data</a><a href="alerts.html">Farming Alerts</a><a href="guides.html">Advisory Guides</a><a href="support.html">Support Contacts</a><a href="track.html">Track Application</a></div></div>
+        <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="popia.html">POPIA Compliance</a><a href="terms.html">Terms of Service</a><a href="staff-login.html">Staff Portal</a></div></div>
+      </div></div></div>
+      <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner"><span>&copy; 2025 Mpumalanga Department of Agriculture. All rights reserved.</span><div class="footer__bottom-links"><a href="popia.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></div>
     </footer>
+
   </div>
 
-  <div class="staff-modal-overlay" id="detailModal" hidden role="dialog" aria-labelledby="detailModalTitle">
+  <div class="staff-modal-overlay" id="detailModal" hidden role="dialog" aria-labelledby="detailModalTitle" aria-modal="true">
     <div class="staff-modal">
       <div class="staff-modal-header">
         <h3 id="detailModalTitle">Application details</h3>
@@ -78,6 +140,7 @@
   <script src="js/security.js"></script>
   <script src="js/staff-auth.js"></script>
   <script src="js/applications.js"></script>
+  <script src="js/nav.js"></script>
   <script>
     (function () {
       if (!window.FarmStaffAuth || !FarmStaffAuth.getCurrentStaff()) {
@@ -85,11 +148,13 @@
         return;
       }
       var staff = FarmStaffAuth.getCurrentStaff();
-      document.getElementById('staffUser').textContent = 'Admin: ' + (staff.name || staff.username);
+      document.getElementById('staffUserName').textContent = (staff.name || staff.username);
       document.getElementById('staffLogout').onclick = function () {
         FarmStaffAuth.logout();
         window.location.href = 'staff-login.html';
       };
+      var mobileLogout = document.getElementById('mobileStaffLogout');
+      if (mobileLogout) mobileLogout.onclick = function () { FarmStaffAuth.logout(); window.location.href = 'staff-login.html'; };
 
       function formatLabel(key) {
         if (!key) return '';
