@@ -437,6 +437,7 @@
   <script src="../js/auth.js"></script>
   <script src="../js/security.js"></script>
   <script src="../js/applications.js"></script>
+  <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
   <script>
@@ -451,6 +452,8 @@
       var currentStep = 1;
       var totalSteps = 5;
       var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
+
+      if (window.FarmAutosave && form) FarmAutosave.init(form, 'environmental');
 
       function showPanel(stepNum) {
         stepNum = parseInt(stepNum, 10);
@@ -678,6 +681,8 @@
           },
           details: details
         };
+
+        if (window.FarmAutosave) FarmAutosave.clearDraft('environmental');
 
         if (window.FarmApplications) {
           FarmApplications.saveApplication(user.id, application).then(function () {

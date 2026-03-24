@@ -134,11 +134,17 @@
     return Promise.resolve(out);
   }
 
-  function updateApplicationStatus(userId, applicationId, status) {
+  function updateApplicationStatus(userId, applicationId, status, extra) {
+    var updatePayload = { status: status, statusUpdatedAt: new Date().toISOString() };
+    if (extra && typeof extra === 'object') {
+      for (var k in extra) {
+        if (Object.prototype.hasOwnProperty.call(extra, k)) updatePayload[k] = extra[k];
+      }
+    }
     if (useFirestore()) {
       return global.firebaseDb.collection(FIRESTORE_COLLECTION)
         .doc(applicationId)
-        .update({ status: status })
+        .update(updatePayload)
         .then(function () { return true; })
         .catch(function (err) {
           console.warn('Firestore updateApplicationStatus failed', err);
@@ -150,7 +156,11 @@
     if (!list) return Promise.resolve(false);
     for (var i = 0; i < list.length; i++) {
       if (list[i].id === applicationId) {
-        list[i].status = status;
+        for (var key in updatePayload) {
+          if (Object.prototype.hasOwnProperty.call(updatePayload, key)) {
+            list[i][key] = updatePayload[key];
+          }
+        }
         saveAll(data);
         return Promise.resolve(true);
       }

@@ -159,12 +159,20 @@
         if (v === 'approved') return 'status-approved';
         if (v === 'rejected') return 'status-rejected';
         if (v === 'under-review') return 'status-review';
+        if (v === 'additional-documentation-required') return 'status-docs-required';
         return 'status-submitted';
       }
 
       function esc(str) {
         return window.FarmSecurity && window.FarmSecurity.escapeHtml ? window.FarmSecurity.escapeHtml(String(str || '')) : String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
+      function progressPercent(s) {
+        if (s === 'Approved' || s === 'Rejected') return 100;
+        if (s === 'Under Review') return 60;
+        if (s === 'Additional Documentation Required') return 40;
+        return 25;
+      }
+
       function renderApps(apps) {
         apps = apps || [];
         if (apps.length === 0) {
@@ -176,13 +184,23 @@
           listEl.innerHTML = apps.map(function (app) {
             var s = app.status || 'Submitted';
             var sum = app.summary || {};
+            var docsRequired = s === 'Additional Documentation Required';
+            var messageHtml = '';
+            if (docsRequired && app.statusMessage) {
+              messageHtml = '<div class="track-docs-notice">' +
+                '<strong>Action required:</strong> Additional documentation has been requested by the reviewer.' +
+                '<p class="track-docs-message">' + esc(app.statusMessage) + '</p>' +
+                (app.docsRequestedAt ? '<p class="track-docs-date">Requested on ' + esc(formatDate(app.docsRequestedAt)) + '</p>' : '') +
+              '</div>';
+            }
             return (
-              '<article class="track-card">' +
+              '<article class="track-card' + (docsRequired ? ' track-card--docs-required' : '') + '">' +
                 '<div class="track-card-header">' +
                   '<span class="track-ref">' + esc(app.id) + '</span>' +
                   '<span class="track-status ' + statusClass(s) + '">' + esc(s) + '</span>' +
                 '</div>' +
                 '<p class="track-date">Submitted ' + esc(formatDate(app.submittedAt)) + '</p>' +
+                messageHtml +
                 '<dl class="track-summary">' +
                   '<dt>Commodity</dt><dd>' + esc(sum.commodity) + '</dd>' +
                   '<dt>Category</dt><dd>' + esc(sum.farmerCategory) + '</dd>' +
@@ -191,7 +209,7 @@
                 '</dl>' +
                 '<div class="track-progress">' +
                   '<span class="track-progress-label">Progress</span>' +
-                  '<div class="track-progress-bar"><div class="track-progress-fill ' + statusClass(s) + '" style="width:' + (s === 'Approved' ? 100 : s === 'Rejected' ? 100 : s === 'Under Review' ? 60 : 25) + '%"></div></div>' +
+                  '<div class="track-progress-bar"><div class="track-progress-fill ' + statusClass(s) + '" style="width:' + progressPercent(s) + '%"></div></div>' +
                 '</div>' +
               '</article>'
             );

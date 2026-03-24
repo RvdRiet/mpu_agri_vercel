@@ -116,7 +116,10 @@
 
             <div class="form-group">
               <label for="cropVariety">Specific crop variety</label>
-              <input type="text" id="cropVariety" name="cropVariety" placeholder="e.g. PAN 3P-350, Bonsmara" />
+              <select id="cropVariety" name="cropVariety">
+                <option value="">-- Select crop variety / Not sure --</option>
+                <option value="Not sure">Not sure</option>
+              </select>
             </div>
 
             <div class="form-group">
@@ -466,6 +469,7 @@
   <script src="../js/auth.js"></script>
   <script src="../js/security.js"></script>
   <script src="../js/applications.js"></script>
+  <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
   <script>
@@ -481,6 +485,8 @@
       var currentStep = 1;
       var totalSteps = 5;
       var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
+
+      if (window.FarmAutosave && form) FarmAutosave.init(form, 'crop');
 
       function showPanel(stepNum) {
         stepNum = parseInt(stepNum, 10);
@@ -582,6 +588,37 @@
 
       var previousGrantRadios = document.querySelectorAll('input[name="previousGrant"]');
       var previousGrantWrap = document.getElementById('previousGrantDetailsWrap');
+      var cropTypeEl = document.getElementById('cropType');
+      var cropVarietyEl = document.getElementById('cropVariety');
+
+      function setCropVarietyOptions() {
+        if (!cropTypeEl || !cropVarietyEl) return;
+        var cropType = cropTypeEl.value;
+        var current = cropVarietyEl.value;
+        var options = ['Not sure'];
+
+        if (cropType === 'Maize') options = ['Not sure', 'White maize hybrid', 'Yellow maize hybrid', 'Open-pollinated maize', 'Sweet corn'];
+        else if (cropType === 'Sorghum') options = ['Not sure', 'Grain sorghum', 'Sweet sorghum', 'Forage sorghum'];
+        else if (cropType === 'Vegetables') options = ['Not sure', 'Tomato', 'Onion', 'Cabbage', 'Spinach', 'Butternut', 'Potato', 'Carrot', 'Green pepper', 'Other vegetable'];
+        else if (cropType === 'Fruit') options = ['Not sure', 'Citrus (orange/lemon)', 'Mango', 'Avocado', 'Banana', 'Litchi', 'Peach/Nectarine', 'Apple/Pear', 'Grapes', 'Other fruit'];
+        else if (cropType === 'Sugarcane') options = ['Not sure', 'Early maturing variety', 'Mid-season variety', 'Late maturing variety'];
+        else if (cropType === 'Nuts') options = ['Not sure', 'Macadamia', 'Pecan', 'Almond', 'Cashew', 'Other nuts'];
+        else if (cropType === 'Sunflower') options = ['Not sure', 'Oilseed sunflower hybrid', 'Confection sunflower'];
+        else if (cropType === 'Soybeans') options = ['Not sure', 'Early maturity soybean', 'Medium maturity soybean', 'Late maturity soybean'];
+        else if (cropType === 'Dry Beans') options = ['Not sure', 'Sugar beans', 'Red speckled beans', 'Navy beans', 'Small white beans', 'Other dry beans'];
+        else if (cropType === 'Other') options = ['Not sure', 'Other (specify in project description)'];
+
+        cropVarietyEl.innerHTML = '<option value="">-- Select crop variety / Not sure --</option>' +
+          options.map(function (opt) { return '<option value="' + opt + '">' + opt + '</option>'; }).join('');
+
+        if (current && options.indexOf(current) !== -1) cropVarietyEl.value = current;
+      }
+
+      if (cropTypeEl) {
+        cropTypeEl.addEventListener('change', setCropVarietyOptions);
+        setCropVarietyOptions();
+      }
+
       previousGrantRadios.forEach(function (r) {
         r.addEventListener('change', function () {
           previousGrantWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
@@ -682,6 +719,8 @@
           },
           details: details
         };
+
+        if (window.FarmAutosave) FarmAutosave.clearDraft('crop');
 
         if (window.FarmApplications) {
           FarmApplications.saveApplication(user.id, application).then(function () {

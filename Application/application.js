@@ -6,6 +6,8 @@
   var totalSteps = 5;
   var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
 
+  if (window.FarmAutosave && form) FarmAutosave.init(form, 'livestock');
+
   function showPanel(stepNum) {
     stepNum = parseInt(stepNum, 10);
     if (stepNum < 1 || stepNum > totalSteps) return;
@@ -214,6 +216,8 @@
       },
       details: details
     };
+
+    if (window.FarmAutosave) FarmAutosave.clearDraft('livestock');
 
     if (window.FarmApplications) {
       FarmApplications.saveApplication(user.id, application).then(function () {

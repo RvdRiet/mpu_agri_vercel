@@ -102,20 +102,7 @@
           <h2 class="account-section__title">Applications</h2>
           <p class="account-section__desc">All submitted applications. View full details, then approve or deny each claim.</p>
 
-          <div id="staffList" class="staff-table-wrap">
-            <table class="staff-table">
-              <thead>
-                <tr>
-                  <th>Reference</th>
-                  <th>Applicant ID</th>
-                  <th>Submitted</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="staffTableBody"></tbody>
-            </table>
-          </div>
+          <div id="staffList" class="staff-groups"></div>
           <div id="staffEmpty" class="staff-empty" hidden>
             <p>No applications have been submitted yet.</p>
           </div>
@@ -190,6 +177,7 @@
         if (v === 'approved') return 'staff-status-approved';
         if (v === 'rejected' || v === 'denied') return 'staff-status-rejected';
         if (v === 'under-review') return 'staff-status-under-review';
+        if (v === 'additional-documentation-required') return 'staff-status-docs-required';
         return 'staff-status-submitted';
       }
 
@@ -210,17 +198,101 @@
         return html;
       }
 
+      function getGrantType(app) {
+        var t = (app && (app.type || (app.summary && app.summary.type)) || '').toLowerCase();
+        if (t === 'crop') return { key: 'crop', label: 'Crop Grant Applications' };
+        if (t === 'environmental') return { key: 'environmental', label: 'Environmental Grant Applications' };
+        if (t === 'mesp_2025_26') return { key: 'mesp_2025_26', label: 'Masibuyele 2025/26 Applications' };
+        if (t === 'livestock') return { key: 'livestock', label: 'Livestock Grant Applications' };
+        return { key: 'other', label: 'Other Applications' };
+      }
+
+      function isDownloadableUrl(v) {
+        if (typeof v !== 'string') return false;
+        var s = v.trim();
+        return /^https?:\/\//i.test(s) || /^data:/i.test(s) || /^blob:/i.test(s);
+      }
+
+      function normalizeDocumentCandidate(key, value, out) {
+        if (!value) return;
+        if (typeof value === 'string') {
+          if (isDownloadableUrl(value)) out.push({ label: formatLabel(key), url: value });
+          return;
+        }
+        if (Array.isArray(value)) {
+          value.forEach(function (item, idx) {
+            normalizeDocumentCandidate(key + ' ' + (idx + 1), item, out);
+          });
+          return;
+        }
+        if (typeof value === 'object') {
+          var url = value.url || value.downloadURL || value.downloadUrl || value.fileUrl || value.href;
+          var name = value.name || value.fileName || value.filename || formatLabel(key);
+          if (url && isDownloadableUrl(url)) out.push({ label: String(name), url: url });
+          return;
+        }
+      }
+
+      function extractDocuments(app) {
+        var docs = [];
+        var details = app && app.details ? app.details : {};
+        var knownDocFields = [
+          'idCopies', 'landProof', 'businessPlanDoc', 'incomeProof', 'offtakeAgreement',
+          'brandCertificate', 'iaAuthorisation', 'eia', 'biosecurityPlan', 'proofOfLand',
+          'soilTestReport', 'proofOfFarming', 'conservationPlan', 'farmMap', 'quotesMaterials',
+          'farmingProof'
+        ];
+
+        knownDocFields.forEach(function (key) {
+          normalizeDocumentCandidate(key, details[key], docs);
+        });
+
+        Object.keys(details).forEach(function (key) {
+          normalizeDocumentCandidate(key, details[key], docs);
+        });
+
+        if (app && app.documents) normalizeDocumentCandidate('documents', app.documents, docs);
+        if (app && app.attachments) normalizeDocumentCandidate('attachments', app.attachments, docs);
+
+        var unique = [];
+        var seen = {};
+        docs.forEach(function (d) {
+          var k = d.url + '|' + d.label;
+          if (!seen[k]) {
+            seen[k] = true;
+            unique.push(d);
+          }
+        });
+        return unique;
+      }
+
+      function renderDocumentButtons(docs) {
+        if (!docs || docs.length === 0) return '<p>No supporting documents were saved with this application.</p>';
+        var html = '<div class="staff-doc-list">';
+        docs.forEach(function (doc, idx) {
+          html += '<a class="staff-btn staff-btn-doc" href="' + esc(doc.url) + '" download target="_blank" rel="noopener">Download document ' + (idx + 1) + ': ' + esc(doc.label) + '</a>';
+        });
+        html += '</div>';
+        return html;
+      }
+
       function openDetail(userId, app) {
         var body = document.getElementById('detailModalBody');
         var summary = app.summary || {};
         var details = app.details || {};
+        var docs = extractDocuments(app);
         var html = '<p><strong>Reference:</strong> ' + esc(app.id) + '</p>';
         html += '<p><strong>Applicant ID:</strong> ' + esc(userId) + '</p>';
         html += '<p><strong>Submitted:</strong> ' + esc(formatDate(app.submittedAt)) + '</p>';
         html += '<p><strong>Status:</strong> ' + esc(app.status) + '</p>';
+        if (app.statusMessage) {
+          html += '<div class="staff-status-message"><strong>Reviewer note:</strong> ' + esc(app.statusMessage) + '</div>';
+        }
         html += '<p><strong>Commodity:</strong> ' + esc(summary.commodity) + ' &nbsp; <strong>Category:</strong> ' + esc(summary.farmerCategory) + '</p>';
         html += '<p><strong>Applicant / Project:</strong> ' + esc(summary.registeredName) + '</p>';
         html += '<p><strong>Farm:</strong> ' + esc(summary.farmName) + '</p>';
+        html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Supporting documents</h4>';
+        html += renderDocumentButtons(docs);
         html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">All form details</h4>';
         html += renderDetails(details);
         body.innerHTML = html;
@@ -326,69 +398,117 @@
         var promise = window.FarmApplications ? FarmApplications.getAllApplicationsForStaff() : Promise.resolve([]);
         promise.then(function (list) {
           list = list || [];
-          var tbody = document.getElementById('staffTableBody');
-          var tableWrap = document.getElementById('staffList');
+          var listWrap = document.getElementById('staffList');
           var emptyEl = document.getElementById('staffEmpty');
 
           if (list.length === 0) {
-            tableWrap.hidden = true;
+            listWrap.hidden = true;
             emptyEl.hidden = false;
             return;
           }
           emptyEl.hidden = true;
-          tableWrap.hidden = false;
+          listWrap.hidden = false;
 
-        tbody.innerHTML = list.map(function (item) {
-          var uid = item.userId;
-          var app = item.application;
-          var ref = app.id || '—';
-          var submitted = formatDate(app.submittedAt);
-          var status = app.status || 'Submitted';
-          var statusCls = statusClass(status);
-          var approved = status === 'Approved';
-          var rejected = status === 'Rejected' || status === 'Denied';
-          return (
-            '<tr>' +
-              '<td>' + esc(ref) + '</td>' +
-              '<td>' + esc(uid) + '</td>' +
-              '<td>' + esc(submitted) + '</td>' +
-              '<td><span class="staff-status ' + statusCls + '">' + esc(status) + '</span></td>' +
-              '<td class="staff-actions-cell">' +
-                '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="view">View details</button>' +
-                '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="download">Download PDF</button>' +
-                (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="approve">Approve</button>' : '') +
-                (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="deny">Deny</button>' : '') +
-              '</td>' +
-            '</tr>'
-          );
-        }).join('');
+          var grouped = {};
+          list.forEach(function (item) {
+            var grant = getGrantType(item.application);
+            if (!grouped[grant.key]) grouped[grant.key] = { label: grant.label, items: [] };
+            grouped[grant.key].items.push(item);
+          });
 
-        tbody.querySelectorAll('[data-action="view"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var uid = btn.getAttribute('data-userid');
-            var appId = btn.getAttribute('data-appid');
-            var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-            if (item) openDetail(uid, item.application);
+          var order = ['mesp_2025_26', 'livestock', 'crop', 'environmental', 'other'];
+          var sectionsHtml = '';
+          order.forEach(function (key) {
+            if (!grouped[key] || grouped[key].items.length === 0) return;
+            var group = grouped[key];
+            sectionsHtml += '<section class="staff-group-card">';
+            sectionsHtml += '<div class="staff-group-head"><h3>' + esc(group.label) + '</h3><span class="staff-group-count">' + group.items.length + '</span></div>';
+            sectionsHtml += '<div class="staff-table-wrap"><table class="staff-table"><thead><tr><th>Reference</th><th>Applicant ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            sectionsHtml += group.items.map(function (item) {
+              var uid = item.userId;
+              var app = item.application;
+              var ref = app.id || '—';
+              var submitted = formatDate(app.submittedAt);
+              var status = app.status || 'Submitted';
+              var statusCls = statusClass(status);
+              var approved = status === 'Approved';
+              var rejected = status === 'Rejected' || status === 'Denied';
+              var docsRequested = status === 'Additional Documentation Required';
+              var docCount = extractDocuments(app).length;
+              return (
+                '<tr>' +
+                  '<td>' + esc(ref) + '</td>' +
+                  '<td>' + esc(uid) + '</td>' +
+                  '<td>' + esc(submitted) + '</td>' +
+                  '<td><span class="staff-status ' + statusCls + '">' + esc(status) + '</span></td>' +
+                  '<td class="staff-actions-cell">' +
+                    '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="view">View details</button>' +
+                    '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="download">Download PDF</button>' +
+                    '<button type="button" class="staff-btn staff-btn-doc" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="docs"' + (docCount ? '' : ' disabled') + '>Documents' + (docCount ? ' (' + docCount + ')' : '') + '</button>' +
+                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-request-docs" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="request-docs">Request Docs</button>' : '') +
+                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="approve">Approve</button>' : '') +
+                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="deny">Deny</button>' : '') +
+                  '</td>' +
+                '</tr>'
+              );
+            }).join('');
+            sectionsHtml += '</tbody></table></div></section>';
           });
-        });
-        tbody.querySelectorAll('[data-action="download"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var uid = btn.getAttribute('data-userid');
-            var appId = btn.getAttribute('data-appid');
-            var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-            if (item) downloadApplicationPdf(uid, item.application);
+
+          listWrap.innerHTML = sectionsHtml;
+
+          listWrap.querySelectorAll('[data-action="view"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var uid = btn.getAttribute('data-userid');
+              var appId = btn.getAttribute('data-appid');
+              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+              if (item) openDetail(uid, item.application);
+            });
           });
-        });
-        tbody.querySelectorAll('[data-action="approve"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            if (confirm('Approve this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Approved');
+          listWrap.querySelectorAll('[data-action="download"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var uid = btn.getAttribute('data-userid');
+              var appId = btn.getAttribute('data-appid');
+              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+              if (item) downloadApplicationPdf(uid, item.application);
+            });
           });
-        });
-        tbody.querySelectorAll('[data-action="deny"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            if (confirm('Deny this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Rejected');
+          listWrap.querySelectorAll('[data-action="docs"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var uid = btn.getAttribute('data-userid');
+              var appId = btn.getAttribute('data-appid');
+              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+              if (!item) return;
+              openDetail(uid, item.application);
+            });
           });
-        });
+          listWrap.querySelectorAll('[data-action="approve"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              if (confirm('Approve this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Approved');
+            });
+          });
+          listWrap.querySelectorAll('[data-action="deny"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              if (confirm('Deny this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Rejected');
+            });
+          });
+          listWrap.querySelectorAll('[data-action="request-docs"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var message = prompt('Describe the additional documentation required from the applicant:');
+              if (message === null) return;
+              message = message.trim();
+              if (!message) { alert('Please provide a description of what documentation is needed.'); return; }
+              var uid = btn.getAttribute('data-userid');
+              var appId = btn.getAttribute('data-appid');
+              if (window.FarmApplications) {
+                FarmApplications.updateApplicationStatus(uid, appId, 'Additional Documentation Required', {
+                  statusMessage: message,
+                  docsRequestedBy: (staff.name || staff.username),
+                  docsRequestedAt: new Date().toISOString()
+                }).then(function () { renderList(); });
+              }
+            });
+          });
         }).catch(function () {
           document.getElementById('staffList').hidden = true;
           document.getElementById('staffEmpty').hidden = false;
