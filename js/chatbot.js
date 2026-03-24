@@ -26,6 +26,7 @@
     /* ---- WEBSITE NAVIGATION ---- */
     [
       { k: ['pages','sitemap','what pages','navigation','menu','where can i find'], a: "This website has the following pages:<br>• <a href='index.html'>Home</a> — Overview &amp; quick access<br>• <a href='crop.html'>Crop Programme</a> — Crop grant details<br>• <a href='livestock.html'>Livestock Programme</a> — Masibuyele Esibayeni<br>• <a href='environmental.html'>Environmental Programme</a> — Conservation grants<br>• <a href='weather.html'>Weather Dashboard</a> — Live weather data<br>• <a href='alerts.html'>Farming Alerts</a> — News &amp; risk events<br>• <a href='guides.html'>Advisory Guides</a> — Comprehensive farming info<br>• <a href='support.html'>Support Contacts</a> — Phone numbers &amp; services<br>• <a href='track.html'>Track Application</a> — Check grant status<br>• <a href='login.html'>Login</a> / <a href='register.html'>Register</a>" },
+      { k: ['education','education dropdown','guides and e-learning','where is e-learning','where is elearning','learning resources'], a: "You can now find learning resources under the <strong>Education</strong> menu in the top navigation.<br><br>It contains:<br>• <a href='guides.html'>Guides</a> — practical crop, livestock, and environmental guidance<br>• <a href='e-learning.html'>E-learning</a> — downloadable learning materials and training resources<br><br>On mobile, Education is also available as its own section in the menu." },
       { k: ['home page','main page','homepage','landing'], a: "The <a href='index.html'>Home page</a> gives you an overview of all programmes, quick access to weather, alerts, guides, and the application tracker. It also has this chatbot to help you find what you need." },
     ],
 
@@ -51,7 +52,9 @@
     /* ---- APPLICATION PROCESS ---- */
     [
       { k: ['how to apply','apply for grant','application process','how do i apply','submit application','step by step'], a: "<strong>How to apply for a grant — step by step:</strong><br><br>1️⃣ <strong>Register:</strong> <a href='register.html'>Create an account</a> with your SA ID number<br>2️⃣ <strong>Choose programme:</strong> Decide between <a href='Application/crop.html'>Crop</a>, <a href='Application/index.html'>Livestock</a>, or <a href='Application/environmental.html'>Environmental</a><br>3️⃣ <strong>Complete the form:</strong> Fill in personal details, farm info, and what support you need (5 steps)<br>4️⃣ <strong>Upload documents:</strong> Attach all required documents as scans or photos<br>5️⃣ <strong>Submit:</strong> Review and submit. You'll get a reference number<br>6️⃣ <strong>Track:</strong> Check status on the <a href='track.html'>Track page</a><br><br><strong>Tip:</strong> Gather all documents BEFORE starting the form. Incomplete applications delay processing." },
-      { k: ['track','status','check application','my application','where is my application','progress','reference number'], a: "To track your application:<br>1. Go to the <a href='track.html'>Track Application</a> page<br>2. Log in with your SA ID and password<br>3. View your application status<br><br><strong>Status stages:</strong><br>• <strong>Submitted</strong> — Received, awaiting review<br>• <strong>Under Review</strong> — Being assessed by officials<br>• <strong>Site Inspection</strong> — Extension officer will visit your farm<br>• <strong>Approved</strong> — Congratulations! Await delivery/payment<br>• <strong>Rejected</strong> — See reason provided; you may reapply next cycle<br><br>Processing typically takes 4-12 weeks depending on the programme." },
+      { k: ['track','status','check application','my application','where is my application','progress','reference number'], a: "To track your application:<br>1. Go to the <a href='track.html'>Track Application</a> page<br>2. Log in with your SA ID and password<br>3. View your application status<br><br><strong>Status stages:</strong><br>• <strong>Submitted</strong> — Received, awaiting review<br>• <strong>Under Review</strong> — Being assessed by officials<br>• <strong>Additional Documentation Required</strong> — Reviewer requested more documents; check the reviewer note on your tracking card<br>• <strong>Approved</strong> — Congratulations! Await delivery/payment<br>• <strong>Rejected</strong> — See reason provided; you may reapply next cycle<br><br>Processing typically takes 4-12 weeks depending on the programme." },
+      { k: ['autosave','draft saved','saved draft','resume application','continue later','form saved'], a: "Application forms now have <strong>autosave</strong> in your browser.<br><br>• If you leave before submitting, your draft is saved automatically<br>• When you return, your saved data is restored<br>• Draft data clears automatically after successful submission<br><br>Note: File uploads may need to be re-selected for security reasons in some browsers." },
+      { k: ['request additional documents','additional documentation required','reviewer requested documents','staff requested docs'], a: "If your status changes to <strong>Additional Documentation Required</strong>, a reviewer needs more information before final approval.<br><br>Go to <a href='track.html'>Track Application</a> and read the reviewer note on your application card. Then prepare and submit the requested documents through the instructed channel or support office." },
       { k: ['document','documents','required','upload','paperwork','what do i need'], a: "<strong>Documents required for grant applications:</strong><br><br>All programmes need:<br>• Certified copy of SA ID (all project members)<br>• Proof of land access (title deed, lease, PTO, CPA resolution)<br>• Business plan or farming profile<br>• Municipal account or proof of address<br>• Bank statement (not older than 3 months)<br><br>Programme-specific:<br>• <strong>Crop:</strong> Soil test results, crop production plan<br>• <strong>Livestock:</strong> Brand mark certificate, proof of infrastructure<br>• <strong>Environmental:</strong> Conservation plan, EIA (if applicable)<br><br>Tip: Certify ID copies at your nearest police station (free of charge)." },
       { k: ['eligibility','eligible','qualify','who can apply','am i eligible'], a: "<strong>General eligibility for all programmes:</strong><br>• South African citizen with valid 13-digit SA ID<br>• Active or aspiring farmer in Mpumalanga province<br>• Valid proof of land access (not necessarily ownership)<br>• Not receiving the same support from another government programme<br><br><strong>Farmer categories:</strong><br>• <strong>Subsistence:</strong> Annual turnover up to R50,000<br>• <strong>Smallholder:</strong> R50,001 – R1,000,000<br>• <strong>Commercial:</strong> Over R1,000,000<br><br>Your category determines the level of support. Most grants target subsistence and smallholder farmers first." },
       { k: ['register','sign up','create account','new account','registration'], a: "To register:<br>1. Go to <a href='register.html'>Register page</a><br>2. Enter your 13-digit SA ID number<br>3. Fill in your full name<br>4. Create a password (at least 6 characters)<br>5. Submit<br><br>Registration is free. Once registered, you can apply for grants and track applications." },
@@ -168,25 +171,364 @@
       { k: ['how many cattle','stocking rate','carrying capacity','how many animals','overstock','overgrazing'], a: "<strong>Stocking rate guidance:</strong><br><br>⚠️ Overstocking is the most common mistake and the biggest cause of veld degradation.<br><br><strong>Guidelines for Mpumalanga:</strong><br>• Sour Bushveld: 5–8 ha per Large Stock Unit (LSU)<br>• Mixed Bushveld: 4–6 ha/LSU<br>• Improved pastures: 2–4 ha/LSU<br>• Kikuyu pasture (irrigated): 1–2 ha/LSU<br><br>1 LSU = 1 mature cow (450 kg) = 6 sheep = 6 goats<br><br><strong>Rule of thumb:</strong> If your veld still has bare patches at the end of the rainy season, you're overstocked. Reduce numbers or increase rest periods.<br><br>Contact your extension officer for a proper veld assessment." },
       { k: ['water','how much water','water requirements','animal water','livestock water'], a: "<strong>Water requirements for livestock:</strong><br><br>💧 Per animal per day (summer, adjust down for winter):<br>• Beef cattle: 40–70 litres<br>• Dairy cows (lactating): 80–150 litres<br>• Sheep/goats: 5–10 litres<br>• Pigs: 10–25 litres<br>• Chickens: 200–300 ml each<br><br><strong>Rules:</strong><br>• Water must be clean and fresh — dirty water causes disease<br>• Animals should not walk more than 3 km to water<br>• In summer heat, ensure shade near water points<br>• Check water troughs daily for cleanliness and flow" },
       { k: ['predator','jackal','caracal','predation','predator control','livestock theft','stock theft'], a: "<strong>Predator &amp; theft protection:</strong><br><br>🐺 <strong>Predators (jackal, caracal, stray dogs):</strong><br>• Kraal animals at night — the most effective measure<br>• Livestock guardian dogs (Anatolian Karabash recommended)<br>• Jackal-proof fencing: 1.2m + electrified outrigger<br>• Avoid poison — it kills vultures and non-target species<br><br>🔒 <strong>Stock theft:</strong><br>• Brand/mark all livestock (legal requirement for cattle)<br>• Report theft IMMEDIATELY: SAPS Stock Theft Unit 086 001 0111<br>• Keep accurate records with photos of each animal<br>• Community policing forums help deter theft<br><br>Visit <a href='support.html'>Support → Fencing &amp; Infrastructure</a> for contractor contacts." },
+      { k: ['market prices','price watch','nda price','commodity prices','maize price','beef price','spot price','futures'], a: "<strong>Market and price information:</strong><br><br>Use <a href='guides.html'>Guides</a> and NDA Price Watch resources to monitor trends. For practical selling decisions:<br>• Check current local auction/market prices weekly<br>• Compare farm-gate vs transport + market commission costs<br>• Use contracts where possible for price certainty<br>• Time sales around seasonal demand (avoid panic selling)<br><br>For grain producers, track SAFEX-linked trends and storage costs before deciding to hold stock." },
+      { k: ['irrigation schedule','when to irrigate','drip irrigation','sprinkler','center pivot','water stress'], a: "<strong>Irrigation management:</strong><br><br>• Irrigate by crop stage and soil moisture, not by calendar only<br>• Prefer early morning irrigation to reduce evaporative loss and disease pressure<br>• Drip gives highest efficiency for vegetables and orchards<br>• Avoid over-irrigation: it leaches nutrients and increases disease<br>• Keep records: date, hours, mm applied, rainfall received<br><br>If possible, use tensiometers/soil probes for better scheduling." },
+      { k: ['fertiliser program','fertilizer program','top dressing','basal dressing','nutrient deficiency','leaf analysis'], a: "<strong>Fertiliser programme basics:</strong><br><br>1) Start with a soil test and realistic yield target.<br>2) Apply basal fertiliser at planting for root establishment.<br>3) Top-dress nitrogen during active vegetative growth and before critical demand peaks.<br>4) Use leaf analysis in high-value crops to fine-tune nutrients.<br>5) Split applications on sandy soils to reduce losses.<br><br>Never copy a neighbour's rate blindly; field conditions differ." },
+      { k: ['farm budget','gross margin','enterprise budget','cost of production','break even'], a: "<strong>Farm financial planning:</strong><br><br>• Build an enterprise budget per crop/livestock line<br>• Track variable costs (seed/feed/fertiliser/medication/fuel/labour)<br>• Calculate break-even yield or break-even price before season start<br>• Update budget monthly with actuals vs plan<br>• Cut low-return activities quickly and reallocate cash to profitable enterprises<br><br>SEDA and extension officers can help you prepare a practical budget template." },
+      { k: ['post harvest','storage','grain storage','aflatoxin','cold chain','packhouse'], a: "<strong>Post-harvest management:</strong><br><br>• Dry grains to safe storage moisture before bagging/silos<br>• Keep stores clean, cool, and pest-controlled<br>• Sort and grade produce before marketing for better price<br>• Maintain cold chain for perishables (fruit/veg/dairy) where possible<br>• Record lot/batch details for traceability and food safety audits" },
+      { k: ['food safety','haccp','globalgap','traceability','residue','withholding period'], a: "<strong>Food safety and compliance:</strong><br><br>• Follow product labels and withholding periods strictly<br>• Keep spray and treatment records (date, product, dose, operator)<br>• Use clean water and hygienic handling during harvest/packing<br>• Separate chemical storage from feed/food areas<br>• Build traceability (what was applied, where, and when)<br><br>For formal markets and exports, certification requirements may apply." },
+      { k: ['tractor','mechanisation','mechanization','implements','planter calibration','sprayer calibration'], a: "<strong>Mechanisation tips:</strong><br><br>• Calibrate planters and sprayers at the start of each season<br>• Service machinery before peak operations (planting/harvest)<br>• Match implement size to tractor power to save fuel and avoid breakdowns<br>• Keep spares for high-failure wear parts<br>• Preventive maintenance is cheaper than emergency repairs during planting windows." },
+      { k: ['climate smart','regenerative agriculture','carbon farming','cover crop','mulching'], a: "<strong>Climate-smart farming:</strong><br><br>• Keep soil covered (mulch/cover crops) to reduce heat and water stress<br>• Diversify crops and livestock to spread climate risk<br>• Improve soil organic matter to hold moisture longer<br>• Use drought-tolerant cultivars in marginal rainfall areas<br>• Plan enterprise calendars around historical rainfall windows and updated forecasts." },
+      { k: ['farm security','biosecurity gate','visitor control','quarantine animals','new animals'], a: "<strong>Farm biosecurity and security:</strong><br><br>• Restrict and log farm visitors/vehicles<br>• Disinfect footwear/equipment at entry points where relevant<br>• Quarantine new livestock for at least 28 days before mixing<br>• Separate sick animals immediately and call a vet<br>• Keep clear movement and treatment records for audits and outbreak tracing." },
+      { k: ['application stages','mesp stages','profiling and shortlisting','farm assessment status','hod approval'], a: "<strong>MESP procedure stages now tracked:</strong><br><br>Submitted → Profiling and Shortlisting → Farm Assessment → HOD Approval → Induction → Procurement → Pre and Post Delivery Inspection → Monitoring Evaluation and Advisory → Approved.<br><br>Staff capture stage evidence at each transition, and applicants can see progress on <a href='track.html'>Track Application</a>." },
+      { k: ['support issue','report issue','website problem','theft report','power loss','water loss'], a: "You can report issues on the <a href='support.html'>Support page</a> when logged in.<br><br>Choose an issue type from the dropdown (website, theft, power loss, water loss, etc.), describe the problem, and submit. Staff can then move it through Submitted → In Progress → Resolved." },
+      { k: ['rabbit feed','goat feed formulation','broiler feed','layer feed','ration'], a: "<strong>Feed and ration advice (general):</strong><br><br>Use feed formulations suitable for species, age, and production stage (growth, pregnancy, lactation, finishing). Sudden feed changes can cause health setbacks, so transition over several days. Ensure constant clean water, mineral balance, and quality roughage for ruminants.<br><br>For precise rations, work with an animal nutritionist or extension support in your district." },
+      { k: ['soil sample','how to sample soil','sampling depth','composite sample'], a: "<strong>How to sample soil correctly:</strong><br><br>• Sample each field/block separately (do not mix very different soils)<br>• Take multiple cores in a zig-zag pattern and make a composite sample<br>• Typical depth: 0-20 cm for topsoil; deeper profiles if needed<br>• Avoid unusual spots (dung heaps, gate areas, wet patches)<br>• Label clearly (field name, date, crop history) and send promptly to lab" },
+      { k: ['spray drift','pesticide safety','ppe','chemical safety','poisoning'], a: "<strong>Pesticide safety essentials:</strong><br><br>• Wear proper PPE (gloves, mask/respirator as required, coveralls, boots)<br>• Avoid spraying in high wind or temperature inversion conditions<br>• Respect buffer zones near homes, water, schools, and sensitive crops<br>• Triple-rinse containers and dispose according to legal guidelines<br>• Keep emergency numbers and product labels accessible during spraying." }
+    ],
+
+    /* ---- ADVANCED FARMING SYSTEMS ---- */
+    [
+      { k: ['intercropping','crop rotation plan','rotation','cover crops for maize','legume rotation'], a: "<strong>Rotation and intercropping strategy:</strong><br><br>• Rotate cereals with legumes to improve nitrogen balance and reduce pest cycles.<br>• Typical 3-year pattern: Maize → Soybean/Beans → Sunflower/Sorghum.<br>• Use cover crops after harvest to protect soil and suppress weeds.<br>• Keep residue on soil where possible to reduce erosion and water loss.<br><br>Good rotation improves yields, lowers fertiliser pressure, and reduces pesticide spend." },
+      { k: ['greenhouse','tunnel farming','shade net','protected cultivation','hydroponics'], a: "<strong>Protected cultivation basics:</strong><br><br>• Use tunnels/shade-net for high-value crops where climate risk is high.<br>• Prioritise crops with reliable markets (tomato, pepper, cucumber, leafy greens).<br>• Manage ventilation and humidity to reduce disease pressure.<br>• Start with small area + strict record keeping before scaling.<br>• Ensure water quality and fertigation management are consistent." },
+      { k: ['value addition','agro processing','processing','packaging','branding produce'], a: "<strong>Value addition opportunities:</strong><br><br>• Convert raw produce into higher-margin products (cleaned, graded, packaged, dried, processed).<br>• Start with market requirements first (pack size, quality spec, shelf life).<br>• Build traceability and hygiene SOPs from day one.<br>• Use SEDA/LED support for branding, compliance, and market linkage.<br><br>Value addition can stabilise income when farm-gate prices are weak." },
+      { k: ['cooperative','co-op','group farming','farmer group','collective marketing'], a: "<strong>Cooperative success checklist:</strong><br><br>• Clear governance (roles, signatures, decision rules).<br>• Written production and quality standards for all members.<br>• Shared aggregation and delivery calendar.<br>• Transparent financial reporting monthly.<br>• Buyer contracts with clear volume/quality commitments.<br><br>Many co-ops fail on governance, not production. Put rules in writing early." },
+      { k: ['export','export market','globalgap audit','phytosanitary'], a: "<strong>Export readiness snapshot:</strong><br><br>• Confirm buyer specification first (grade, size, residue limits, pack type).<br>• Build spray and input records for traceability.<br>• Prepare for compliance audits (GlobalG.A.P. or buyer standard).<br>• Ensure post-harvest handling and cold-chain control.<br>• Work with accredited labs and inspectors where required.<br><br>Start with domestic formal markets before scaling to export unless supported by an experienced off-taker." },
+      { k: ['labour plan','seasonal workers','farm labour','staff planning'], a: "<strong>Farm labour planning:</strong><br><br>• Forecast labour demand by operation window (land prep, planting, weeding, harvest).<br>• Cross-train workers for peak periods and emergencies.<br>• Standardise task checklists and safety briefings.<br>• Track labour productivity by field/block.<br>• Align labour plan to budget before season starts." },
+      { k: ['diesel cost','fuel planning','input inflation','cost control'], a: "<strong>Cost-control framework:</strong><br><br>1) Separate controllable vs non-controllable costs.<br>2) Protect top 3 profit drivers (yield, quality, market timing).<br>3) Reduce wastage via calibration + maintenance + scheduling.<br>4) Bulk-buy strategic inputs when pricing is favourable.<br>5) Review gross margin per enterprise monthly and drop weak performers quickly." },
+      { k: ['farm succession','next generation','family farm planning'], a: "<strong>Farm continuity planning:</strong><br><br>• Document enterprise SOPs and decision rules.<br>• Train at least one backup operator per critical activity.<br>• Keep legal and financial records updated and accessible.<br>• Build a 12-month transition plan for leadership handover.<br>• Use advisors for legal/entity and tax planning where needed." }
     ]
   );
 
-  var fallback = "I'm not sure about that specific question, but I can help with many farming topics. Try asking about:<br><br>• <strong>Grants:</strong> \"How do I apply?\" or \"Am I eligible?\"<br>• <strong>Financing:</strong> \"MADC loans\" or \"How to get funding?\"<br>• <strong>Crops:</strong> \"How do I grow maize?\" or \"When should I plant?\"<br>• <strong>Livestock:</strong> \"Which cattle breed?\" or \"How to manage goats?\"<br>• <strong>Health:</strong> \"Vaccination schedule\" or \"Parasite control\"<br>• <strong>Programmes:</strong> \"What is CASP?\" or \"LRAD programme\"<br>• <strong>Support:</strong> \"Extension officer\" or \"Thusong centre\" or \"SEDA office\"<br>• <strong>Local contacts:</strong> \"LED officer\" or \"Emergency numbers\"<br>• <strong>Weather, Alerts, Guides:</strong> just ask!<br><br>Or contact your extension officer at <strong>013 766 4027</strong>, visit a Thusong Centre, or call the toll-free hotline at <strong>1020</strong>.";
+  var fallback = "I can help with most farming and website questions, but I need a bit more detail for this one.<br><br>Try adding context like:<br>• your <strong>enterprise</strong> (maize, cattle, poultry, goats, citrus, etc.)<br>• your <strong>goal</strong> (apply, prevent disease, improve yield, reduce costs, market produce)<br>• your <strong>location/season</strong> in Mpumalanga<br><br>Examples:<br>• \"I'm in Ermelo and planting maize next month - what should I do first?\"<br>• \"My goats are losing condition in winter - what feed plan works?\"<br>• \"What documents do I need for MESP smallholder application?\"<br><br>You can also ask about grants, pests, livestock health, irrigation, finance, weather, alerts, and support contacts.";
 
   /* ================================================================
-   *  MATCHING ENGINE — improved multi-word & fuzzy scoring
+   *  MATCHING ENGINE + SMART FARMER HELPERS
    * ================================================================ */
+  var chatContext = {
+    location: '',
+    enterprise: ''
+  };
+  var guidedFlow = {
+    active: '',
+    step: 0,
+    data: {}
+  };
+
+  function resetGuidedFlow() {
+    guidedFlow.active = '';
+    guidedFlow.step = 0;
+    guidedFlow.data = {};
+  }
+
+  function startGuidedFlow(flowId) {
+    guidedFlow.active = flowId;
+    guidedFlow.step = 0;
+    guidedFlow.data = {};
+    if (flowId === 'maize_pest') {
+      return "🔎 <strong>Maize diagnosis flow started.</strong><br>Step 1/3: Where is the main damage?<br>Reply with one:<br>• <code>leaves</code><br>• <code>whorl</code><br>• <code>stem</code><br>• <code>cob</code><br>Type <code>cancel</code> to stop.";
+    }
+    if (flowId === 'smallstock_parasite') {
+      return "🔎 <strong>Goat/Sheep parasite flow started.</strong><br>Step 1/3: Which species?<br>Reply: <code>goat</code> or <code>sheep</code><br>Type <code>cancel</code> to stop.";
+    }
+    if (flowId === 'poultry_mortality') {
+      return "🔎 <strong>Poultry mortality flow started.</strong><br>Step 1/3: Age group?<br>Reply with one:<br>• <code>day-old</code><br>• <code>1-3 weeks</code><br>• <code>grower</code><br>• <code>layer/breeder</code><br>Type <code>cancel</code> to stop.";
+    }
+    return '';
+  }
+
+  function normalizeSimple(input) {
+    return String(input || '').toLowerCase().trim();
+  }
+
+  function handleGuidedFlowInput(input) {
+    var ans = normalizeSimple(input);
+    if (ans === 'cancel' || ans === 'stop' || ans === 'exit') {
+      resetGuidedFlow();
+      return "Guided diagnosis cancelled. You can start again anytime.";
+    }
+
+    if (guidedFlow.active === 'maize_pest') {
+      if (guidedFlow.step === 0) {
+        guidedFlow.data.damageSite = ans;
+        guidedFlow.step = 1;
+        return "Step 2/3: Do you see frass (sawdust-like droppings) in the whorl/cob?<br>Reply: <code>yes</code> or <code>no</code>";
+      }
+      if (guidedFlow.step === 1) {
+        guidedFlow.data.frass = ans;
+        guidedFlow.step = 2;
+        return "Step 3/3: Is damage patchy with fresh chewing, or uniform yellowing?<br>Reply with one:<br>• <code>patchy chewing</code><br>• <code>uniform yellowing</code>";
+      }
+      guidedFlow.data.pattern = ans;
+      var res = "<strong>Maize likely-cause output:</strong><br><br>";
+      var severity = 'Medium';
+      var immediate = '';
+      var next24 = '';
+      if ((guidedFlow.data.damageSite.indexOf('whorl') >= 0 || guidedFlow.data.damageSite.indexOf('cob') >= 0) && guidedFlow.data.frass === 'yes') {
+        res += "Most likely: <strong>Fall armyworm / cob-feeding caterpillars</strong>.<br>Action: scout immediately, treat early instars, and check product label + timing.";
+        severity = 'High';
+        immediate = "Scout all blocks now, mark hotspots, and treat above threshold areas first.";
+        next24 = "Re-check treated zones, confirm larval knockdown, and log affected hectares.";
+      } else if (guidedFlow.data.pattern.indexOf('uniform') >= 0) {
+        res += "Most likely: <strong>nutrient or moisture-related stress</strong> rather than acute chewing pest.<br>Action: check soil moisture, fertiliser history, and root health before spraying insecticide.";
+        severity = 'Medium';
+        immediate = "Run moisture + nutrient checks before any pesticide spend.";
+        next24 = "Inspect roots and irrigation uniformity; correct the limiting factor first.";
+      } else {
+        res += "Likely mixed pressure (insect + stress factors).<br>Action: split field into zones, verify pest presence physically, and treat only above threshold.";
+        severity = 'Medium-High';
+        immediate = "Separate insect-damaged zones from nutrient/water stress zones.";
+        next24 = "Deploy targeted intervention per zone and re-scout after 24 hours.";
+      }
+      res += "<br><br>Next: send photos and samples to extension support for confirmation before major chemical spend.";
+      res += "<br><br><strong>Field report card:</strong><br>• Severity: <strong>" + severity + "</strong><br>• Immediate actions: " + immediate + "<br>• Next 24h plan: " + next24 + "<br>• Escalate to: Extension officer (013 766 4027) if spread accelerates.";
+      resetGuidedFlow();
+      return res;
+    }
+
+    if (guidedFlow.active === 'smallstock_parasite') {
+      if (guidedFlow.step === 0) {
+        guidedFlow.data.species = ans;
+        guidedFlow.step = 1;
+        return "Step 2/3: What is the eyelid colour on FAMACHA check?<br>Reply: <code>red</code>, <code>pink</code>, or <code>pale/white</code>";
+      }
+      if (guidedFlow.step === 1) {
+        guidedFlow.data.eyelid = ans;
+        guidedFlow.step = 2;
+        return "Step 3/3: Is there bottle jaw or weight loss?<br>Reply: <code>yes</code> or <code>no</code>";
+      }
+      guidedFlow.data.clinical = ans;
+      var out = "<strong>Small-stock parasite likely-cause output:</strong><br><br>";
+      var sev2 = 'Medium';
+      var immediate2 = '';
+      var next242 = '';
+      if (guidedFlow.data.eyelid.indexOf('pale') >= 0 || guidedFlow.data.eyelid.indexOf('white') >= 0 || guidedFlow.data.clinical === 'yes') {
+        out += "High risk of <strong>Haemonchus (wireworm) anaemia</strong>.<br>Action: targeted deworming of affected animals, dose by weight, then reassess in 7-10 days.";
+        sev2 = 'High';
+        immediate2 = "Prioritise weak/pale animals for immediate intervention and close observation.";
+        next242 = "Check response, hydration, and grazing pressure; isolate poor responders.";
+      } else if (guidedFlow.data.eyelid.indexOf('pink') >= 0) {
+        out += "Moderate parasite pressure likely.<br>Action: monitor closely, treat selective animals, and improve grazing rotation.";
+        sev2 = 'Medium';
+        immediate2 = "Treat selective high-risk animals and avoid blanket dosing.";
+        next242 = "Re-score FAMACHA and record body condition changes.";
+      } else {
+        out += "Low immediate worm risk signs.<br>Action: continue monitoring and avoid blanket deworming to slow resistance.";
+        sev2 = 'Low-Medium';
+        immediate2 = "Maintain surveillance and nutrition support.";
+        next242 = "Repeat FAMACHA checks and track any decline early.";
+      }
+      out += "<br><br>Confirm with faecal egg count/FECRT where possible.";
+      out += "<br><br><strong>Field report card:</strong><br>• Severity: <strong>" + sev2 + "</strong><br>• Immediate actions: " + immediate2 + "<br>• Next 24h plan: " + next242 + "<br>• Escalate to: State Vet (013 288 2087) if deaths, severe anaemia, or rapid deterioration.";
+      resetGuidedFlow();
+      return out;
+    }
+
+    if (guidedFlow.active === 'poultry_mortality') {
+      if (guidedFlow.step === 0) {
+        guidedFlow.data.age = ans;
+        guidedFlow.step = 1;
+        return "Step 2/3: Main sign before death?<br>Reply one:<br>• <code>respiratory</code><br>• <code>diarrhea</code><br>• <code>sudden death</code><br>• <code>neurological</code>";
+      }
+      if (guidedFlow.step === 1) {
+        guidedFlow.data.sign = ans;
+        guidedFlow.step = 2;
+        return "Step 3/3: Mortality trend?<br>Reply one:<br>• <code>rising fast</code><br>• <code>stable low</code>";
+      }
+      guidedFlow.data.trend = ans;
+      var msg = "🚨 <strong>Poultry mortality triage output:</strong><br><br>";
+      var sev3 = 'Medium';
+      var immediate3 = '';
+      var next243 = '';
+      if (guidedFlow.data.trend.indexOf('rising') >= 0) {
+        msg += "Treat as a potential outbreak. Isolate houses, stop movement, tighten hygiene, and contact veterinary authorities urgently.";
+        sev3 = 'High';
+        immediate3 = "Lock down movement, isolate houses, enforce strict hygiene controls.";
+        next243 = "Track hourly mortality, secure samples, and prepare outbreak report.";
+      } else {
+        msg += "Likely manageable but still urgent. Check brooding/ventilation/water quality and vaccination timing immediately.";
+        sev3 = 'Medium';
+        immediate3 = "Correct environment and husbandry stress points immediately.";
+        next243 = "Monitor trend and reassess if mortality rises.";
+      }
+      if (guidedFlow.data.sign.indexOf('resp') >= 0 || guidedFlow.data.sign.indexOf('neuro') >= 0) {
+        msg += "<br>Possible respiratory/viral component - escalate quickly for lab confirmation.";
+        sev3 = 'High';
+      }
+      msg += "<br><br>Contact State Vet: <strong>013 288 2087</strong>.";
+      msg += "<br><br><strong>Field report card:</strong><br>• Severity: <strong>" + sev3 + "</strong><br>• Immediate actions: " + immediate3 + "<br>• Next 24h plan: " + next243 + "<br>• Escalate to: State Vet (013 288 2087) and district extension support if trend worsens.";
+      resetGuidedFlow();
+      return msg;
+    }
+
+    return '';
+  }
+
+  function extractContext(words) {
+    var locations = ['ermelo','bethal','standerton','nelspruit','mbombela','middelburg','secunda','komatipoort','malelane','white river','hazyview','carolina','piet retief'];
+    var enterprises = ['maize','soybean','sunflower','wheat','vegetable','citrus','avocado','sugarcane','cattle','goat','sheep','pig','poultry','rabbit','aquaculture','fish','dairy'];
+    var joined = words.join(' ');
+    for (var i = 0; i < locations.length; i++) {
+      if (joined.indexOf(locations[i]) >= 0) chatContext.location = locations[i];
+    }
+    for (var j = 0; j < enterprises.length; j++) {
+      if (joined.indexOf(enterprises[j]) >= 0) chatContext.enterprise = enterprises[j];
+    }
+  }
+
+  function tryCalculatorResponse(lower) {
+    // Fertiliser calculator example: "35 ha at 180 kg/ha"
+    if ((lower.indexOf('kg/ha') >= 0 || lower.indexOf('kg per ha') >= 0 || lower.indexOf('kgha') >= 0) && lower.indexOf('ha') >= 0) {
+      var nums = lower.match(/(\d+(\.\d+)?)/g);
+      if (nums && nums.length >= 2) {
+        var hectares = parseFloat(nums[0]);
+        var rate = parseFloat(nums[1]);
+        if (hectares > 0 && rate > 0) {
+          var totalKg = hectares * rate;
+          var bags = totalKg / 50;
+          return "<strong>Fertiliser quick calculator:</strong><br><br>Area: " + hectares + " ha<br>Rate: " + rate + " kg/ha<br><strong>Total required: " + totalKg.toFixed(2) + " kg</strong><br>Equivalent 50 kg bags: <strong>" + bags.toFixed(1) + "</strong><br><br>Tip: Add 3-5% contingency for handling and calibration losses.";
+        }
+      }
+    }
+
+    // Stocking quick check example: "120 ha and 40 cattle"
+    if ((lower.indexOf('stocking') >= 0 || lower.indexOf('carrying') >= 0 || lower.indexOf('overstock') >= 0 || lower.indexOf('ha') >= 0) &&
+        (lower.indexOf('cattle') >= 0 || lower.indexOf('goat') >= 0 || lower.indexOf('sheep') >= 0)) {
+      var n = lower.match(/(\d+(\.\d+)?)/g);
+      if (n && n.length >= 2) {
+        var area = parseFloat(n[0]);
+        var head = parseFloat(n[1]);
+        if (area > 0 && head > 0) {
+          var haPerHead = area / head;
+          return "<strong>Stocking quick check:</strong><br><br>Area: " + area + " ha<br>Animals: " + head + "<br><strong>Current ratio: " + haPerHead.toFixed(2) + " ha per animal</strong><br><br>This is a screening figure only. Final carrying capacity depends on veld type, rainfall, and class of livestock. Get a veld-specific assessment from your extension officer before expanding herd/flock size.";
+        }
+      }
+    }
+    return '';
+  }
+
+  function tryEmergencyResponse(lower) {
+    var livestockSignals = ['not eating','off feed','diarrhea','diarrhoea','high fever','coughing','sudden death','abortion','mouth lesions','lameness'];
+    var cropSignals = ['wilting','yellow leaves','leaf spots','stem rot','root rot','blight','pest outbreak'];
+    var hasLivestock = lower.indexOf('cattle') >= 0 || lower.indexOf('goat') >= 0 || lower.indexOf('sheep') >= 0 || lower.indexOf('pig') >= 0 || lower.indexOf('poultry') >= 0 || lower.indexOf('chicken') >= 0;
+    var hasCrop = lower.indexOf('maize') >= 0 || lower.indexOf('crop') >= 0 || lower.indexOf('tomato') >= 0 || lower.indexOf('potato') >= 0 || lower.indexOf('vegetable') >= 0;
+    var i;
+    for (i = 0; i < livestockSignals.length; i++) {
+      if (lower.indexOf(livestockSignals[i]) >= 0 && hasLivestock) {
+        return "🚨 <strong>Possible livestock health emergency:</strong><br><br>Immediate actions:<br>1) Isolate affected animals now.<br>2) Stop all animal movement on/off farm.<br>3) Record symptoms, numbers affected, and onset time.<br>4) Contact State Vet immediately: <strong>013 288 2087</strong>.<br>5) If deaths occur, do not open carcasses unless instructed by veterinary officials.<br><br>I can build a same-day response checklist if you share species and key symptoms.";
+      }
+    }
+    for (i = 0; i < cropSignals.length; i++) {
+      if (lower.indexOf(cropSignals[i]) >= 0 && hasCrop) {
+        return "⚠️ <strong>Possible crop health issue:</strong><br><br>Rapid response steps:<br>1) Map affected area (hotspots vs whole field).<br>2) Check irrigation, drainage, and recent spray/fertiliser records.<br>3) Scout 10-20 random points and take clear photos.<br>4) Separate insect damage from nutrient/disease symptoms before spraying.<br>5) Contact extension support for diagnosis confirmation before major chemical spend.<br><br>If you share crop, growth stage, and symptoms, I can provide a targeted troubleshooting guide.";
+      }
+    }
+    return '';
+  }
+
+  function detectSeasonByMonth() {
+    var month = new Date().getMonth() + 1;
+    if (month >= 9 && month <= 11) return 'spring';
+    if (month >= 12 || month <= 2) return 'summer';
+    if (month >= 3 && month <= 5) return 'autumn';
+    return 'winter';
+  }
+
+  function seasonPlan(season, enterprise) {
+    var ent = enterprise || 'mixed farming';
+    if (season === 'spring') {
+      return "<strong>Spring action plan (" + ent + "):</strong><br><br>• Finalise soil prep and input procurement.<br>• Calibrate planters/sprayers before first use.<br>• Plant summer crops in optimal windows.<br>• Vaccinate and parasite-control livestock before peak summer pressure.<br>• Repair fences, water points, and drainage ahead of storms.";
+    }
+    if (season === 'summer') {
+      return "<strong>Summer action plan (" + ent + "):</strong><br><br>• Intensify scouting (pests, disease, water stress).<br>• Execute top-dressing and weed control on time.<br>• Manage grazing pressure and provide clean water/shade.<br>• Prepare flood/heat contingency responses.<br>• Track costs weekly to avoid cash flow surprises.";
+    }
+    if (season === 'autumn') {
+      return "<strong>Autumn action plan (" + ent + "):</strong><br><br>• Harvest and post-harvest handling discipline.<br>• Grade and market produce strategically.<br>• Build winter feed reserves for livestock.<br>• Review enterprise performance and plan adjustments.<br>• Prepare winter fields/pastures where applicable.";
+    }
+    return "<strong>Winter action plan (" + ent + "):</strong><br><br>• Maintain body condition with targeted supplementation.<br>• Perform equipment maintenance and pre-season repairs.<br>• Apply lime and soil amendments where planned.<br>• Update budgets and secure next-season inputs early.<br>• Fire-risk mitigation: maintain firebreaks and readiness.";
+  }
+
+  function tryPlannerResponse(lower) {
+    if (lower.indexOf('weekly plan') >= 0 || lower.indexOf('week plan') >= 0 || lower.indexOf('plan my week') >= 0) {
+      var ent = chatContext.enterprise || 'farm operations';
+      return "<strong>7-day practical farm plan (" + ent + "):</strong><br><br><strong>Day 1:</strong> Field/livestock inspection + priority list.<br><strong>Day 2:</strong> Input checks, calibration, and procurement gaps.<br><strong>Day 3:</strong> Core operation (plant/spray/feed health intervention).<br><strong>Day 4:</strong> Follow-up scouting and corrective actions.<br><strong>Day 5:</strong> Record keeping, cost tracking, and market checks.<br><strong>Day 6:</strong> Infrastructure maintenance (water, fences, housing).<br><strong>Day 7:</strong> Review outcomes and prepare next-week plan.";
+    }
+    if (lower.indexOf('season plan') >= 0 || lower.indexOf('seasonal plan') >= 0 || lower.indexOf('this season plan') >= 0) {
+      return seasonPlan(detectSeasonByMonth(), chatContext.enterprise);
+    }
+    if (lower.indexOf('startup plan') >= 0 || lower.indexOf('start up plan') >= 0 || lower.indexOf('new farm plan') >= 0) {
+      var ent2 = chatContext.enterprise || 'your chosen enterprise';
+      return "<strong>90-day startup plan (" + ent2 + "):</strong><br><br><strong>Days 1-30:</strong> Define enterprise scope, budget, market outlet, and input plan.<br><strong>Days 31-60:</strong> Set up infrastructure, secure inputs, train labour, establish records.<br><strong>Days 61-90:</strong> Execute first production cycle, monitor weekly KPIs, and correct quickly.<br><br>Must-have KPIs: survival/establishment rate, feed/input conversion, pest/disease incidence, gross margin trend.";
+    }
+    if (lower.indexOf('outbreak checklist') >= 0 || lower.indexOf('disease checklist') >= 0 || lower.indexOf('emergency checklist') >= 0) {
+      return "🚨 <strong>Farm outbreak checklist (first 24 hours):</strong><br><br>1) Isolate affected animals/fields immediately.<br>2) Restrict movement of people, tools, and vehicles.<br>3) Document signs, numbers affected, and timing.<br>4) Notify authorities/State Vet where required.<br>5) Separate clean/dirty zones and disinfect equipment.<br>6) Preserve evidence/samples for diagnosis.<br>7) Communicate one clear protocol to all workers.<br>8) Start a daily incident log until closure.";
+    }
+    return '';
+  }
+
+  function contextualTail() {
+    var bits = [];
+    if (chatContext.enterprise) bits.push('enterprise: <strong>' + chatContext.enterprise + '</strong>');
+    if (chatContext.location) bits.push('location: <strong>' + chatContext.location + '</strong>');
+    if (!bits.length) return '';
+    return "<br><br><em>Saved context (" + bits.join(' | ') + ").</em> Ask follow-up questions without repeating everything.";
+  }
+
+  function normalizeText(input) {
+    var lower = input.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+    var alias = {
+      fertlizer: 'fertilizer', fertiliser: 'fertilizer', farme: 'farm', farmr: 'farmer',
+      cattel: 'cattle', chiken: 'chicken', poutry: 'poultry', vegtable: 'vegetable',
+      appliation: 'application', documnts: 'documents', wheather: 'weather',
+      aquacuture: 'aquaculture', irigation: 'irrigation', enviromental: 'environmental',
+      progamme: 'programme', eligiblity: 'eligibility'
+    };
+    var words = lower.split(/\s+/).filter(function (w) { return w.length > 1; }).map(function (w) {
+      return alias[w] || w;
+    });
+    return { lower: words.join(' '), words: words };
+  }
+
   function matchAnswer(input) {
-    var lower = input.toLowerCase().replace(/[^a-z0-9\s]/g, '');
-    var words = lower.split(/\s+/).filter(function (w) { return w.length > 1; });
+    var normalized = normalizeText(input);
+    var lower = normalized.lower;
+    var words = normalized.words;
+
+    if (guidedFlow.active) {
+      return handleGuidedFlowInput(input);
+    }
+
+    if (lower.indexOf('maize diagnosis') >= 0 || lower.indexOf('maize pest diagnosis') >= 0 || lower.indexOf('diagnose maize') >= 0) {
+      return startGuidedFlow('maize_pest');
+    }
+    if (lower.indexOf('goat parasite diagnosis') >= 0 || lower.indexOf('sheep parasite diagnosis') >= 0 || lower.indexOf('small stock parasite diagnosis') >= 0) {
+      return startGuidedFlow('smallstock_parasite');
+    }
+    if (lower.indexOf('poultry mortality diagnosis') >= 0 || lower.indexOf('diagnose poultry deaths') >= 0 || lower.indexOf('poultry outbreak diagnosis') >= 0) {
+      return startGuidedFlow('poultry_mortality');
+    }
+
+    extractContext(words);
+
+    var quickCalc = tryCalculatorResponse(lower);
+    if (quickCalc) return quickCalc + contextualTail();
+
+    var emergency = tryEmergencyResponse(lower);
+    if (emergency) return emergency + contextualTail();
+
+    var planner = tryPlannerResponse(lower);
+    if (planner) return planner + contextualTail();
+
     var bestScore = 0;
     var bestAnswer = fallback;
+    var secondScore = 0;
+    var secondAnswer = '';
 
     for (var i = 0; i < qa.length; i++) {
       var score = 0;
       var kws = qa[i].k;
       for (var j = 0; j < kws.length; j++) {
-        var kw = kws[j];
+        var kw = kws[j].toLowerCase();
         if (kw.indexOf(' ') >= 0) {
           if (lower.indexOf(kw) >= 0) score += 4;
         } else {
@@ -199,11 +541,23 @@
         }
       }
       if (score > bestScore) {
+        secondScore = bestScore;
+        secondAnswer = bestAnswer;
         bestScore = score;
         bestAnswer = qa[i].a;
+      } else if (score > secondScore) {
+        secondScore = score;
+        secondAnswer = qa[i].a;
       }
     }
-    return bestAnswer;
+
+    if (bestScore < 3) return fallback + contextualTail();
+
+    // When users ask broad multi-part questions, return two strong answers.
+    if (secondScore >= 5 && secondAnswer && secondAnswer !== bestAnswer) {
+      return bestAnswer + "<hr style='border:none;border-top:1px solid rgba(0,0,0,.1);margin:10px 0;'>" + secondAnswer + contextualTail();
+    }
+    return bestAnswer + contextualTail();
   }
 
   /* ================================================================
@@ -232,6 +586,14 @@
       html += '<button class="chatbot-suggestion" type="button">Which cattle breed is best for beginners?</button>';
       html += '<button class="chatbot-suggestion" type="button">When should I plant maize?</button>';
       html += '<button class="chatbot-suggestion" type="button">How do I control fall armyworm?</button>';
+      html += '<button class="chatbot-suggestion" type="button">Calculate fertiliser for 35 ha at 180 kg/ha</button>';
+      html += '<button class="chatbot-suggestion" type="button">I have 120 ha and 40 cattle - is this overstocked?</button>';
+      html += '<button class="chatbot-suggestion" type="button">Give me a weekly plan for my farm</button>';
+      html += '<button class="chatbot-suggestion" type="button">Give me a season plan for this month</button>';
+      html += '<button class="chatbot-suggestion" type="button">Outbreak emergency checklist</button>';
+      html += '<button class="chatbot-suggestion" type="button">Start maize pest diagnosis</button>';
+      html += '<button class="chatbot-suggestion" type="button">Start goat/sheep parasite diagnosis</button>';
+      html += '<button class="chatbot-suggestion" type="button">Start poultry mortality diagnosis</button>';
       html += '<button class="chatbot-suggestion" type="button">Emergency contacts</button>';
       html += '<button class="chatbot-suggestion" type="button">I\'m a new farmer — where do I start?</button>';
       html += '</div>';

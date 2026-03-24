@@ -1,0 +1,699 @@
+BUSINESS REQUIREMENTS DOCUMENT (BRD)
+Mpumalanga AgriSupport - Farm Management System
+Decision Support and Grant Platform
+
+================================================================================
+DOCUMENT CONTROL
+================================================================================
+
+Document Title: Business Requirements Document (BRD)
+Project: Mpumalanga AgriSupport - Farm Management System
+Document Type: Business Requirements Specification
+Classification: Internal / Project
+Confidentiality: For project and authorised stakeholders only
+
+Version History:
+
+| Version | Date       | Author/Role        | Description of Changes                    |
+|---------|------------|--------------------|------------------------------------------|
+| 0.1     | [Date]     | [Author]           | Initial draft                            |
+| 1.0     | Feb 2025   | [Author]           | Baseline; full BRD for sign-off          |
+| 1.1     | Mar 2026   | Delivery Team      | Added MESP compliance workflow and support enhancements |
+
+Document Status: Active (Updated)
+Next Review Date: [To be set]
+Approval Required From: Project Sponsor, Business Owner, Lead Developer (technical review)
+
+Distribution: Project sponsor, business analyst, development lead, test lead, compliance (as applicable).
+
+Revision Notes: This document follows industry practice for business requirements (e.g. BABOK guide, IEEE 830-style structure). Requirements are uniquely identified (FR-xxx, NFR-xxx) for traceability to design, build, and test artefacts.
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+The Mpumalanga AgriSupport platform is a web and mobile application that provides farmers and applicants in Mpumalanga with a single point of access to advisory content, weather and market (Price Watch) information, grant application submission, and application tracking. The system also provides a staff portal for authorised department personnel to review, approve, or deny grant applications in an auditable manner.
+
+This BRD defines the business and functional requirements that the solution shall meet. All persistent data is stored in Azure (PostgreSQL for structured data, Blob Storage for documents). A single backend API (Vercel serverless) is the only component that communicates with Azure and with external services (WinSMS for SMS 2FA, OpenWeather for weather, Map API for map data). Web, iOS, and Android clients call only this API; they do not connect directly to databases or third-party APIs. Mobile clients may use local SQLite for offline caching and draft storage, syncing with the backend when online.
+
+The document is intended for use by project sponsors, business analysts, solution architects, developers, testers, and compliance to ensure a common understanding of scope, requirements, and acceptance criteria.
+
+================================================================================
+
+1. INTRODUCTION AND CONTEXT
+
+----------------------------------------------------------------------
+1.1 Document Purpose
+----------------------------------------------------------------------
+
+This Business Requirements Document (BRD) is the authoritative specification of what the Mpumalanga AgriSupport system must do from a business perspective. It:
+
+- Defines the business problem, objectives, and scope.
+- Specifies functional requirements (what the system shall do) and non-functional requirements (how it shall perform, secure, and scale).
+- Identifies stakeholders, roles, and responsibilities.
+- Describes processes, data, integrations, and compliance needs.
+- Provides testable acceptance criteria and traceability for design, development, and testing.
+
+The BRD does not specify implementation details (e.g. specific technology choices beyond what is contractually or architecturally fixed); those belong in technical design documents. Changes to requirements should be controlled via versioning and change approval.
+
+----------------------------------------------------------------------
+1.2 Scope
+----------------------------------------------------------------------
+
+In Scope:
+
+- Public-facing website (HTML, CSS, JavaScript) for advisory guides, e-learning, weather, alerts, NDA Price Watch linkage, grant application entry, and application tracking.
+- Applicant authentication using South African ID number and password, with optional two-factor authentication (2FA) via SMS using the WinSMS service.
+- User (applicant) profiles: personal details, farm profile, document uploads (e.g. ID copy, proof of ownership, bank details), and application history.
+- Staff portal for authorised personnel to list, view, approve, or deny grant applications with full audit trail.
+- Staff portal for authorised personnel to manage MESP procedure stages, request additional documentation, capture stage evidence, and review issue reports.
+- Native or cross-platform mobile applications (iOS and Android) with offline capability via local SQLite storage, calling the same backend API as the web client.
+- Backend API hosted on Vercel (serverless) as the only system component that communicates with Azure PostgreSQL, Azure Blob Storage, WinSMS, OpenWeather, and any Map API.
+- Integration with the National Department of Agriculture (NDA) Price Watch publication for latest market/price information (link or server-side resolution of latest PDF).
+- Support issue reporting for logged-in users with staff-side status management (Submitted, In Progress, Resolved).
+
+Out of Scope (for this BRD):
+
+- Hardware or IoT devices; internal departmental ERP, payroll, or financial systems; third-party grant payment execution (only application and approval workflow are in scope).
+- Detailed UI wireframes or visual design (referenced at high level only); detailed API contract specifications (to be documented in technical design).
+
+----------------------------------------------------------------------
+1.3 Target Audience and Stakeholders
+----------------------------------------------------------------------
+
+- Project sponsor / business owner: Mpumalanga Department of Agriculture (or designated programme owner). Accountable for business outcomes and sign-off.
+- Primary users: Farmers and agri-applicants in Mpumalanga (web browser, iOS app, Android app). They consume information, maintain profile, submit applications, and track status.
+- Secondary users: Department staff (staff portal) who review and decide on applications; support staff who may handle feedback or complaints.
+- Technical audience: Development team (backend, frontend, mobile), infrastructure (Vercel, Azure), testers. They use the BRD to derive technical specifications and test cases.
+- Compliance / governance: POPIA, WASPA (SMS), and any departmental data and security policies. They use the BRD to ensure requirements align with regulatory and policy obligations.
+
+----------------------------------------------------------------------
+1.4 Definitions and Acronyms (Glossary)
+----------------------------------------------------------------------
+
+- BRD: Business Requirements Document. A formal document that states business and high-level functional and non-functional requirements.
+- SRS: Software Requirements Specification. A more technical elaboration of requirements (may reference this BRD).
+- API: Application Programming Interface. In this project, HTTP REST endpoints provided by the Vercel serverless backend. Clients (web, iOS, Android) call these endpoints only; they do not call Azure or external APIs directly.
+- 2FA: Two-Factor Authentication. A second step after password (e.g. one-time code sent via SMS) to verify the user.
+- NDA: National Department of Agriculture (South Africa). Source of Price Watch publication.
+- POPIA: Protection of Personal Information Act (South Africa). Governs collection, processing, storage, and deletion of personal information.
+- WASPA: Wireless Application Service Providers' Association. Industry body for SMS and related services; compliance required for commercial SMS in South Africa.
+- E.164: International telephone numbering format (e.g. 27821234567 for a South African number). Used for WinSMS recipient numbers.
+- SQLite: Lightweight, file-based relational database used on mobile devices for local/offline storage. Not a substitute for the central Azure database; used for caching and drafts.
+- Blob Storage: Azure Blob Storage. Object storage for unstructured data (e.g. uploaded document files). Access only via the Vercel API.
+- Serverless: Execution model where backend code runs in response to events (e.g. HTTP request) without long-lived servers. In this project, Vercel serverless functions implement the API.
+- JWT: JSON Web Token. A common format for session or access tokens issued after successful authentication.
+- WCAG: Web Content Accessibility Guidelines. International standard for accessible web content (e.g. WCAG 2.1 Level AA).
+- RACI: Responsible, Accountable, Consulted, Informed. A model for clarifying roles in tasks or decisions.
+- Traceability: The ability to link a requirement to its source (e.g. business objective) and to downstream artefacts (e.g. design, test case).
+
+----------------------------------------------------------------------
+1.5 References and Standards
+----------------------------------------------------------------------
+
+- System architecture diagram: Vercel API, Azure PostgreSQL and Blob, clients (Web, iOS, Android), Vercel Web Hosting, external APIs (WinSMS, OpenWeather, Map API), and SQLite on mobile.
+- NDA Price Watch: https://www.nda.gov.za/index.php/publications/36-price-watch
+- WinSMS HTTP API documentation (SMS sending, authentication, E.164).
+- OpenWeather API (or equivalent) documentation.
+- POPIA: Protection of Personal Information Act No. 4 of 2013 (South Africa).
+- WASPA Code of Conduct and related SMS guidelines.
+- WCAG 2.1 (or current version) for accessibility targets.
+- Industry practice: BABOK Guide (Business Analysis Body of Knowledge), IEEE 830-style requirements structure, and project-specific governance.
+
+================================================================================
+
+2. BUSINESS BACKGROUND
+
+----------------------------------------------------------------------
+2.1 Business Problem or Opportunity
+----------------------------------------------------------------------
+
+Farmers and applicants in Mpumalanga require a single, accessible digital platform to:
+
+- Access reliable farming advice, weather data, and market (Price Watch) information.
+- Apply for departmental grants (crop, livestock, environmental) and track application status.
+- Manage their profile and supporting documents in one place, with secure sign-in and optional SMS-based verification for higher assurance.
+
+The department requires a staff-facing portal to review applications and approve or deny them in a consistent, auditable way. Applicants and staff must not connect directly to databases or external APIs; all access to data and third-party services must be mediated by a central backend API to ensure security, compliance, and maintainability.
+
+----------------------------------------------------------------------
+2.2 Business Drivers and Goals
+----------------------------------------------------------------------
+
+- Improve access to information and grant application for farmers across web and mobile.
+- Reduce manual handling and improve traceability of applications and decisions.
+- Centralise authentication, profile, and document storage in a secure, scalable manner (Azure PostgreSQL and Blob), with access only through the backend API.
+- Ensure compliance with POPIA and SMS (WASPA) where applicable.
+- Enable future scalability (e.g. additional programmes or users) without changing the core architecture (API-centric; no direct client access to Azure or external APIs).
+
+----------------------------------------------------------------------
+2.3 Current State (As-Is) Summary
+----------------------------------------------------------------------
+
+- A static website exists with advisory content, e-learning, weather placeholders, alerts, and grant application forms. Applicant and staff authentication and data persistence are currently client-side only (e.g. browser localStorage/sessionStorage).
+- Current implementation includes production-style client workflows for MESP manual compliance, including autosave drafts, additional-document requests, procedure-stage progression, and stage history visibility.
+- There is no central database or document store; no server-side 2FA or SMS integration.
+- A staff portal exists with a simplified UI; applications are managed in memory or local storage only and are not persisted to a shared backend.
+
+----------------------------------------------------------------------
+2.4 Desired Future State (To-Be) Summary
+----------------------------------------------------------------------
+
+- All persistent data (users, applications, document metadata) stored in Azure PostgreSQL; document files stored in Azure Blob Storage.
+- A single backend (Vercel API) that all clients (web, iOS, Android) call. Only the Vercel API communicates with Azure, WinSMS, OpenWeather, and Map API.
+- Applicant sign-in: ID number and password, with optional 2FA via SMS (WinSMS). Session created only after successful authentication (and 2FA when enabled).
+- Staff sign-in: username and password; staff portal for listing, viewing, requesting additional documents, managing MESP procedure stages with required evidence, and approving or denying applications with status and audit stored in PostgreSQL.
+- Web static assets served by Vercel Web Hosting. There is no direct communication between "Vercel Web Hosting" and "Vercel API"; both are part of the same Vercel project, and clients load static content and call the API separately.
+- Mobile apps use local SQLite for offline caching and drafts; they sync with the backend via the Vercel API when online.
+
+================================================================================
+
+3. STAKEHOLDERS AND ROLES (RACI Overview)
+
+----------------------------------------------------------------------
+3.1 Stakeholder List
+----------------------------------------------------------------------
+
+- Sponsor / Business owner: Mpumalanga Department of Agriculture (or designated owner). Accountable for business outcomes and funding.
+- Primary users: Farmers and agri-applicants (web, iOS, Android). Responsible for providing accurate information and using the system as intended.
+- Staff (department): Personnel who review and approve/deny applications. Responsible for timely and consistent decisions.
+- Development team: Implements and maintains the system. Responsible for meeting requirements and technical quality.
+- Test team: Validates against requirements. Responsible for test coverage and defect reporting.
+- External parties: NDA (Price Watch source); WinSMS (SMS); OpenWeather; Map API provider; Azure (hosting). Consulted or Informed as needed; no direct requirement authorship.
+
+----------------------------------------------------------------------
+3.2 Role Summary (Permissions)
+----------------------------------------------------------------------
+
+- Applicant: Register; sign in (ID and password, 2FA when enabled); manage own profile and documents; create and submit applications; view own application list and status; view guides, weather, alerts, Price Watch; submit feedback. No access to other users' data or staff functions.
+
+- Staff: Sign in to staff portal; list and filter applications; view full application details; approve or deny applications (status and audit stored in PostgreSQL). No direct access to Azure or external APIs; all actions via Vercel API.
+
+- Unauthenticated: May view public content (e.g. guides, weather, alerts, Price Watch link). No access to application submission, profile, or tracking.
+
+================================================================================
+
+4. BUSINESS OBJECTIVES AND SUCCESS CRITERIA
+
+----------------------------------------------------------------------
+4.1 Business Objectives (Traceability Source)
+----------------------------------------------------------------------
+
+BO-1: Provide a single, secure platform for applicants to access information, apply for grants, and track applications across web and mobile.
+
+BO-2: Enable staff to review and decide on applications with a full audit trail.
+
+BO-3: Store all application and user data in Azure (PostgreSQL and Blob) with access only through the Vercel API (no direct client-to-database or client-to-blob connections).
+
+BO-4: Support optional SMS 2FA for applicant sign-in using WinSMS; provide weather and map data via backend-only integration (OpenWeather, Map API).
+
+----------------------------------------------------------------------
+4.2 Success Criteria (Measurable)
+----------------------------------------------------------------------
+
+- Applicants can register and sign in (ID and password; 2FA when enabled) from web and mobile; session is created only after successful authentication (and 2FA when required).
+- Applicants can manage profile and documents; documents are stored in Blob with metadata in PostgreSQL; access only via API.
+- Applicants can submit grant applications and track status; staff can list, view, approve, or deny with status and audit persisted in PostgreSQL.
+- Weather and map data (and Price Watch link) are served via the Vercel API calling external services; no client has direct access to external APIs or Azure.
+- Staff portal is visually and functionally aligned with requirements; all staff actions go through the API.
+- Mobile apps can use SQLite for offline cache/drafts and sync with the Vercel API when online.
+- Architecture matches the agreed diagram: single Vercel API as the only component talking to Azure (Postgres, Blob), WinSMS, OpenWeather, and Map API; clients only call the Vercel API and (web only) load static assets from Vercel Web Hosting.
+
+----------------------------------------------------------------------
+4.3 Assumptions
+----------------------------------------------------------------------
+
+- Users have access to a browser or mobile device and (for 2FA) a mobile number capable of receiving SMS.
+- The department will provision and maintain Azure PostgreSQL and Blob; the Vercel project and environment variables (DB URL, Blob credentials, WinSMS API key, weather/map keys) will be maintained and kept secure.
+- WinSMS and OpenWeather/Map APIs remain available and compliant with WASPA and their terms of use.
+- Static web assets and serverless API are deployed together on Vercel (same project). "Vercel Web Hosting" and "Vercel API" do not communicate with each other; clients call the API and load static assets separately.
+- Vercel and Azure remain approved platforms; the department will fund WinSMS credits and third-party API usage; mobile apps will be developed and maintained (or phased as per project plan).
+
+----------------------------------------------------------------------
+4.4 Constraints
+----------------------------------------------------------------------
+
+- Budget and timeline as set by the department.
+- Technology: Vercel (hosting and serverless API), Azure (PostgreSQL, Blob), WinSMS (SMS), OpenWeather and Map API (third-party); mobile may be native or cross-platform with SQLite for offline.
+- Compliance: POPIA, WASPA, and any departmental security and data policies must be adhered to. No requirement may contradict these.
+
+----------------------------------------------------------------------
+4.5 Dependencies
+----------------------------------------------------------------------
+
+- Azure subscription and resource provisioning (PostgreSQL, Blob, networking/firewall).
+- Vercel project and environment variables.
+- WinSMS account and API key; OpenWeather and Map API keys.
+- NDA Price Watch page availability for "latest PDF" link or fallback; optional serverless function to resolve latest PDF link.
+
+================================================================================
+
+5. FUNCTIONAL REQUIREMENTS
+
+Requirements are stated in "shall" language where applicable. Each is assigned an ID (FR-xxx) for traceability. Acceptance criteria are testable conditions that must be met for the requirement to be considered satisfied.
+
+----------------------------------------------------------------------
+5.1 User (Applicant) Registration and Authentication
+----------------------------------------------------------------------
+
+FR-001: The system shall allow applicants to register using South African ID number and password (and any other required profile fields as defined by business rules). Credentials and profile shall be stored in Azure PostgreSQL; only the Vercel API shall read or write this data.
+
+FR-002: The system shall allow sign-in using ID number and password. The API shall validate credentials against PostgreSQL. On success, if 2FA is enabled for the user, the system shall generate a one-time code, store it (hashed) with a short expiry (e.g. 10 minutes), and send it via WinSMS. The API shall call WinSMS; clients shall never call WinSMS directly.
+
+FR-003: After the user submits the 2FA code, the API shall verify the code and expiry. If valid, the system shall create a session (e.g. JWT or session cookie) and return success. Only after successful 2FA (when enabled) shall the user access protected resources.
+
+FR-004: Password policy and reset flows shall be as defined by business (e.g. minimum length, reset via email or secure flow). Details to be confirmed in business rules.
+
+Acceptance: Applicants can register and sign in from web and mobile; when 2FA is enabled, access is granted only after correct code entry. Credentials and sessions are managed server-side; no client direct access to PostgreSQL.
+
+----------------------------------------------------------------------
+5.2 Two-Factor Authentication (2FA) via SMS
+----------------------------------------------------------------------
+
+FR-005: 2FA shall be optional and configurable (e.g. per user or globally). When enabled, after valid ID and password, the backend shall generate a short-lived numeric code, store hashed code and expiry in PostgreSQL or a short-lived cache, and call the WinSMS API to send the SMS to the user's registered mobile number.
+
+FR-006: The user shall enter the code in the client; the client shall send the code to the Vercel API. The API shall verify the code and expiry and then issue the final session. No client shall ever call WinSMS directly.
+
+FR-007: WinSMS integration shall be implemented only in Vercel serverless functions (e.g. HTTP GET to batchmessage.asp with apikey, message, and numbers). Numbers shall be in E.164 format (e.g. 2782xxxxxxxx). WASPA and opt-out shall be handled per WinSMS and department policy.
+
+Acceptance: When 2FA is enabled, sign-in completes only after correct code entry within the expiry window. SMS is sent only by the backend; clients do not hold WinSMS credentials.
+
+----------------------------------------------------------------------
+5.3 User Profile and Farm Profile
+----------------------------------------------------------------------
+
+FR-008: The system shall allow applicants to view and update personal details (name, contact, email, address) and farm profile (farm name, district, coordinates, size, soil type, commodities, irrigation, previous yields). All data shall be persisted in Azure PostgreSQL via the Vercel API. Web, iOS, and Android clients shall call the API only.
+
+Acceptance: Profile and farm data can be updated from web and mobile; changes are stored in PostgreSQL and visible on next load.
+
+----------------------------------------------------------------------
+5.4 Document Upload, Storage, and Retrieval
+----------------------------------------------------------------------
+
+FR-009: The system shall allow applicants to upload documents (e.g. ID copy, proof of ownership, bank details). The client shall send the file to the Vercel API; the API shall upload file bytes to Azure Blob Storage and store metadata (user id, type, filename, blob path or URL, size, content type) in PostgreSQL.
+
+FR-010: For download or view, the client shall request the document by id from the API. The API shall fetch from Blob (or return a signed URL per policy) and stream or redirect to the client. No client shall have direct access to Blob.
+
+Acceptance: Uploaded documents are stored in Blob with metadata in PostgreSQL; download/view is only via the API. No client-side Blob credentials.
+
+----------------------------------------------------------------------
+5.5 Grant Applications (Crop, Livestock, Environmental)
+----------------------------------------------------------------------
+
+FR-011: The system shall allow applicants to start and submit grant applications per programme. Form data and summary shall be stored in PostgreSQL; any file attachments shall be stored via Blob as in FR-009. Status values shall include at least: draft, submitted, under review, additional documentation required, approved, rejected. Only the Vercel API shall write to PostgreSQL and Blob; clients shall only call the API.
+
+Acceptance: Applications can be created and submitted from web and mobile; status is persisted and visible to applicant and staff.
+
+----------------------------------------------------------------------
+5.6 Application Tracking
+----------------------------------------------------------------------
+
+FR-012: The system shall allow applicants to view a list of their applications and status and to drill into details. Data shall be sourced from PostgreSQL via the Vercel API. The same API shall be used by web and mobile clients.
+
+Acceptance: Applicant can see their application list and detail from web and mobile; data is consistent and from the central database.
+
+----------------------------------------------------------------------
+5.7 Staff Portal
+----------------------------------------------------------------------
+
+FR-013: The system shall allow staff to sign in with username and password. Credentials shall be stored and validated server-side (e.g. in PostgreSQL or a dedicated staff table). No direct database access from the staff browser; all actions shall go through the Vercel API.
+
+FR-014: The system shall allow staff to list all applications (or filter by status), view full application details, request additional documentation with reviewer notes, and approve or deny. Status and audit information (e.g. timestamp, staff id) shall be updated in PostgreSQL by the API.
+
+FR-023: The system shall enforce key MESP qualification and exclusion declarations at submission time, including residency and citizenship confirmation, age eligibility, government employee exclusion, prior benefit repayment declaration, and declaration of relationship to departmental officials. Submission shall be blocked until required declarations are complete.
+
+FR-024: The system shall enforce MESP checklist compliance rules by farmer category:
+- Subsistence: mandatory baseline checklist with brand-mark certificate or 6-month undertaking.
+- Smallholder/Commercial: mandatory legal entity, proof of income, market/off-take, brand mark, and biosecurity confirmation.
+- Commodity-specific IA authorisation shall be mandatory where applicable (e.g. poultry and pigs).
+
+FR-025: The system shall enforce land access validation rules for lease-based applications, including minimum lease period of 5 years.
+
+FR-026: The system shall support MESP procedure-stage progression in the staff portal with controlled transitions and evidence capture for each stage:
+- Submitted
+- Profiling and Shortlisting
+- Farm Assessment
+- HOD Approval
+- Induction
+- Procurement
+- Pre and Post Delivery Inspection
+- Monitoring Evaluation and Advisory
+- Approved
+
+FR-027: The system shall require structured stage evidence fields before staff can advance to the next stage, and shall persist stage history entries including from-stage, to-stage, note/evidence, updater, and timestamp.
+
+FR-028: The system shall expose stage history and evidence to applicants on the tracking page as a procedure progress log.
+
+FR-029: The system shall provide a support issue reporting module for logged-in users and a staff-side issue management view with status updates (Submitted, In Progress, Resolved).
+
+FR-015: The staff portal UI shall be aligned with the rest of the platform (e.g. same visual style as applicant "My Account" and design system).
+
+Acceptance: Staff can sign in, list and view applications, and approve or deny; all actions are recorded and visible in the system.
+
+----------------------------------------------------------------------
+5.8 Weather Data
+----------------------------------------------------------------------
+
+FR-016: Weather information displayed to users shall be obtained by the Vercel API from OpenWeather (or an agreed provider). Clients shall not call OpenWeather directly; they shall call a Vercel endpoint (e.g. /api/weather) that fetches from OpenWeather and returns data. The API key shall be stored only in Vercel environment variables.
+
+Acceptance: Weather data is shown on web and mobile; the client never receives or stores the OpenWeather API key.
+
+----------------------------------------------------------------------
+5.9 Map Information
+----------------------------------------------------------------------
+
+FR-017: Where map or location data is required, the Vercel API shall call the Map API (e.g. fetch map information); clients shall receive only the response from the Vercel API. The Map API key or token shall reside only on the server.
+
+Acceptance: Map-related features work via the API; no client direct access to the Map API or its key.
+
+----------------------------------------------------------------------
+5.10 NDA Price Watch
+----------------------------------------------------------------------
+
+FR-018: The website shall display a Price Watch section (e.g. on the Guides page) with a link to the latest NDA Price Watch PDF or to the NDA Price Watch page. Optionally, a Vercel serverless function may fetch the NDA page, parse the latest PDF link, and return it to the client so a "Download latest PDF" button remains current. Fallback: direct link to the NDA Price Watch page.
+
+Acceptance: Users can access Price Watch information or the latest PDF (or NDA page) from the Guides area; no client-side scraping of NDA.
+
+----------------------------------------------------------------------
+5.11 Alerts and Notifications
+----------------------------------------------------------------------
+
+FR-019: Farming alerts and any in-app notifications shall be served via the API (data from PostgreSQL or an external source as designed). If alert data is sensitive or key-protected, clients shall not have direct access to the external feed.
+
+Acceptance: Alerts are available through the application; access control and data source are server-side.
+
+----------------------------------------------------------------------
+5.12 E-Learning and Advisory Guides
+----------------------------------------------------------------------
+
+FR-020: E-learning and advisory guide content shall be served as static assets (Vercel Web Hosting) or via the API (e.g. from the database) as designed. Clients shall not have direct access to the backend database.
+
+Acceptance: Content is accessible to users through the intended channels; no direct DB access from clients.
+
+----------------------------------------------------------------------
+5.13 User Feedback
+----------------------------------------------------------------------
+
+FR-021: The system shall allow users to submit feedback (e.g. star rating, complaints, general feedback) via the website. Data shall be sent to the Vercel API and stored (e.g. in PostgreSQL or a designated store). Personal information shall not be included in feedback unless explicitly collected and compliant with POPIA.
+
+Acceptance: Feedback can be submitted and stored; handling of PII complies with policy.
+
+----------------------------------------------------------------------
+5.14 Mobile Offline and SQLite
+----------------------------------------------------------------------
+
+FR-022: iOS and Android apps may use local SQLite for offline caching and draft storage. When online, apps shall call the same Vercel API to push or pull data. Business rules (e.g. submission requires online) shall be enforced by the API. SQLite shall not be the system of record; it is a local cache and draft store.
+
+Acceptance: Mobile apps can operate offline for cached/draft data and sync when connected; submission and authoritative data remain via the API.
+
+================================================================================
+
+6. NON-FUNCTIONAL REQUIREMENTS
+
+Non-functional requirements define quality attributes and constraints. They are uniquely identified (NFR-xxx) for traceability.
+
+----------------------------------------------------------------------
+6.1 Performance (NFR-001)
+----------------------------------------------------------------------
+
+- API response times shall meet agreed targets (e.g. p95 under 2 seconds for standard CRUD and list operations). Database and Blob access shall be optimized (e.g. connection pooling for Postgres; efficient Blob reads and writes). Rate limiting shall be applied on public endpoints to protect the backend and third-party APIs.
+
+Acceptance: Response time and rate-limiting behaviour are verified under load as per project test plan.
+
+----------------------------------------------------------------------
+6.2 Availability (NFR-002)
+----------------------------------------------------------------------
+
+- Target availability for the API and web hosting shall be as per department SLA (e.g. 99% or 99.9%). Azure and Vercel are chosen for managed availability. The application design shall avoid a single point of failure (API stateless; database and Blob managed by Azure).
+
+Acceptance: Availability targets are documented and monitored; architecture review confirms no single point of failure for application logic.
+
+----------------------------------------------------------------------
+6.3 Security (NFR-003)
+----------------------------------------------------------------------
+
+- Authentication shall use ID and password (and optional 2FA) as specified in Section 5. Credentials and tokens shall not be exposed to the client inappropriately; session or JWT handling shall be server-side or via secure, HTTP-only cookies where applicable.
+- Only the Vercel API shall connect to Azure (PostgreSQL, Blob). Connection strings and keys shall be stored only in Vercel environment variables. Clients shall never have database or Blob credentials. All client-to-backend communication shall use HTTPS.
+- Input validation and output encoding shall be applied to prevent injection and XSS. Under POPIA, only necessary personal information shall be collected and stored; retention and deletion shall follow policy.
+
+Acceptance: Security review confirms no credentials in client code; HTTPS and validation in place; POPIA alignment documented.
+
+----------------------------------------------------------------------
+6.4 Scalability (NFR-004)
+----------------------------------------------------------------------
+
+- The backend shall scale via Vercel serverless and Azure managed services. Client applications shall not hold persistent connections to the API; they shall call on demand. Database connection pooling (e.g. PgBouncer or Azure-side pooling) shall be used to support serverless concurrency.
+
+Acceptance: Architecture supports horizontal scaling; connection pooling is configured and verified.
+
+----------------------------------------------------------------------
+6.5 Usability and Accessibility (NFR-005)
+----------------------------------------------------------------------
+
+- Web and mobile UIs shall be consistent with department branding and the agreed design system. Key flows (apply, track, staff review) shall be clear and minimal. Accessibility shall meet the target level per policy (e.g. WCAG 2.1 Level AA where applicable).
+
+Acceptance: UI adheres to design system; accessibility review or testing confirms target level.
+
+----------------------------------------------------------------------
+6.6 Compatibility (NFR-006)
+----------------------------------------------------------------------
+
+- Web: Supported browsers and versions shall be as per department standard (e.g. latest Chrome, Firefox, Safari, Edge). Mobile: Current and previous major OS versions for iOS and Android shall be supported as per project scope.
+
+Acceptance: Supported matrix is documented and tested.
+
+----------------------------------------------------------------------
+6.7 Data Retention and Backup (NFR-007)
+----------------------------------------------------------------------
+
+- Azure PostgreSQL and Blob retention and backup shall follow Azure and department policy. Business data shall not be stored only on client devices for long-term retention; SQLite is for cache and draft only.
+
+Acceptance: Retention and backup procedures are documented and in place.
+
+================================================================================
+
+7. PROCESSES AND WORKFLOWS
+
+----------------------------------------------------------------------
+7.1 Applicant Registration and Sign-In (with optional 2FA)
+----------------------------------------------------------------------
+
+1. User enters ID number and password on the client.
+2. Client sends credentials to the Vercel API (e.g. POST /api/auth/login).
+3. API validates against PostgreSQL; if invalid, returns 401.
+4. If 2FA is enabled: API generates a code, stores hashed code and expiry, calls WinSMS to send SMS, and returns a pending2FAId to the client. Client shows "Enter code" screen.
+5. User enters code; client sends it to the API (e.g. POST /api/auth/verify-2fa).
+6. API verifies code and expiry; if valid, creates session (e.g. JWT or cookie) and returns success. Client stores token and redirects to dashboard or home.
+7. If 2FA is not enabled, steps 4 to 6 are skipped and the session is created after step 3.
+
+----------------------------------------------------------------------
+7.2 Grant Application Submission
+----------------------------------------------------------------------
+
+1. Applicant signs in (as above). Fills the application form on the client (web or mobile). Optional: draft saved locally (e.g. SQLite on mobile) or via the API as draft.
+2. On submit, client sends the application payload (and any file references or uploads) to the Vercel API. API validates, writes to PostgreSQL, uploads files to Blob, and stores document metadata in PostgreSQL.
+3. API returns application id and status (e.g. submitted). Client shows confirmation and link to track.
+
+----------------------------------------------------------------------
+7.3 Staff Review and Decision
+----------------------------------------------------------------------
+
+1. Staff signs in to the staff portal; client calls the API for the list of applications.
+2. API reads from PostgreSQL and returns the list (filtered as per role).
+3. Staff selects an application; client calls the API for full details; API returns data from PostgreSQL (and optionally signed URLs for documents from Blob).
+4. Staff may request additional documentation; client sends the action and reviewer note to the API; API updates status and stores the note and audit fields.
+5. Staff may advance applications through defined MESP procedure stages. Before each transition, required stage evidence is captured and stored.
+6. Staff may approve or deny; client sends the action to the API; API updates status and audit fields in PostgreSQL. Client refreshes the list.
+
+----------------------------------------------------------------------
+7.5 MESP Submission Compliance Validation
+----------------------------------------------------------------------
+
+1. Applicant completes MESP application sections and checklist.
+2. On submit, the system validates category-specific checklist requirements, eligibility declarations, and land access rules.
+3. If any mandatory item is missing or non-compliant (including lease period), submission is blocked with explicit guidance.
+4. If compliant, application is submitted and status is created as Submitted.
+
+----------------------------------------------------------------------
+7.6 Support Issue Reporting and Staff Handling
+----------------------------------------------------------------------
+
+1. Logged-in user submits an issue report from Support page using predefined issue type and detailed description.
+2. Issue is stored and displayed in staff issue queue.
+3. Staff updates issue lifecycle state (Submitted/In Progress/Resolved).
+4. Status updates are retained for support tracking and operational follow-up.
+
+----------------------------------------------------------------------
+7.4 Weather and Map Data
+----------------------------------------------------------------------
+
+1. Client requests weather or map data (e.g. GET /api/weather or /api/map).
+2. Vercel API calls OpenWeather or Map API with the server-held key and returns the processed response to the client. Client never sees the API key.
+
+================================================================================
+
+8. DATA REQUIREMENTS
+
+----------------------------------------------------------------------
+8.1 Main Entities (Logical Data Model)
+----------------------------------------------------------------------
+
+- Users (applicants): id, id_number (or hash), password_hash, phone, email, name, address, 2fa_enabled, created_at, updated_at. Stored in PostgreSQL; access only via API.
+
+- Staff: id, username, password_hash, name, role, created_at. PostgreSQL.
+
+- Applications: id, user_id, programme_type, status, summary (JSON or columns), details (JSON or columns), status_message, stage_history (JSON), stage_evidence_latest, submitted_at, decided_at, decided_by. PostgreSQL.
+
+- Documents: id, user_id, application_id (optional), type (e.g. id_copy, proof_of_ownership, bank_details), filename, content_type, size, blob_path_or_url, uploaded_at. Metadata in PostgreSQL; file bytes in Blob.
+
+- Pending 2FA: id, user_id or session_ref, code_hash, phone, expires_at. PostgreSQL or short-lived cache. Deleted or invalidated after use or expiry.
+
+- Support issue reports: id, user_id, issue_type, description, status, submitted_at, status_updated_at, updated_by. PostgreSQL.
+
+----------------------------------------------------------------------
+8.2 Data Ownership and Sensitivity
+----------------------------------------------------------------------
+
+- Applicant data and documents are owned by the department and processed per POPIA. Access only through the authenticated API and role-based rules.
+- Staff actions (approve/deny) and timestamps are stored for audit. Access to audit data shall be restricted per policy.
+
+----------------------------------------------------------------------
+8.3 Data Quality and Retention
+----------------------------------------------------------------------
+
+- Validation rules on registration and application (required fields, formats) shall be applied at the API. Retention and deletion of personal data and documents shall follow department policy and POPIA.
+
+================================================================================
+
+9. INTEGRATION REQUIREMENTS
+
+----------------------------------------------------------------------
+9.1 Azure PostgreSQL
+----------------------------------------------------------------------
+
+- The Vercel API shall connect using a connection string from environment variables (e.g. DATABASE_URL). TLS shall be required. Used for: users, staff, applications, document metadata, pending 2FA. Connection pooling is recommended for serverless. Firewall: allow Vercel outbound (or Azure allow list). No client shall connect directly to PostgreSQL.
+
+----------------------------------------------------------------------
+9.2 Azure Blob Storage
+----------------------------------------------------------------------
+
+- The Vercel API shall upload and download blobs using a connection string or SAS from environment variables. Containers and naming shall follow policy. Used for: uploaded documents only. No client direct access. Optional: signed URLs with short expiry for download if required by design.
+
+----------------------------------------------------------------------
+9.3 WinSMS
+----------------------------------------------------------------------
+
+- The Vercel API shall call the WinSMS HTTP API (e.g. batchmessage.asp) with apikey and message/numbers (E.164). Used only for sending 2FA (or other approved) SMS. No client shall call WinSMS. WASPA and opt-out compliance shall be followed per WinSMS and department.
+
+----------------------------------------------------------------------
+9.4 OpenWeather API
+----------------------------------------------------------------------
+
+- The Vercel API shall call OpenWeather (or equivalent) for weather data; key in environment variables. Clients shall receive data only via Vercel API responses.
+
+----------------------------------------------------------------------
+9.5 Map API
+----------------------------------------------------------------------
+
+- The Vercel API shall call the Map API for map/location data; key or token in environment variables. Clients shall receive data only via the Vercel API.
+
+----------------------------------------------------------------------
+9.6 NDA Price Watch
+----------------------------------------------------------------------
+
+- Optionally, a Vercel serverless function may fetch the NDA Price Watch page, parse the latest PDF link, and return it to the client. Fallback: static link to the NDA page. No client-side scraping of NDA.
+
+================================================================================
+
+10. USER INTERFACE AND EXPERIENCE
+
+- Web: Responsive site served by Vercel Web Hosting (HTML, CSS, JS). Pages: home, programmes (crop, livestock, environmental), weather, alerts, guides (with Price Watch block), e-learning, support (including issue reporting), apply (grant forms with autosave and compliance declarations), track (including stage history), my account (profile, documents, application history), login, register, staff portal (staff only). Consistent navigation and footer; design system (colours, typography, components) applied across applicant and staff areas.
+
+- Mobile (iOS/Android): Native or cross-platform apps; same flows as web where applicable (apply, track, profile, documents). Offline: SQLite for cache and drafts; sync via Vercel API when online. Push notifications if required by business (future scope).
+
+- Accessibility and language: Per department standards (e.g. WCAG, language options if required).
+
+================================================================================
+
+11. COMPLIANCE AND REGULATORY
+
+- POPIA: Personal data shall be collected only as necessary; lawful basis shall be documented; retention and deletion shall follow policy; storage shall be secure (Azure, API-only access); credentials and sensitive data shall not be stored on the client beyond the session token.
+
+- WASPA: SMS sending via WinSMS shall comply with WinSMS and WASPA rules; opt-out and consent shall be handled as applicable.
+
+- Audit: Staff decisions and key events (e.g. additional-document requests, application stage transitions, status changes) shall be recorded in PostgreSQL with timestamp and actor for audit trail.
+
+================================================================================
+
+12. RISKS AND MITIGATION
+
+- Risk: API key or database credential leak. Likelihood: Low if env vars and access control are enforced. Impact: High. Mitigation: Keys and connection strings only in Vercel env; no client exposure; periodic rotation of keys.
+
+- Risk: WinSMS or weather/map API unavailable. Likelihood: Low to medium. Impact: Medium (2FA or weather unavailable temporarily). Mitigation: Graceful degradation (e.g. show error and retry; cache weather or show "unavailable"); fallback links (e.g. NDA Price Watch page).
+
+- Risk: Azure outage. Likelihood: Low. Impact: High. Mitigation: Azure SLA and regional redundancy; application stateless so it can align with DB/Blob region.
+
+- Risk: Abuse (spam, brute force). Likelihood: Medium. Impact: Medium. Mitigation: Rate limiting, CAPTCHA or similar where appropriate, monitoring and alerting.
+
+================================================================================
+
+13. ASSUMPTIONS AND OPEN DECISIONS
+
+- Assumptions: As listed in Section 4.3. In addition: Vercel and Azure remain approved platforms; the department will fund WinSMS credits and third-party API usage; mobile apps will be developed and maintained (or phased as per plan).
+
+- Open decisions: Exact password policy (length, complexity, expiry); 2FA mandatory vs optional per user or globally; retention periods for applications and documents; formal sign-off process for this BRD and subsequent releases. These shall be resolved before or during implementation and documented in change control.
+
+================================================================================
+
+14. ACCEPTANCE CRITERIA (SUMMARY)
+
+- Applicants can register and sign in (ID and password; 2FA when enabled) via web and mobile; session is created only after successful authentication (and 2FA when required).
+- Applicants can manage profile and documents; documents are stored in Blob with metadata in PostgreSQL; access only via API.
+- Applicants can submit grant applications and track status; staff can list, view, approve, or deny with status and audit in PostgreSQL.
+- MESP applications enforce eligibility declarations, category-based checklist compliance, and lease-duration rules before submission.
+- Staff can request additional documentation and record reviewer notes.
+- Staff can advance applications through MESP procedure stages with mandatory structured evidence per stage.
+- Applicants can view stage-history progress on tracking.
+- Logged-in users can report support/farm disruption issues; staff can manage issue statuses.
+- Weather and map data (and Price Watch link) are served via the Vercel API calling external services; no client direct access to external APIs or Azure.
+- Staff portal is visually and functionally aligned with requirements; all staff actions go through the API.
+- Mobile apps can use SQLite for offline cache/drafts and sync with the Vercel API when online.
+- Architecture matches the agreed diagram: single Vercel API as the only component talking to Azure (Postgres, Blob), WinSMS, OpenWeather, and Map API; clients (web, iOS, Android) only call the Vercel API and (web only) load static assets from Vercel Web Hosting.
+
+================================================================================
+
+15. APPENDIX A - ARCHITECTURE SUMMARY
+
+- Central component: Vercel API (serverless functions). Only component that connects to Azure PostgreSQL (TCP/connection string) and Azure Blob (HTTPS/REST). Only component that calls WinSMS, OpenWeather, and Map API.
+
+- Clients: Web (browser), iOS app, Android app. All call the Vercel API over HTTPS (API calls request/response). Web client also receives HTML/CSS/JS from Vercel Web Hosting. No direct client connection to Azure or external APIs.
+
+- Vercel Web Hosting: Serves static assets. Does not communicate with the Vercel API; both are part of the same Vercel project.
+
+- External APIs: OpenWeather (fetch weather), WinSMS (send SMS), Map API (fetch map information). Direction: Vercel API to external APIs only.
+
+- Azure: PostgreSQL (structured data), Blob (document files). Direction: Vercel API to Azure only (TCP for Postgres, HTTPS for Blob).
+
+- Mobile: SQLite on device for offline cache and drafts; sync with Vercel API when online.
+
+================================================================================
+
+16. APPENDIX B - REQUIREMENT TRACEABILITY (SUMMARY)
+
+Functional requirements FR-001 to FR-022 and non-functional requirements NFR-001 to NFR-007 trace to business objectives BO-1 to BO-4 and to the acceptance criteria in Section 14. Downstream artefacts (technical design, test cases) should reference these requirement IDs to ensure full traceability. A detailed Requirement Traceability Matrix (RTM) can be maintained in a separate document or spreadsheet linking each requirement to design elements and test case IDs.
+
+================================================================================
+
+17. APPROVAL AND SIGN-OFF
+
+This BRD is subject to approval by the following roles before baseline release for development:
+
+- Project Sponsor / Business Owner: _________________________ Date: _______
+- Business Analyst (optional): _________________________ Date: _______
+- Technical Lead (review): _________________________ Date: _______
+
+Approved baseline shall be placed under version control. Changes shall be managed via a change request process and reflected in the version history (Section: Document Control).
+
+================================================================================
+
+END OF DOCUMENT

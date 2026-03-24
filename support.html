@@ -268,6 +268,79 @@
       gap: var(--space-3);
     }
     .prototype-banner__icon { font-size: 20px; flex-shrink: 0; }
+
+    .issue-report {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      margin-bottom: var(--space-8);
+    }
+    .issue-report__title {
+      margin: 0 0 var(--space-2);
+      font-size: var(--text-xl);
+      font-weight: 800;
+      color: var(--color-text);
+    }
+    .issue-report__subtitle {
+      margin: 0 0 var(--space-5);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .issue-report__panel {
+      background: #171a21;
+      border: 1px solid #2a475e;
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+    }
+    .issue-report__label {
+      display: block;
+      margin-bottom: var(--space-2);
+      color: #c7d5e0;
+      font-size: var(--text-sm);
+      font-weight: 600;
+    }
+    .issue-report__select,
+    .issue-report__textarea {
+      width: 100%;
+      background: #0f1116;
+      color: #fff;
+      border: 1px solid #3a4b5f;
+      border-radius: var(--radius-sm);
+      padding: var(--space-3);
+      font-family: inherit;
+      font-size: var(--text-sm);
+    }
+    .issue-report__textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+    .issue-report__hint {
+      margin: var(--space-2) 0 0;
+      font-size: var(--text-xs);
+      color: #9fb3c8;
+    }
+    .issue-report__actions {
+      margin-top: var(--space-4);
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .issue-report__message {
+      font-size: var(--text-sm);
+      font-weight: 600;
+    }
+    .issue-report__message--ok { color: var(--color-success); }
+    .issue-report__message--error { color: var(--color-error); }
+    .issue-report__login {
+      background: var(--color-surface-alt);
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
   </style>
 </head>
 <body>
@@ -352,6 +425,42 @@
             <span class="prototype-banner__icon">&#9888;</span>
             <span><strong>Notice:</strong> Government programme contacts (MADC, CASP, SEDA, LED, Thusong Centres) are sourced from the Mpumalanga Economic Opportunities booklet. Private service provider contacts are representative placeholders — verify details before engaging services.</span>
           </div>
+
+          <section class="issue-report" id="issueReportSection">
+            <h2 class="issue-report__title">Report an Issue</h2>
+            <p class="issue-report__subtitle">Logged-in users can report website issues and farm-related disruptions like theft, power loss, and water outages.</p>
+            <div class="issue-report__login" id="issueReportLoginPrompt" hidden>
+              Please <a href="login.html?return=support.html">log in</a> to submit an issue report.
+            </div>
+            <form class="issue-report__panel" id="issueReportForm" hidden>
+              <label for="issueType" class="issue-report__label">What issue are you experiencing?</label>
+              <select id="issueType" name="issueType" class="issue-report__select" required>
+                <option value="">-- Select issue type --</option>
+                <option value="Website bug">Website bug</option>
+                <option value="Cannot submit application">Cannot submit application</option>
+                <option value="Cannot log in">Cannot log in</option>
+                <option value="Tracking status problem">Tracking status problem</option>
+                <option value="Document upload problem">Document upload problem</option>
+                <option value="Theft">Theft</option>
+                <option value="Power loss">Power loss</option>
+                <option value="Water loss">Water loss</option>
+                <option value="Flood damage">Flood damage</option>
+                <option value="Drought impact">Drought impact</option>
+                <option value="Livestock disease concern">Livestock disease concern</option>
+                <option value="Other">Other</option>
+              </select>
+              <p class="issue-report__hint">Choose the closest issue type from the list, then describe what happened below.</p>
+
+              <label for="issueDescription" class="issue-report__label" style="margin-top: var(--space-4);">Please describe your issue</label>
+              <textarea id="issueDescription" name="issueDescription" class="issue-report__textarea" placeholder="Include key details (what happened, when it started, where it happened, and what you've already tried)." required></textarea>
+              <p class="issue-report__hint">For urgent emergencies (theft, disease outbreak, disasters), also call the emergency contacts above immediately.</p>
+
+              <div class="issue-report__actions">
+                <button type="submit" class="btn btn--primary">Submit Issue Report</button>
+                <span id="issueReportMessage" class="issue-report__message" aria-live="polite"></span>
+              </div>
+            </form>
+          </section>
 
           <!-- Emergency Numbers -->
           <div class="support-emergency">
@@ -1435,6 +1544,8 @@
     </footer>
   </div>
 
+  <script src="js/auth.js"></script>
+  <script src="js/security.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/feedback.js"></script>
   <script>
@@ -1450,6 +1561,69 @@
           if (target) target.classList.add('active');
         });
       });
+
+      var currentUser = window.FarmAuth && FarmAuth.getCurrentUser ? FarmAuth.getCurrentUser() : null;
+      var reportForm = document.getElementById('issueReportForm');
+      var loginPrompt = document.getElementById('issueReportLoginPrompt');
+      var issueMessage = document.getElementById('issueReportMessage');
+      var issueType = document.getElementById('issueType');
+      var issueDescription = document.getElementById('issueDescription');
+
+      function setIssueMessage(text, isError) {
+        if (!issueMessage) return;
+        issueMessage.textContent = text || '';
+        issueMessage.className = 'issue-report__message ' + (isError ? 'issue-report__message--error' : 'issue-report__message--ok');
+      }
+
+      function loadIssueReports() {
+        try {
+          var raw = localStorage.getItem('farm_issue_reports');
+          return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveIssueReport(entry) {
+        var list = loadIssueReports();
+        list.push(entry);
+        localStorage.setItem('farm_issue_reports', JSON.stringify(list));
+      }
+
+      if (!currentUser) {
+        if (loginPrompt) loginPrompt.hidden = false;
+        if (reportForm) reportForm.hidden = true;
+      } else {
+        if (loginPrompt) loginPrompt.hidden = true;
+        if (reportForm) reportForm.hidden = false;
+      }
+
+      if (reportForm) {
+        reportForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var selectedType = issueType ? issueType.value.trim() : '';
+          var description = issueDescription ? issueDescription.value.trim() : '';
+          if (!selectedType || !description) {
+            setIssueMessage('Please select an issue type and describe your issue.', true);
+            return;
+          }
+
+          var safeType = (window.FarmSecurity && FarmSecurity.sanitizeString) ? FarmSecurity.sanitizeString(selectedType) : selectedType;
+          var safeDescription = (window.FarmSecurity && FarmSecurity.sanitizeString) ? FarmSecurity.sanitizeString(description) : description;
+          saveIssueReport({
+            id: 'ISSUE-' + Date.now(),
+            userId: currentUser.id,
+            userName: currentUser.name || currentUser.id,
+            issueType: safeType,
+            description: safeDescription,
+            status: 'Submitted',
+            submittedAt: new Date().toISOString()
+          });
+
+          reportForm.reset();
+          setIssueMessage('Issue report submitted successfully. Our team will review it.', false);
+        });
+      }
     })();
   </script>
 </body>

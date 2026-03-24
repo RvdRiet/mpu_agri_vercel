@@ -370,6 +370,12 @@
   margin-bottom: var(--space-3);
 }
 
+.form-doc-note {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
 /* Validation */
 .app-form .field-error,
 .app-form .validation-error {
