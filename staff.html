@@ -149,6 +149,7 @@
   <script src="js/security.js"></script>
   <script src="js/staff-auth.js"></script>
   <script src="js/applications.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/nav.js"></script>
   <script>
     (function () {
@@ -234,6 +235,93 @@
         });
       }
 
+      function formatValueForPdf(value) {
+        if (value === true) return 'Yes';
+        if (value === false) return 'No';
+        if (value === null || value === undefined || value === '') return '—';
+        if (Array.isArray(value)) return value.join(', ');
+        if (typeof value === 'object') {
+          try { return JSON.stringify(value); } catch (e) { return String(value); }
+        }
+        return String(value);
+      }
+
+      function buildPdfRows(app, userId) {
+        var rows = [
+          ['Reference', app.id || '—'],
+          ['Applicant ID', userId || '—'],
+          ['Submitted', formatDate(app.submittedAt)],
+          ['Status', app.status || 'Submitted'],
+          ['Application Type', app.type || '—']
+        ];
+
+        var summary = app.summary || {};
+        Object.keys(summary).sort().forEach(function (key) {
+          rows.push(['Summary: ' + formatLabel(key), formatValueForPdf(summary[key])]);
+        });
+
+        var details = app.details || {};
+        Object.keys(details).sort().forEach(function (key) {
+          if (details[key] === '' || details[key] == null) return;
+          rows.push(['Detail: ' + formatLabel(key), formatValueForPdf(details[key])]);
+        });
+
+        return rows;
+      }
+
+      function downloadApplicationPdf(userId, app) {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          alert('PDF generator is unavailable right now. Please refresh and try again.');
+          return;
+        }
+
+        var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+        var pageWidth = doc.internal.pageSize.getWidth();
+        var pageHeight = doc.internal.pageSize.getHeight();
+        var margin = 40;
+        var y = margin;
+        var contentWidth = pageWidth - (margin * 2);
+
+        function ensureSpace(heightNeeded) {
+          if (y + heightNeeded > pageHeight - margin) {
+            doc.addPage();
+            y = margin;
+          }
+        }
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text('Mpumalanga AgriSupport - Application Export', margin, y);
+        y += 24;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text('Generated: ' + new Date().toLocaleString('en-ZA'), margin, y);
+        y += 18;
+
+        var rows = buildPdfRows(app, userId);
+        doc.setFontSize(11);
+        rows.forEach(function (row) {
+          var label = row[0] + ':';
+          var value = row[1];
+          var labelLines = doc.splitTextToSize(label, contentWidth);
+          var valueLines = doc.splitTextToSize(value, contentWidth);
+          var heightNeeded = ((labelLines.length + valueLines.length) * 14) + 8;
+          ensureSpace(heightNeeded);
+
+          doc.setFont('helvetica', 'bold');
+          doc.text(labelLines, margin, y);
+          y += labelLines.length * 14;
+
+          doc.setFont('helvetica', 'normal');
+          doc.text(valueLines, margin, y);
+          y += (valueLines.length * 14) + 8;
+        });
+
+        var safeRef = String(app.id || 'application').replace(/[^a-zA-Z0-9_-]/g, '_');
+        doc.save('application-' + safeRef + '.pdf');
+      }
+
       function renderList() {
         var promise = window.FarmApplications ? FarmApplications.getAllApplicationsForStaff() : Promise.resolve([]);
         promise.then(function (list) {
@@ -267,6 +355,7 @@
               '<td><span class="staff-status ' + statusCls + '">' + esc(status) + '</span></td>' +
               '<td class="staff-actions-cell">' +
                 '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="view">View details</button>' +
+                '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="download">Download PDF</button>' +
                 (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="approve">Approve</button>' : '') +
                 (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="deny">Deny</button>' : '') +
               '</td>' +
@@ -280,6 +369,14 @@
             var appId = btn.getAttribute('data-appid');
             var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
             if (item) openDetail(uid, item.application);
+          });
+        });
+        tbody.querySelectorAll('[data-action="download"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var uid = btn.getAttribute('data-userid');
+            var appId = btn.getAttribute('data-appid');
+            var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+            if (item) downloadApplicationPdf(uid, item.application);
           });
         });
         tbody.querySelectorAll('[data-action="approve"]').forEach(function (btn) {
