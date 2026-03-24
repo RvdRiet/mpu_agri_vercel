@@ -824,6 +824,13 @@
                     <label class="checkbox-label"><input type="checkbox" name="checkIaAuthorisation" value="yes"> IA (Authorisation or exemption)</label>
                     <label class="checkbox-label"><input type="checkbox" name="checkBiosecurityPlan" value="yes"> Biosecurity plan</label>
                   </div>
+                  <div class="form-group" id="subsistenceBrandUndertakingWrap" style="display:none; margin-top: .75rem;">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="subsistenceBrandUndertaking" name="subsistenceBrandUndertaking" value="yes">
+                      <span>Subsistence undertaking: if brand mark is not yet available, I undertake to register and submit it within 6 months.</span>
+                    </label>
+                  </div>
+                  <span class="field-error" id="checklistComplianceError" aria-live="polite"></span>
                 </div>
 
                 <div class="form-group">
@@ -831,34 +838,42 @@
                 </div>
                 <div class="form-group">
                   <label for="idCopies">Certified ID copies</label>
+                  <p class="form-doc-note">ID copies are used to verify applicant identity and confirm all listed members.</p>
                   <input type="file" id="idCopies" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
                 </div>
                 <div class="form-group">
                   <label for="landProof">Proof of land access</label>
+                  <p class="form-doc-note">Land access proof confirms legal use of the site where livestock activities will be implemented.</p>
                   <input type="file" id="landProof" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
                 </div>
                 <div class="form-group">
                   <label for="businessPlanDoc">Business plan / profile</label>
+                  <p class="form-doc-note">This helps reviewers assess project viability, management capacity, and expected outcomes.</p>
                   <input type="file" id="businessPlanDoc" name="businessPlanDoc" accept=".pdf,.doc,.docx" />
                 </div>
                 <div class="form-group doc-optional">
                   <label for="incomeProof">Proof of annual income (Smallholder / Commercial)</label>
+                  <p class="form-doc-note">Income proof supports farmer category verification and programme compliance checks.</p>
                   <input type="file" id="incomeProof" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
                 </div>
                 <div class="form-group doc-optional">
                   <label for="offtakeAgreement">Markets / off-take agreement</label>
+                  <p class="form-doc-note">A market agreement indicates how livestock outputs will be sold after support is provided.</p>
                   <input type="file" id="offtakeAgreement" name="offtakeAgreement" accept=".pdf,.doc,.docx" />
                 </div>
                 <div class="form-group doc-optional">
                   <label for="brandCertificate">Brand mark certificate</label>
+                  <p class="form-doc-note">Brand mark documentation supports ownership, traceability, and livestock control requirements.</p>
                   <input type="file" id="brandCertificate" name="brandCertificate" accept=".pdf,.jpg,.jpeg,.png" />
                 </div>
                 <div class="form-group doc-optional">
                   <label for="iaAuthorisation">IA (Authorisation or exemption)</label>
+                  <p class="form-doc-note">Where applicable, authorisation documents confirm regulatory compliance before implementation.</p>
                   <input type="file" id="iaAuthorisation" name="iaAuthorisation" accept=".pdf,.jpg,.jpeg,.png" />
                 </div>
                 <div class="form-group doc-optional">
                   <label for="biosecurityPlan">Biosecurity plan</label>
+                  <p class="form-doc-note">A biosecurity plan shows how disease risks will be managed to protect livestock and farms.</p>
                   <input type="file" id="biosecurityPlan" name="biosecurityPlan" accept=".pdf,.doc,.docx" />
                 </div>
 
@@ -905,6 +920,53 @@
                   <p><strong>Farmer category:</strong> <span id="summaryCategory">—</span></p>
                   <p><strong>Applicant / Project:</strong> <span id="summaryApplicant">—</span></p>
                   <p><strong>Farm:</strong> <span id="summaryFarm">—</span></p>
+                </div>
+
+                <div class="popia-consent-block">
+                  <h4 class="popia-consent-heading">MESP eligibility declarations</h4>
+                  <p>These declarations are required under the Masibuyele Esibayeni Procedure Manual qualification and exclusion criteria.</p>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="eligSouthAfricanMpumalanga" name="eligSouthAfricanMpumalanga" value="yes" required />
+                      <span>I confirm that I am a South African citizen residing and farming in Mpumalanga.</span>
+                    </label>
+                  </div>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="eligAge18Plus" name="eligAge18Plus" value="yes" required />
+                      <span>I confirm that all listed applicants are 18 years or older.</span>
+                    </label>
+                  </div>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="eligNoGovEmployee" name="eligNoGovEmployee" value="yes" required />
+                      <span>I confirm that no listed applicant is a government employee or public office bearer.</span>
+                    </label>
+                  </div>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="eligNoUnpaidBenefit" name="eligNoUnpaidBenefit" value="yes" required />
+                      <span>I confirm that applicants who previously benefited from MESP have repaid or settled all return obligations.</span>
+                    </label>
+                  </div>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" id="eligNoOtherGovLivestockBenefit" name="eligNoOtherGovLivestockBenefit" value="yes" required />
+                      <span>I confirm that applicants have not received overlapping livestock support from other government programmes that would make this application non-compliant.</span>
+                    </label>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Are you related to any DARDLEA official? <span class="label-required">*</span></label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="relatedToOfficial" value="No" required> No</label>
+                      <label class="radio-label"><input type="radio" name="relatedToOfficial" value="Yes" required> Yes</label>
+                    </div>
+                  </div>
+                  <div class="form-group" id="relatedToOfficialDetailsWrap" style="display:none;">
+                    <label for="relatedToOfficialDetails">If yes, provide the official's name, role, and relationship</label>
+                    <textarea id="relatedToOfficialDetails" name="relatedToOfficialDetails" rows="3" placeholder="Enter declaration details"></textarea>
+                  </div>
+                  <span class="field-error" id="eligibilityError" aria-live="polite"></span>
                 </div>
 
                 <div class="popia-consent-block">
@@ -1045,6 +1107,101 @@
         return true;
       }
 
+      function validateEligibilityDeclarations() {
+        var requiredChecks = [
+          'eligSouthAfricanMpumalanga',
+          'eligAge18Plus',
+          'eligNoGovEmployee',
+          'eligNoUnpaidBenefit',
+          'eligNoOtherGovLivestockBenefit'
+        ];
+        var i;
+        for (i = 0; i < requiredChecks.length; i++) {
+          var checkEl = document.getElementById(requiredChecks[i]);
+          if (!checkEl || !checkEl.checked) {
+            var errA = document.getElementById('eligibilityError');
+            if (errA) errA.textContent = 'Please confirm all required MESP eligibility declarations before submitting.';
+            return false;
+          }
+        }
+
+        var related = document.querySelector('input[name="relatedToOfficial"]:checked');
+        if (!related) {
+          var errB = document.getElementById('eligibilityError');
+          if (errB) errB.textContent = 'Please indicate whether you are related to any DARDLEA official.';
+          return false;
+        }
+        if (related.value === 'Yes') {
+          var details = document.getElementById('relatedToOfficialDetails');
+          if (!details || !details.value.trim()) {
+            var errC = document.getElementById('eligibilityError');
+            if (errC) errC.textContent = 'Please provide relationship declaration details.';
+            return false;
+          }
+        }
+
+        var errOk = document.getElementById('eligibilityError');
+        if (errOk) errOk.textContent = '';
+        return true;
+      }
+
+      function hasSelectedCommodity(name) {
+        var el = form.querySelector('input[name="' + name + '"]');
+        return !!(el && el.checked);
+      }
+
+      function validateChecklistCompliance() {
+        var categoryEl = document.querySelector('input[name="farmerCategory"]:checked');
+        var category = categoryEl ? categoryEl.value : '';
+        var err = document.getElementById('checklistComplianceError');
+        var setErr = function (msg) {
+          if (err) err.textContent = msg || '';
+          return !msg;
+        };
+        if (!category) return setErr('Please select a farmer category before submitting.');
+
+        function isChecked(name) {
+          var el = form.querySelector('input[name="' + name + '"]');
+          return !!(el && el.checked);
+        }
+
+        var commonRequired = ['checkCompletedForms', 'checkCertifiedIds', 'checkLandAccessProof', 'checkBusinessPlan'];
+        for (var i = 0; i < commonRequired.length; i++) {
+          if (!isChecked(commonRequired[i])) return setErr('Checklist incomplete: please confirm all mandatory common requirements.');
+        }
+
+        var isSubsistence = category === 'Subsistence';
+        var nonSubsRequired = ['checkLegalEntityDoc', 'checkIncomeProof', 'checkMarketsOfftake', 'checkBrandMark', 'checkBiosecurityPlan'];
+        if (!isSubsistence) {
+          for (var j = 0; j < nonSubsRequired.length; j++) {
+            if (!isChecked(nonSubsRequired[j])) return setErr('Checklist incomplete for ' + category + ' applicants. Please confirm all required supporting documents.');
+          }
+        } else {
+          var brandChecked = isChecked('checkBrandMark');
+          var undertaking = document.getElementById('subsistenceBrandUndertaking');
+          if (!brandChecked && (!undertaking || !undertaking.checked)) {
+            return setErr('For subsistence applicants, provide a brand mark certificate or confirm the 6-month undertaking.');
+          }
+        }
+
+        var requiresIa = hasSelectedCommodity('commodityPoultry') || hasSelectedCommodity('commodityPigs');
+        if (requiresIa && !isChecked('checkIaAuthorisation')) {
+          return setErr('IA authorisation/exemption is required for selected commodity categories (e.g. poultry or pigs).');
+        }
+
+        return setErr('');
+      }
+
+      function validateLandAccessRules() {
+        var lease = form.querySelector('input[name="landAccessLease"]');
+        if (lease && lease.checked) {
+          var yearsEl = document.getElementById('leasePeriodYears');
+          var years = parseInt((yearsEl && yearsEl.value) || '', 10);
+          if (!years || years < 5) return false;
+        }
+        return true;
+      }
+
       function validateStep(stepNum) {
         clearStepErrors(stepNum);
         if (stepNum === 1) return validateStep1();
@@ -1086,6 +1243,26 @@
       var leaseWrap = document.getElementById('leasePeriodWrap');
       if (landLease && leaseWrap) {
         landLease.addEventListener('change', function () { leaseWrap.style.display = landLease.checked ? 'block' : 'none'; });
+      }
+
+      var categoryRadios = document.querySelectorAll('input[name="farmerCategory"]');
+      var subsistenceBrandWrap = document.getElementById('subsistenceBrandUndertakingWrap');
+      if (categoryRadios.length && subsistenceBrandWrap) {
+        categoryRadios.forEach(function (r) {
+          r.addEventListener('change', function () {
+            subsistenceBrandWrap.style.display = this.value === 'Subsistence' ? 'block' : 'none';
+          });
+        });
+      }
+
+      var relatedToOfficialRadios = document.querySelectorAll('input[name="relatedToOfficial"]');
+      var relatedToOfficialWrap = document.getElementById('relatedToOfficialDetailsWrap');
+      if (relatedToOfficialRadios.length && relatedToOfficialWrap) {
+        relatedToOfficialRadios.forEach(function (r) {
+          r.addEventListener('change', function () {
+            relatedToOfficialWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
+          });
+        });
       }
 
       form.addEventListener('click', function (e) {
@@ -1135,6 +1312,22 @@
         }
 
         updateSummary();
+        if (!validateLandAccessRules()) {
+          alert('Lease-based applications must indicate a lease period of at least 5 years as required by the MESP manual.');
+          document.getElementById('panel-3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showPanel(3);
+          return;
+        }
+        if (!validateChecklistCompliance()) {
+          document.getElementById('panel-6').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showPanel(6);
+          return;
+        }
+        if (!validateEligibilityDeclarations()) {
+          document.getElementById('panel-6').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          showPanel(6);
+          return;
+        }
         if (!validatePopiaConsent()) {
           document.getElementById('panel-6').scrollIntoView({ behavior: 'smooth', block: 'start' });
           showPanel(6);

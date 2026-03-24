@@ -107,6 +107,15 @@
             <p>No applications have been submitted yet.</p>
           </div>
         </section>
+
+        <section class="account-section staff-issues" id="staffIssuesSection">
+          <h2 class="account-section__title">Reported Issues</h2>
+          <p class="account-section__desc">Issues submitted by logged-in users from the Support page.</p>
+          <div id="staffIssuesList" class="staff-issue-grid"></div>
+          <div id="staffIssuesEmpty" class="staff-empty" hidden>
+            <p>No issue reports submitted yet.</p>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -176,9 +185,91 @@
         var v = (s || '').toLowerCase().replace(/\s/g, '-');
         if (v === 'approved') return 'staff-status-approved';
         if (v === 'rejected' || v === 'denied') return 'staff-status-rejected';
-        if (v === 'under-review') return 'staff-status-under-review';
+        if (
+          v === 'under-review' ||
+          v === 'profiling-and-shortlisting' ||
+          v === 'farm-assessment' ||
+          v === 'hod-approval' ||
+          v === 'induction' ||
+          v === 'procurement' ||
+          v === 'pre-and-post-delivery-inspection' ||
+          v === 'monitoring-evaluation-and-advisory'
+        ) return 'staff-status-under-review';
         if (v === 'additional-documentation-required') return 'staff-status-docs-required';
         return 'staff-status-submitted';
+      }
+
+      var PROCEDURE_FLOW = [
+        'Submitted',
+        'Profiling and Shortlisting',
+        'Farm Assessment',
+        'HOD Approval',
+        'Induction',
+        'Procurement',
+        'Pre and Post Delivery Inspection',
+        'Monitoring Evaluation and Advisory',
+        'Approved'
+      ];
+
+      function nextProcedureStage(currentStatus) {
+        var current = currentStatus || 'Submitted';
+        var idx = PROCEDURE_FLOW.indexOf(current);
+        if (idx === -1 || idx >= PROCEDURE_FLOW.length - 1) return null;
+        return PROCEDURE_FLOW[idx + 1];
+      }
+
+      var STAGE_EVIDENCE_FIELDS = {
+        'Profiling and Shortlisting': [
+          { key: 'district', label: 'District name' },
+          { key: 'shortlistingReason', label: 'Shortlisting basis/reason' },
+          { key: 'persalCheck', label: 'PERSAL verification result/reference' }
+        ],
+        'Farm Assessment': [
+          { key: 'assessmentDate', label: 'Assessment date (YYYY-MM-DD)' },
+          { key: 'assessmentTeam', label: 'Assessment team roles involved' },
+          { key: 'assessmentOutcome', label: 'Assessment outcome summary' }
+        ],
+        'HOD Approval': [
+          { key: 'hodDecisionDate', label: 'HOD decision date (YYYY-MM-DD)' },
+          { key: 'hodReference', label: 'HOD approval reference/minute' }
+        ],
+        'Induction': [
+          { key: 'inductionDate', label: 'Induction date (YYYY-MM-DD)' },
+          { key: 'slaPrepared', label: 'SLA prepared and explained (Yes/No)' }
+        ],
+        'Procurement': [
+          { key: 'commoditySpec', label: 'Commodity/breed specification confirmed' },
+          { key: 'supplierName', label: 'Service provider/supplier name' }
+        ],
+        'Pre and Post Delivery Inspection': [
+          { key: 'deliveryDate', label: 'Delivery date (YYYY-MM-DD)' },
+          { key: 'inspectionResult', label: 'Inspection result summary' },
+          { key: 'vetReportRef', label: 'Veterinary report reference' }
+        ],
+        'Monitoring Evaluation and Advisory': [
+          { key: 'monitoringDate', label: 'Monitoring date (YYYY-MM-DD)' },
+          { key: 'advisorySummary', label: 'Advisory/monitoring summary' }
+        ],
+        'Approved': [
+          { key: 'finalApprovalReason', label: 'Final approval note' }
+        ]
+      };
+
+      function collectStageEvidence(nextStage) {
+        var fields = STAGE_EVIDENCE_FIELDS[nextStage] || [{ key: 'note', label: 'Supporting note' }];
+        var evidence = {};
+        for (var i = 0; i < fields.length; i++) {
+          var f = fields[i];
+          var val = prompt('[' + nextStage + '] ' + f.label + ' (required):');
+          if (val === null) return null;
+          val = val.trim();
+          if (!val) {
+            alert('All required evidence fields must be completed before advancing.');
+            return null;
+          }
+          evidence[f.key] = val;
+        }
+        return evidence;
       }
 
       function esc(str) {
@@ -288,9 +379,27 @@
         if (app.statusMessage) {
           html += '<div class="staff-status-message"><strong>Reviewer note:</strong> ' + esc(app.statusMessage) + '</div>';
         }
+        if (app.stageEvidenceLatest) {
+          html += '<div class="staff-status-message"><strong>Latest stage evidence:</strong> ' + esc(app.stageEvidenceLatest) + '</div>';
+        }
         html += '<p><strong>Commodity:</strong> ' + esc(summary.commodity) + ' &nbsp; <strong>Category:</strong> ' + esc(summary.farmerCategory) + '</p>';
         html += '<p><strong>Applicant / Project:</strong> ' + esc(summary.registeredName) + '</p>';
         html += '<p><strong>Farm:</strong> ' + esc(summary.farmName) + '</p>';
+        if (Array.isArray(app.stageHistory) && app.stageHistory.length) {
+          html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Stage history</h4><ul>';
+          app.stageHistory.forEach(function (entry) {
+            var evidenceHtml = '';
+            if (entry.evidence && typeof entry.evidence === 'object') {
+              var parts = [];
+              Object.keys(entry.evidence).forEach(function (k) {
+                parts.push(esc(formatLabel(k)) + ': ' + esc(entry.evidence[k]));
+              });
+              evidenceHtml = parts.join(' | ');
+            }
+            html += '<li><strong>' + esc(entry.to || '—') + '</strong> from ' + esc(entry.from || '—') + ' on ' + esc(formatDate(entry.updatedAt)) + ' by ' + esc(entry.updatedBy || 'Staff') + '<br><span>' + (evidenceHtml || esc(entry.note || '')) + '</span></li>';
+          });
+          html += '</ul>';
+        }
         html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Supporting documents</h4>';
         html += renderDocumentButtons(docs);
         html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">All form details</h4>';
@@ -305,6 +414,47 @@
         FarmApplications.updateApplicationStatus(userId, appId, status).then(function () {
           renderList();
         });
+      }
+
+      function advanceProcedureStage(item) {
+        if (!item || !item.application || !window.FarmApplications) return;
+        var app = item.application;
+        var current = app.status || 'Submitted';
+        if (current === 'Rejected' || current === 'Denied') {
+          alert('Rejected applications cannot advance to the next stage.');
+          return;
+        }
+        if (current === 'Additional Documentation Required') {
+          alert('Please resolve outstanding requested documentation before advancing.');
+          return;
+        }
+        var next = nextProcedureStage(current);
+        if (!next) {
+          alert('This application is already at the final stage in the procedure flow.');
+          return;
+        }
+        var evidenceMap = collectStageEvidence(next);
+        if (!evidenceMap) return;
+        var evidenceParts = [];
+        Object.keys(evidenceMap).forEach(function (k) {
+          evidenceParts.push(formatLabel(k) + ': ' + evidenceMap[k]);
+        });
+        var evidence = evidenceParts.join(' | ');
+        var history = Array.isArray(app.stageHistory) ? app.stageHistory.slice() : [];
+        history.push({
+          from: current,
+          to: next,
+          note: evidence,
+          evidence: evidenceMap,
+          updatedBy: (staff.name || staff.username || 'Staff'),
+          updatedAt: new Date().toISOString()
+        });
+        FarmApplications.updateApplicationStatus(item.userId, app.id, next, {
+          stageHistory: history,
+          stageEvidenceLatest: evidence,
+          stageEvidenceMapLatest: evidenceMap,
+          stageUpdatedBy: (staff.name || staff.username || 'Staff')
+        }).then(function () { renderList(); });
       }
 
       function formatValueForPdf(value) {
@@ -446,6 +596,7 @@
                     '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="download">Download PDF</button>' +
                     '<button type="button" class="staff-btn staff-btn-doc" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="docs"' + (docCount ? '' : ' disabled') + '>Documents' + (docCount ? ' (' + docCount + ')' : '') + '</button>' +
                     (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-request-docs" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="request-docs">Request Docs</button>' : '') +
+                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="advance">Advance Stage</button>' : '') +
                     (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="approve">Approve</button>' : '') +
                     (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="deny">Deny</button>' : '') +
                   '</td>' +
@@ -487,6 +638,14 @@
               if (confirm('Approve this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Approved');
             });
           });
+          listWrap.querySelectorAll('[data-action="advance"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var uid = btn.getAttribute('data-userid');
+              var appId = btn.getAttribute('data-appid');
+              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
+              if (item) advanceProcedureStage(item);
+            });
+          });
           listWrap.querySelectorAll('[data-action="deny"]').forEach(function (btn) {
             btn.addEventListener('click', function () {
               if (confirm('Deny this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Rejected');
@@ -516,6 +675,95 @@
         });
       }
 
+      function issueStatusClass(status) {
+        var v = (status || '').toLowerCase().replace(/\s/g, '-');
+        if (v === 'resolved') return 'staff-status-approved';
+        if (v === 'in-progress') return 'staff-status-under-review';
+        return 'staff-status-submitted';
+      }
+
+      function getIssueReports() {
+        try {
+          var raw = localStorage.getItem('farm_issue_reports');
+          var list = raw ? JSON.parse(raw) : [];
+          list.sort(function (a, b) {
+            return new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0);
+          });
+          return list;
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveIssueReports(list) {
+        try {
+          localStorage.setItem('farm_issue_reports', JSON.stringify(list || []));
+        } catch (e) {}
+      }
+
+      function updateIssueStatus(issueId, status) {
+        var list = getIssueReports();
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].id === issueId) {
+            list[i].status = status;
+            list[i].statusUpdatedAt = new Date().toISOString();
+            break;
+          }
+        }
+        saveIssueReports(list);
+        renderIssues();
+      }
+
+      function renderIssues() {
+        var listWrap = document.getElementById('staffIssuesList');
+        var emptyEl = document.getElementById('staffIssuesEmpty');
+        var list = getIssueReports();
+
+        if (!listWrap || !emptyEl) return;
+        if (!list.length) {
+          listWrap.hidden = true;
+          emptyEl.hidden = false;
+          return;
+        }
+
+        emptyEl.hidden = true;
+        listWrap.hidden = false;
+        listWrap.innerHTML = list.map(function (issue) {
+          var status = issue.status || 'Submitted';
+          return (
+            '<article class="staff-issue-card">' +
+              '<div class="staff-issue-head">' +
+                '<h3 class="staff-issue-title">' + esc(issue.issueType || 'Issue') + '</h3>' +
+                '<span class="staff-status ' + issueStatusClass(status) + '">' + esc(status) + '</span>' +
+              '</div>' +
+              '<p class="staff-issue-meta"><strong>Ref:</strong> ' + esc(issue.id || '—') + ' &nbsp; <strong>User:</strong> ' + esc(issue.userName || issue.userId || '—') + ' &nbsp; <strong>Submitted:</strong> ' + esc(formatDate(issue.submittedAt)) + '</p>' +
+              '<p class="staff-issue-desc">' + esc(issue.description || '') + '</p>' +
+              '<div class="staff-issue-actions">' +
+                '<button type="button" class="staff-btn staff-btn-view" data-issueid="' + esc(issue.id || '') + '" data-issue-action="submitted">Mark Submitted</button>' +
+                '<button type="button" class="staff-btn staff-btn-request-docs" data-issueid="' + esc(issue.id || '') + '" data-issue-action="inprogress">Mark In Progress</button>' +
+                '<button type="button" class="staff-btn staff-btn-approve" data-issueid="' + esc(issue.id || '') + '" data-issue-action="resolved">Mark Resolved</button>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+
+        listWrap.querySelectorAll('[data-issue-action="submitted"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            updateIssueStatus(btn.getAttribute('data-issueid'), 'Submitted');
+          });
+        });
+        listWrap.querySelectorAll('[data-issue-action="inprogress"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            updateIssueStatus(btn.getAttribute('data-issueid'), 'In Progress');
+          });
+        });
+        listWrap.querySelectorAll('[data-issue-action="resolved"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            updateIssueStatus(btn.getAttribute('data-issueid'), 'Resolved');
+          });
+        });
+      }
+
       document.getElementById('detailModalClose').addEventListener('click', function () {
         document.getElementById('detailModal').hidden = true;
       });
@@ -524,6 +772,7 @@
       });
 
       renderList();
+      renderIssues();
     })();
   </script>
 </body>

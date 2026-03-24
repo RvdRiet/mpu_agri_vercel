@@ -158,7 +158,16 @@
         var v = (s || '').toLowerCase().replace(/\s/g, '-');
         if (v === 'approved') return 'status-approved';
         if (v === 'rejected') return 'status-rejected';
-        if (v === 'under-review') return 'status-review';
+        if (
+          v === 'under-review' ||
+          v === 'profiling-and-shortlisting' ||
+          v === 'farm-assessment' ||
+          v === 'hod-approval' ||
+          v === 'induction' ||
+          v === 'procurement' ||
+          v === 'pre-and-post-delivery-inspection' ||
+          v === 'monitoring-evaluation-and-advisory'
+        ) return 'status-review';
         if (v === 'additional-documentation-required') return 'status-docs-required';
         return 'status-submitted';
       }
@@ -167,6 +176,13 @@
         return window.FarmSecurity && window.FarmSecurity.escapeHtml ? window.FarmSecurity.escapeHtml(String(str || '')) : String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
       function progressPercent(s) {
+        if (s === 'Monitoring Evaluation and Advisory') return 90;
+        if (s === 'Pre and Post Delivery Inspection') return 80;
+        if (s === 'Procurement') return 70;
+        if (s === 'Induction') return 65;
+        if (s === 'HOD Approval') return 55;
+        if (s === 'Farm Assessment') return 45;
+        if (s === 'Profiling and Shortlisting') return 35;
         if (s === 'Approved' || s === 'Rejected') return 100;
         if (s === 'Under Review') return 60;
         if (s === 'Additional Documentation Required') return 40;
@@ -193,6 +209,22 @@
                 (app.docsRequestedAt ? '<p class="track-docs-date">Requested on ' + esc(formatDate(app.docsRequestedAt)) + '</p>' : '') +
               '</div>';
             }
+            var stageHistoryHtml = '';
+            if (Array.isArray(app.stageHistory) && app.stageHistory.length) {
+              stageHistoryHtml = '<div class="track-docs-notice"><strong>Procedure progress log</strong><ul>';
+              app.stageHistory.forEach(function (entry) {
+                var detailText = '';
+                if (entry.evidence && typeof entry.evidence === 'object') {
+                  var pieces = [];
+                  Object.keys(entry.evidence).forEach(function (k) {
+                    pieces.push(k + ': ' + entry.evidence[k]);
+                  });
+                  detailText = pieces.join(' | ');
+                }
+                stageHistoryHtml += '<li>' + esc(entry.to || '—') + ' (' + esc(formatDate(entry.updatedAt)) + '): ' + esc(detailText || entry.note || '') + '</li>';
+              });
+              stageHistoryHtml += '</ul></div>';
+            }
             return (
               '<article class="track-card' + (docsRequired ? ' track-card--docs-required' : '') + '">' +
                 '<div class="track-card-header">' +
@@ -201,6 +233,7 @@
                 '</div>' +
                 '<p class="track-date">Submitted ' + esc(formatDate(app.submittedAt)) + '</p>' +
                 messageHtml +
+                stageHistoryHtml +
                 '<dl class="track-summary">' +
                   '<dt>Commodity</dt><dd>' + esc(sum.commodity) + '</dd>' +
                   '<dt>Category</dt><dd>' + esc(sum.farmerCategory) + '</dd>' +
