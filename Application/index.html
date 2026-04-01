@@ -267,14 +267,34 @@
             </div>
 
             <div class="form-group" id="mespDetailsWrap" style="display: none;">
+              <label for="mespPreviousCommodity">If yes, which commodity did you benefit from previously?</label>
+              <select id="mespPreviousCommodity" name="mespPreviousCommodity">
+                <option value="">-- Select previous commodity --</option>
+                <option value="Beef Cattle">Beef Cattle</option>
+                <option value="Dairy Cattle">Dairy Cattle</option>
+                <option value="Goats">Goats</option>
+                <option value="Sheep">Sheep</option>
+                <option value="Pigs">Pigs</option>
+                <option value="Poultry">Poultry</option>
+                <option value="Rabbits">Rabbits</option>
+                <option value="Fish">Fish</option>
+              </select>
+
+              <label class="label-block" style="margin-top: var(--space-3);">Did you return the commodity previously provided?</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="mespCommodityReturned" value="Yes" /> Yes</label>
+                <label class="radio-label"><input type="radio" name="mespCommodityReturned" value="No" /> No</label>
+              </div>
+
               <label for="mespDetails">If yes, provide details and include the date</label>
               <textarea id="mespDetails" name="mespDetails" rows="3" placeholder="Details and date (if applicable)"></textarea>
+              <span class="field-error" id="mespPreviousDetailsError" aria-live="polite"></span>
             </div>
 
             <div class="form-group">
               <button type="button" class="btn-link" id="btnShowDefinition" aria-expanded="false">Definition of farmer category</button>
             </div>
-            <div class="definition-block" id="definitionBlock" style="display: none;">
+            <div class="definition-block" id="definitionBlock">
               <h4 class="definition-heading">Definition of farmer category</h4>
               <p><strong>Subsistence farmer</strong> — practices agriculture mainly for household food security. Not classified as indigent. Annual turnover up to R50,000.</p>
               <p><strong>Smallholder farmer</strong> — produces for household consumption and markets. Annual turnover R50,001 to R1,000,000.</p>
@@ -444,11 +464,18 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="district">District</label>
-                <input type="text" id="district" name="district" />
+                <select id="district" name="district">
+                  <option value="">-- Select district --</option>
+                  <option value="Ehlanzeni District Municipality">Ehlanzeni District Municipality</option>
+                  <option value="Gert Sibande District Municipality">Gert Sibande District Municipality</option>
+                  <option value="Nkangala District Municipality">Nkangala District Municipality</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="localMunicipality">Local municipality</label>
-                <input type="text" id="localMunicipality" name="localMunicipality" />
+                <select id="localMunicipality" name="localMunicipality">
+                  <option value="">-- Select local municipality --</option>
+                </select>
               </div>
             </div>
 
@@ -742,9 +769,10 @@
             <p class="app-step-intro">Upload required documents and review your application before submitting.</p>
 
             <div class="form-group">
-              <label for="idCopies">Certified ID copies</label>
-              <p class="form-doc-note">We use ID copies to verify the identity of all applicants and prevent duplicate or fraudulent applications.</p>
-              <input type="file" id="idCopies" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+              <label for="idCopies">Certified ID copies of all beneficiaries</label>
+              <p class="form-doc-note">Upload one certified ID copy per listed project member. The number of required uploads is based on <strong>Total project members</strong> in Applicant Details.</p>
+              <div id="idCopiesDynamicWrap"></div>
+              <span class="field-error" id="idCopiesError" aria-live="polite"></span>
             </div>
 
             <div class="form-group">
@@ -759,10 +787,17 @@
               <input type="file" id="businessPlanDoc" name="businessPlanDoc" accept=".pdf,.doc,.docx" />
             </div>
 
-            <div class="form-group doc-optional">
-              <label for="incomeProof">Proof of farming income (Smallholder / Commercial)</label>
-              <p class="form-doc-note">Income proof helps us verify your farmer category and align support with programme rules.</p>
-              <input type="file" id="incomeProof" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
+            <div class="doc-optional" id="financialDocsWrap" style="display: none;">
+              <div class="form-group">
+                <label for="incomeProof">Proof of income (registered business entities)</label>
+                <p class="form-doc-note">Required for registered entities to verify financial activity and farmer category.</p>
+                <input type="file" id="incomeProof" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+              <div class="form-group">
+                <label for="bankStatementProof">Bank statement (registered business entities)</label>
+                <p class="form-doc-note">Provide a recent bank statement as supporting financial evidence for registered entities.</p>
+                <input type="file" id="bankStatementProof" name="bankStatementProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
             </div>
 
             <div class="form-group doc-optional">
@@ -846,8 +881,12 @@
       var block = document.getElementById('definitionBlock');
       var btnClose = document.getElementById('btnCloseDefinition');
       var btnShow = document.getElementById('btnShowDefinition');
+      if (block && btnShow) {
+        block.style.display = 'block';
+        btnShow.setAttribute('aria-expanded', 'true');
+      }
       if (block && btnClose) btnClose.addEventListener('click', function () { block.style.display = 'none'; if (btnShow) btnShow.setAttribute('aria-expanded', 'false'); });
-      if (block && btnShow) btnShow.addEventListener('click', function () { block.style.display = block.style.display === 'none' ? 'block' : 'none'; btnShow.setAttribute('aria-expanded', block.style.display !== 'none'); });
+      if (block && btnShow) btnShow.addEventListener('click', function () { block.style.display = 'block'; btnShow.setAttribute('aria-expanded', 'true'); });
 
       var mespRadios = document.querySelectorAll('input[name="mespPreviously"]');
       var mespDetailsWrap = document.getElementById('mespDetailsWrap');
