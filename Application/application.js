@@ -174,7 +174,7 @@
     var entity = legalEntityType ? legalEntityType.value : '';
     var categoryEl = document.querySelector('input[name="farmerCategory"]:checked');
     var category = categoryEl ? categoryEl.value : '';
-    var isRegisteredEntity = entity === 'Cooperative' || entity === 'Company' || entity === 'Trust' || entity === 'Other';
+    var isRegisteredEntity = entity === 'Cooperative' || entity === 'CPA' || entity === 'Trust' || entity === 'PTY Ltd' || entity === 'Other';
     var showFinancialDocs = isRegisteredEntity && category !== 'Subsistence';
     financialDocsWrap.style.display = showFinancialDocs ? 'block' : 'none';
 
@@ -294,16 +294,238 @@
     filterBreedSelectByCommodity(secondChoiceEl, commodityValue);
   }
 
+  function setCommodityVisibility(selector, selected, clearFn) {
+    document.querySelectorAll(selector).forEach(function (el) {
+      var allowed = el.getAttribute(selector.replace(/[\[\]]/g, '')).split(',').map(function (s) { return s.trim(); });
+      var visible = !selected || allowed.indexOf(selected) !== -1;
+      el.style.display = visible ? '' : 'none';
+      if (!visible && clearFn) clearFn(el);
+    });
+  }
+
+  function clearAllInputs(el) {
+    el.querySelectorAll('input, select, textarea').forEach(function (inp) {
+      if (inp.type === 'radio' || inp.type === 'checkbox') inp.checked = false;
+      else if (inp.type !== 'file') inp.value = '';
+      else inp.value = '';
+    });
+  }
+
+  function updateInfrastructureVisibility() {
+    var commodityEl = document.getElementById('commodity');
+    var selected = commodityEl ? commodityEl.value : '';
+
+    setCommodityVisibility('[data-infra-for]', selected, clearAllInputs);
+
+    setCommodityVisibility('[data-stock-for]', selected, function (el) {
+      el.querySelectorAll('input[type="number"]').forEach(function (inp) { inp.value = ''; });
+    });
+
+    setCommodityVisibility('[data-doc-for]', selected, function (el) {
+      el.querySelectorAll('input[type="file"]').forEach(function (inp) { inp.value = ''; });
+    });
+
+    setCommodityVisibility('[data-biosec-for]', selected, clearAllInputs);
+  }
+
   var commodityForBreeds = document.getElementById('commodity');
   if (commodityForBreeds) {
-    commodityForBreeds.addEventListener('change', applyBreedFilters);
+    commodityForBreeds.addEventListener('change', function () {
+      applyBreedFilters();
+      updateInfrastructureVisibility();
+    });
     applyBreedFilters();
+    updateInfrastructureVisibility();
   }
+
+  function updateChecklistVisibility() {
+    var categoryEl = document.querySelector('input[name="farmerCategory"]:checked');
+    var category = categoryEl ? categoryEl.value : '';
+    document.querySelectorAll('[data-checklist-cat]').forEach(function (row) {
+      var cats = row.getAttribute('data-checklist-cat').split(',').map(function (s) { return s.trim(); });
+      var relevant = !category || cats.indexOf(category) !== -1;
+      row.style.opacity = relevant ? '1' : '0.4';
+      var cb = row.querySelector('input[type="checkbox"]');
+      if (cb && !relevant) { cb.checked = false; cb.disabled = true; }
+      if (cb && relevant) { cb.disabled = false; }
+    });
+  }
+
+  farmerCategoryRadios.forEach(function (r) {
+    r.addEventListener('change', updateChecklistVisibility);
+  });
+  updateChecklistVisibility();
 
   var districtSelect = document.getElementById('district');
   if (districtSelect) {
     districtSelect.addEventListener('change', updateLocalMunicipalityOptions);
     updateLocalMunicipalityOptions();
+  }
+
+  var addressMap = null;
+  var addressMarker = null;
+
+  function setAddressMapStatus(msg, isError) {
+    var statusEl = document.getElementById('addressMapStatus');
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.style.color = isError ? 'var(--color-error)' : 'var(--color-text-muted)';
+  }
+
+  function ensureAddressMap() {
+    if (addressMap) return true;
+    var mapEl = document.getElementById('addressMap');
+    if (!mapEl || !window.L) return false;
+    addressMap = window.L.map(mapEl).setView([-25.5, 30.9], 7);
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(addressMap);
+    return true;
+  }
+
+  function buildAddressQuery() {
+    var physicalAddress = document.getElementById('physicalAddress');
+    var localMunicipality = document.getElementById('localMunicipality');
+    var district = document.getElementById('district');
+    var postcode = document.getElementById('physicalPostCode');
+    var parts = [
+      physicalAddress && physicalAddress.value ? physicalAddress.value.trim() : '',
+      localMunicipality && localMunicipality.value ? localMunicipality.value.trim() : '',
+      district && district.value ? district.value.trim() : '',
+      postcode && postcode.value ? postcode.value.trim() : '',
+      'Mpumalanga',
+      'South Africa'
+    ].filter(function (v) { return !!v; });
+    return parts.join(', ');
+  }
+
+  function geocodeAddressToMap() {
+    var query = buildAddressQuery();
+    if (!query) {
+      setAddressMapStatus('Please enter a physical address first.', true);
+      return;
+    }
+    if (!ensureAddressMap()) {
+      setAddressMapStatus('Map could not be loaded in this browser.', true);
+      return;
+    }
+    setAddressMapStatus('Searching address on map...');
+
+    var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+    fetch(url, { headers: { 'Accept-Language': 'en' } })
+      .then(function (res) { return res.json(); })
+      .then(function (list) {
+        if (!Array.isArray(list) || !list.length) {
+          setAddressMapStatus('Address not found. Try adding street/area details.', true);
+          return;
+        }
+        var hit = list[0];
+        var lat = parseFloat(hit.lat);
+        var lon = parseFloat(hit.lon);
+        if (isNaN(lat) || isNaN(lon)) {
+          setAddressMapStatus('Coordinates could not be resolved for this address.', true);
+          return;
+        }
+
+        var gpsLat = document.getElementById('gpsLatitude');
+        var gpsLon = document.getElementById('gpsLongitude');
+        if (gpsLat) gpsLat.value = lat.toFixed(6);
+        if (gpsLon) gpsLon.value = lon.toFixed(6);
+
+        if (addressMarker) {
+          addressMarker.setLatLng([lat, lon]);
+        } else {
+          addressMarker = window.L.marker([lat, lon]).addTo(addressMap);
+        }
+        addressMarker.bindPopup(hit.display_name || 'Selected address').openPopup();
+        addressMap.setView([lat, lon], 15);
+        setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
+        setAddressMapStatus('Address found. GPS latitude/longitude fields were auto-filled.');
+      })
+      .catch(function () {
+        setAddressMapStatus('Could not look up the address right now. Please try again.', true);
+      });
+  }
+
+  function useCurrentLocationOnMap() {
+    if (!navigator.geolocation) {
+      setAddressMapStatus('Geolocation is not supported by this browser.', true);
+      return;
+    }
+    if (!ensureAddressMap()) {
+      setAddressMapStatus('Map could not be loaded in this browser.', true);
+      return;
+    }
+
+    setAddressMapStatus('Getting your current location...');
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
+      var accuracyM = pos.coords.accuracy;
+
+      var gpsLat = document.getElementById('gpsLatitude');
+      var gpsLon = document.getElementById('gpsLongitude');
+      if (gpsLat) gpsLat.value = lat.toFixed(6);
+      if (gpsLon) gpsLon.value = lon.toFixed(6);
+
+      if (addressMarker) {
+        addressMarker.setLatLng([lat, lon]);
+      } else {
+        addressMarker = window.L.marker([lat, lon]).addTo(addressMap);
+      }
+      addressMarker.bindPopup('Current location').openPopup();
+      addressMap.setView([lat, lon], 16);
+      setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
+      setAddressMapStatus('Current location captured. GPS fields updated (accuracy approx. ±' + Math.round(accuracyM || 0) + 'm).');
+    }, function () {
+      setAddressMapStatus('Could not access your location. Please allow location permission and try again.', true);
+    }, {
+      enableHighAccuracy: true,
+      timeout: 12000,
+      maximumAge: 0
+    });
+  }
+
+  var biosecRadios = document.querySelectorAll('input[name="biosecurityOption"]');
+  var biosecUploadWrap = document.getElementById('biosecUploadWrap');
+  var biosecTemplateWrap = document.getElementById('biosecTemplateWrap');
+
+  function updateBiosecVisibility() {
+    var selected = document.querySelector('input[name="biosecurityOption"]:checked');
+    var val = selected ? selected.value : 'template';
+    if (biosecUploadWrap) biosecUploadWrap.style.display = val === 'upload' ? 'block' : 'none';
+    if (biosecTemplateWrap) biosecTemplateWrap.style.display = val === 'template' ? 'block' : 'none';
+  }
+
+  biosecRadios.forEach(function (r) {
+    r.addEventListener('change', updateBiosecVisibility);
+  });
+  updateBiosecVisibility();
+
+  var biosecFarmNameEl = document.getElementById('biosecFarmName');
+  var mainFarmNameEl = document.getElementById('farmName');
+  if (biosecFarmNameEl && mainFarmNameEl) {
+    function syncBiosecFarmName() {
+      if (!biosecFarmNameEl.dataset.userEdited) {
+        biosecFarmNameEl.value = mainFarmNameEl.value;
+      }
+    }
+    mainFarmNameEl.addEventListener('input', syncBiosecFarmName);
+    mainFarmNameEl.addEventListener('change', syncBiosecFarmName);
+    biosecFarmNameEl.addEventListener('input', function () {
+      biosecFarmNameEl.dataset.userEdited = '1';
+    });
+    syncBiosecFarmName();
+  }
+
+  var locateAddressBtn = document.getElementById('btnLocateAddress');
+  if (locateAddressBtn) {
+    locateAddressBtn.addEventListener('click', geocodeAddressToMap);
+  }
+  var useCurrentLocationBtn = document.getElementById('btnUseCurrentLocation');
+  if (useCurrentLocationBtn) {
+    useCurrentLocationBtn.addEventListener('click', useCurrentLocationOnMap);
   }
 
   var totalMembersInput = document.getElementById('totalMembers');

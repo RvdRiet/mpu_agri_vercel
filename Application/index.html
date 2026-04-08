@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../nav.css">
   <link rel="stylesheet" href="application.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
   <div class="page-wrapper">
@@ -296,9 +297,9 @@
             </div>
             <div class="definition-block" id="definitionBlock">
               <h4 class="definition-heading">Definition of farmer category</h4>
-              <p><strong>Subsistence farmer</strong> — practices agriculture mainly for household food security. Not classified as indigent. Annual turnover up to R50,000.</p>
-              <p><strong>Smallholder farmer</strong> — produces for household consumption and markets. Annual turnover R50,001 to R1,000,000.</p>
-              <p><strong>Commercial producer</strong> — established farming venture for production and sale of agricultural products. Farm income exceeds R1,000,000 per annum.</p>
+              <p><strong>"Subsistence farmer"</strong> — practices agriculture mainly for household food security. These producers are not classified as indigents by their municipality and they produce mainly for household consumption. They may market limited surplus production with an annual turnover of up to R50,000 per annum.</p>
+              <p><strong>"Smallholder farmer"</strong> — produces for household consumption and markets, with an annual turnover ranging from R50,001 to R1,000,000.00 per annum aspiring to produce for markets and make profit.</p>
+              <p><strong>"Commercial producer"</strong> — a commercial operation defined as an established farming venture undertaken by an individual or business entity for the purpose of production and sale of agricultural products to make a profit. The farm income must exceed R1,000,000.00 per annum.</p>
               <button type="button" class="btn-close-definition" id="btnCloseDefinition">Close</button>
             </div>
 
@@ -315,10 +316,11 @@
               <label for="legalEntityType">Type of Legal Entity</label>
               <select id="legalEntityType" name="legalEntityType">
                 <option value="">-- Select --</option>
-                <option value="Individual">Individual</option>
+                <option value="Sole Proprietor">Sole Proprietor</option>
                 <option value="Cooperative">Cooperative</option>
-                <option value="Company">Company</option>
+                <option value="CPA">CPA (Communal Property Association)</option>
                 <option value="Trust">Trust</option>
+                <option value="PTY Ltd">PTY Ltd (Private Company)</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -366,8 +368,26 @@
             </div>
 
             <div class="form-group">
-              <label for="physicalAddress">Physical address</label>
+              <label class="label-block">Applying as a group or individual</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="applicationType" value="Group" /> Group</label>
+                <label class="radio-label"><input type="radio" name="applicationType" value="Individual" /> Individual</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="physicalAddress">Physical / business address</label>
               <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group address-map-wrap">
+              <div class="address-map-actions">
+                <button type="button" class="btn-link" id="btnLocateAddress">Find address on map</button>
+                <button type="button" class="btn-link" id="btnUseCurrentLocation">Use current location</button>
+              </div>
+              <p class="form-hint">Uses OpenStreetMap geocoding (no Google API). If found, coordinates are auto-filled in the GPS fields.</p>
+              <p class="form-doc-note">Accuracy tip: enter street/farm name, area, municipality, district, and postcode where possible. Then use <strong>Use current location</strong> while standing on-site to improve coordinate accuracy.</p>
+              <div id="addressMapStatus" class="field-note"></div>
+              <div id="addressMap" class="address-map" aria-label="Address map preview"></div>
             </div>
             <div class="form-row">
               <div class="form-group">
@@ -383,6 +403,20 @@
             <div class="form-group">
               <label for="postalAddress">Postal Address</label>
               <textarea id="postalAddress" name="postalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email address (optional)</label>
+              <input type="email" id="contactEmail" name="contactEmail" placeholder="name@example.com" />
+              <p class="form-hint">Optional. Provide an email if you want to receive updates electronically.</p>
+            </div>
+            <div class="form-group">
+              <label class="label-block">Preferred method of communication (optional)</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactPhone" value="Phone call" /> Phone call</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactSms" value="SMS" /> SMS</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactEmail" value="Email" /> Email</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactWhatsapp" value="WhatsApp" /> WhatsApp</label>
+              </div>
             </div>
 
             <div class="form-group">
@@ -507,6 +541,7 @@
                 <option value="">-- Select --</option>
                 <option value="Own">Own</option>
                 <option value="Lease">Lease</option>
+                <option value="Communal">Communal</option>
                 <option value="PTO">PTO (Permission to Occupy)</option>
                 <option value="RTO">RTO (Right to Occupy)</option>
                 <option value="Other">Other</option>
@@ -528,227 +563,801 @@
           <section class="app-step-panel" id="panel-4" data-step="4">
             <h3 class="panel-title">Infrastructure &amp; Stock</h3>
 
-            <div class="form-group">
-              <span class="form-group-label">Fencing &amp; camps</span>
+            <!-- Fencing & grazing — relevant for ruminants (cattle, goats, sheep) -->
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep">
+              <div class="form-group">
+                <span class="form-group-label">Fencing &amp; camps</span>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Boundary Fence</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="boundaryFence" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="boundaryFence" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Grazing Camps</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="grazingCamps" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="grazingCamps" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="conditionOfFence">Condition of fences</label>
+                <select id="conditionOfFence" name="conditionOfFence">
+                  <option value="">-- Select --</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Bad">Bad</option>
+                </select>
+              </div>
             </div>
-            <div class="form-group">
-              <label class="label-block">Boundary Fence</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="boundaryFence" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="boundaryFence" value="No" /> No</label>
+
+            <!-- Water sources — all commodities -->
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs,Poultry,Rabbits,Fish">
+              <div class="form-group">
+                <span class="form-group-label">Water sources</span>
+              </div>
+              <div class="form-group">
+                <label class="label-block">River</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterRiver" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterRiver" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Streams</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterStreams" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterStreams" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Windmill</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterWindmill" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterWindmill" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Borehole</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="waterOther">Other water source (specify)</label>
+                <input type="text" id="waterOther" name="waterOther" placeholder="Specify if applicable" />
+              </div>
+            </div>
+
+            <!-- Kraals, crush pens, dipping — ruminants and pigs -->
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs">
+              <div class="form-group">
+                <label class="label-block">Kraals</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="kraals" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="kraals" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Crush Pens</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="crushPens" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="crushPens" value="No" /> No</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dipping — ruminants only -->
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep">
+              <div class="form-group">
+                <label class="label-block">Dipping Facilities</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="dippingFacilities" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="dippingFacilities" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="conditionKraals">Condition of kraals and handling infrastructure</label>
+                <select id="conditionKraals" name="conditionKraals">
+                  <option value="">-- Select --</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Bad">Bad</option>
+                </select>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="label-block">Grazing Camps</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="grazingCamps" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="grazingCamps" value="No" /> No</label>
+              <label for="infrastructureComments">Comments</label>
+              <textarea id="infrastructureComments" name="infrastructureComments" rows="3" placeholder="Any additional comments about farm infrastructure"></textarea>
+            </div>
+
+            <!-- Section D: Livestock Housing — poultry, pigs, rabbits -->
+            <div data-infra-for="Poultry,Pigs,Rabbits">
+              <div class="form-group">
+                <span class="form-group-label">Section D: Livestock Housing</span>
+                <p class="form-hint">Complete this section only if applying for poultry, pigs, or rabbits.</p>
+              </div>
+              <div class="form-group">
+                <label for="housingCapacity">Capacity of houses</label>
+                <input type="text" id="housingCapacity" name="housingCapacity" placeholder="e.g. 500 broilers per house" />
+              </div>
+              <div class="form-group">
+                <label for="housingCondition">Condition of housing</label>
+                <select id="housingCondition" name="housingCondition">
+                  <option value="">-- Select --</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Bad">Bad</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Feeders and drinkers</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="feedersDrinkers" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="feedersDrinkers" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Heating available</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="heatingAvailable" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="heatingAvailable" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="housingDescription">Brief description of the housing</label>
+                <textarea id="housingDescription" name="housingDescription" rows="3" placeholder="Describe the type and layout of housing structures"></textarea>
+              </div>
+              <div data-infra-for="Poultry">
+                <div class="form-group">
+                  <label class="label-block">Appropriate steel cages for layers (skip if not applying for egg layers)</label>
+                  <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="steelCagesLayers" value="Yes" /> Yes</label>
+                    <label class="radio-label"><input type="radio" name="steelCagesLayers" value="No" /> No</label>
+                    <label class="radio-label"><input type="radio" name="steelCagesLayers" value="N/A" /> Not applicable</label>
+                  </div>
+                </div>
+              </div>
+              <div data-infra-for="Rabbits">
+                <div class="form-group">
+                  <label class="label-block">Appropriate steel cages for rabbits</label>
+                  <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="steelCagesRabbits" value="Yes" /> Yes</label>
+                    <label class="radio-label"><input type="radio" name="steelCagesRabbits" value="No" /> No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cageDescription">Brief description of cages including dimensions</label>
+                <textarea id="cageDescription" name="cageDescription" rows="2" placeholder="e.g. 3-tier A-frame cages, 60cm x 40cm per cell"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Storage facilities for feeds</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="feedStorage" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="feedStorage" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="feedStorageCondition">Condition of storage</label>
+                <select id="feedStorageCondition" name="feedStorageCondition">
+                  <option value="">-- Select --</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Good">Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Bad">Bad</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Biosecurity plan available</label>
+                <p class="form-hint">If yes, attach a copy in the Documents step.</p>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="biosecurityPlanAvailableD" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="biosecurityPlanAvailableD" value="No" /> No</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section E: Dairy Infrastructure — dairy cattle and dairy goats -->
+            <div data-infra-for="Dairy Cattle,Goats">
+              <div class="form-group">
+                <span class="form-group-label">Section E: Dairy Infrastructure</span>
+                <p class="form-hint">Complete this section if applying for dairy cattle or goats.</p>
+              </div>
+              <div class="form-group">
+                <label for="dairyMachineryDetails">Details of available machinery and facilities for dairy</label>
+                <textarea id="dairyMachineryDetails" name="dairyMachineryDetails" rows="3" placeholder="e.g. 4-point milking parlour, pipeline system, bulk tank, separator"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="milkingCapacity">Milking capacity (litres per day)</label>
+                  <input type="number" id="milkingCapacity" name="milkingCapacity" min="0" step="0.1" placeholder="e.g. 200" />
+                </div>
+                <div class="form-group">
+                  <label for="storageTankSize">Size of storage tanks (litres / kilolitres)</label>
+                  <input type="text" id="storageTankSize" name="storageTankSize" placeholder="e.g. 500 litres" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Milk sold</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="milkSoldType" value="Raw" /> Raw</label>
+                  <label class="radio-label"><input type="radio" name="milkSoldType" value="Processed" /> Processed</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dairyPastureType">Type of planted pastures</label>
+                  <input type="text" id="dairyPastureType" name="dairyPastureType" placeholder="e.g. Eragrostis, Kikuyu, Ryegrass" />
+                </div>
+                <div class="form-group">
+                  <label for="dairyPastureHectares">Hectares of planted pasture</label>
+                  <input type="number" id="dairyPastureHectares" name="dairyPastureHectares" min="0" step="0.01" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="dairyAvailableFeeds">Available feeds: type and quantities</label>
+                <textarea id="dairyAvailableFeeds" name="dairyAvailableFeeds" rows="3" placeholder="e.g. Lucerne hay — 50 bales/month; Dairy concentrate — 500 kg/month; Mineral lick blocks"></textarea>
+              </div>
+            </div>
+
+            <!-- Section F: Aquaculture Infrastructure — fish only -->
+            <div data-infra-for="Fish">
+              <div class="form-group">
+                <span class="form-group-label">Section F: Aquaculture Infrastructure</span>
+                <p class="form-hint">Complete this section if applying for fish.</p>
+              </div>
+              <div class="form-group">
+                <label for="pondsDams">Details of available dams, ponds and facilities for fish farming</label>
+                <textarea id="pondsDams" name="pondsDams" rows="3" placeholder="Describe dam/pond facilities, sizes, depth, and water source"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="fishProductionCapacity">Production capacity (tons per annum)</label>
+                <input type="number" id="fishProductionCapacity" name="fishProductionCapacity" min="0" step="0.1" placeholder="e.g. 5" />
+              </div>
+              <div class="form-group">
+                <label class="label-block">Fish sold</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="fishSoldType" value="Unprocessed" /> Unprocessed</label>
+                  <label class="radio-label"><input type="radio" name="fishSoldType" value="Processed" /> Processed</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="fishMarkets">Markets</label>
+                <input type="text" id="fishMarkets" name="fishMarkets" placeholder="e.g. Local restaurants, fresh produce market, direct to consumer" />
+              </div>
+              <div class="form-group">
+                <label for="fishFeedStorage">Feed storage facilities</label>
+                <input type="text" id="fishFeedStorage" name="fishFeedStorage" placeholder="e.g. Dry store, rodent-proof containers" />
               </div>
             </div>
 
             <div class="form-group">
-              <label for="conditionOfFence">Condition of Fence</label>
-              <select id="conditionOfFence" name="conditionOfFence">
-                <option value="">-- Select --</option>
-                <option value="Excellent">Excellent</option>
-                <option value="Good">Good</option>
-                <option value="Fair">Fair</option>
-                <option value="Poor">Poor</option>
-              </select>
+              <span class="form-group-label">Section G: Current Number of Stock on the Farm</span>
             </div>
+            <p class="form-hint form-hint--spaced">Health records of current stock to be made available when requested by the department, especially vaccination history, TB and Brucellosis test results. Please indicate the numbers below, put 0 if none.</p>
 
-            <div class="form-group">
-              <span class="form-group-label">Water sources</span>
-            </div>
-            <div class="form-group">
-              <label class="label-block">River</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="waterRiver" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="waterRiver" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label-block">Streams</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="waterStreams" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="waterStreams" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label-block">Windmill</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="waterWindmill" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="waterWindmill" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label-block">Borehole</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="waterOther">Other water source (specify)</label>
-              <input type="text" id="waterOther" name="waterOther" placeholder="Specify if applicable" />
-            </div>
-
-            <div class="form-group">
-              <label class="label-block">Kraals</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="kraals" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="kraals" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label-block">Crush Pens</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="crushPens" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="crushPens" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="label-block">Dipping Facilities</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="dippingFacilities" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="dippingFacilities" value="No" /> No</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="conditionKraals">Condition of kraals and handling infrastructure</label>
-              <select id="conditionKraals" name="conditionKraals">
-                <option value="">-- Select --</option>
-                <option value="Excellent">Excellent</option>
-                <option value="Good">Good</option>
-                <option value="Fair">Fair</option>
-                <option value="Poor">Poor</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <span class="form-group-label">Current stock numbers</span>
-            </div>
-            <p class="form-hint form-hint--spaced">Enter numbers for each livestock type (use 0 if not applicable).</p>
-            <div class="form-group">
-              <span class="form-group-label">Beef Cattle</span>
-            </div>
-            <div class="form-row form-row-three">
-              <div class="form-group">
-                <label for="beefBreedingBulls">Breeding Bulls</label>
-                <input type="number" id="beefBreedingBulls" name="beefBreedingBulls" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="beefSteers">Steers</label>
-                <input type="number" id="beefSteers" name="beefSteers" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="beefCowsHeifers">Cows/Heifers</label>
-                <input type="number" id="beefCowsHeifers" name="beefCowsHeifers" min="0" />
+            <div data-stock-for="Beef Cattle">
+              <div class="form-group"><span class="form-group-label">Beef Cattle</span></div>
+              <div class="form-row form-row-three">
+                <div class="form-group">
+                  <label for="beefBreedingBulls">Breeding Bulls</label>
+                  <input type="number" id="beefBreedingBulls" name="beefBreedingBulls" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="beefSteers">Steers</label>
+                  <input type="number" id="beefSteers" name="beefSteers" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="beefCowsHeifers">Cows/Heifers</label>
+                  <input type="number" id="beefCowsHeifers" name="beefCowsHeifers" min="0" />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <span class="form-group-label">Dairy Cattle</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="dairyBreedingBulls">Breeding Bulls</label>
-                <input type="number" id="dairyBreedingBulls" name="dairyBreedingBulls" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="dairyCowsHeifers">Cows/Heifers</label>
-                <input type="number" id="dairyCowsHeifers" name="dairyCowsHeifers" min="0" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <span class="form-group-label">Goats</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="goatsBucks">Bucks</label>
-                <input type="number" id="goatsBucks" name="goatsBucks" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="goatsDoes">Does</label>
-                <input type="number" id="goatsDoes" name="goatsDoes" min="0" />
+            <div data-stock-for="Dairy Cattle">
+              <div class="form-group"><span class="form-group-label">Dairy Cattle</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dairyBreedingBulls">Breeding Bulls</label>
+                  <input type="number" id="dairyBreedingBulls" name="dairyBreedingBulls" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="dairyCowsHeifers">Cows/Heifers</label>
+                  <input type="number" id="dairyCowsHeifers" name="dairyCowsHeifers" min="0" />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <span class="form-group-label">Sheep</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="sheepRams">Rams</label>
-                <input type="number" id="sheepRams" name="sheepRams" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="sheepEwes">Ewes</label>
-                <input type="number" id="sheepEwes" name="sheepEwes" min="0" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <span class="form-group-label">Pigs</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="pigsBoars">Boars</label>
-                <input type="number" id="pigsBoars" name="pigsBoars" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="pigsSows">Sows</label>
-                <input type="number" id="pigsSows" name="pigsSows" min="0" />
+            <div data-stock-for="Goats">
+              <div class="form-group"><span class="form-group-label">Goats</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="goatsBucks">Bucks</label>
+                  <input type="number" id="goatsBucks" name="goatsBucks" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="goatsDoes">Does</label>
+                  <input type="number" id="goatsDoes" name="goatsDoes" min="0" />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <span class="form-group-label">Rabbits</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="rabbitsBucks">Bucks</label>
-                <input type="number" id="rabbitsBucks" name="rabbitsBucks" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="rabbitsDoes">Does</label>
-                <input type="number" id="rabbitsDoes" name="rabbitsDoes" min="0" />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <span class="form-group-label">Poultry</span>
-            </div>
-            <div class="form-row form-row-three">
-              <div class="form-group">
-                <label for="poultryBroilers">Broilers <span class="field-note">(per 6 week cycle)</span></label>
-                <input type="number" id="poultryBroilers" name="poultryBroilers" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="poultryLayers">Layers</label>
-                <input type="number" id="poultryLayers" name="poultryLayers" min="0" />
-              </div>
-              <div class="form-group">
-                <label for="poultryFreeRange">Free Range</label>
-                <input type="number" id="poultryFreeRange" name="poultryFreeRange" min="0" />
+            <div data-stock-for="Sheep">
+              <div class="form-group"><span class="form-group-label">Sheep</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sheepRams">Rams</label>
+                  <input type="number" id="sheepRams" name="sheepRams" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="sheepEwes">Ewes</label>
+                  <input type="number" id="sheepEwes" name="sheepEwes" min="0" />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="label-block">Farm infrastructure capable to quarantine/separate current stock from new animals</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="No" /> No</label>
+            <div data-stock-for="Pigs">
+              <div class="form-group"><span class="form-group-label">Pigs</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="pigsBoars">Boars</label>
+                  <input type="number" id="pigsBoars" name="pigsBoars" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="pigsSows">Sows</label>
+                  <input type="number" id="pigsSows" name="pigsSows" min="0" />
+                </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="label-block">Livestock Brand mark (if yes attach copy in Documents step)</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="livestockBrandMark" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="livestockBrandMark" value="No" /> No</label>
+            <div data-stock-for="Rabbits">
+              <div class="form-group"><span class="form-group-label">Rabbits</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="rabbitsBucks">Bucks</label>
+                  <input type="number" id="rabbitsBucks" name="rabbitsBucks" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="rabbitsDoes">Does</label>
+                  <input type="number" id="rabbitsDoes" name="rabbitsDoes" min="0" />
+                </div>
+              </div>
+            </div>
+
+            <div data-stock-for="Poultry">
+              <div class="form-group"><span class="form-group-label">Poultry</span></div>
+              <div class="form-row form-row-three">
+                <div class="form-group">
+                  <label for="poultryBroilers">Broilers <span class="field-note">(per 6 week cycle)</span></label>
+                  <input type="number" id="poultryBroilers" name="poultryBroilers" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="poultryLayers">Layers</label>
+                  <input type="number" id="poultryLayers" name="poultryLayers" min="0" />
+                </div>
+                <div class="form-group">
+                  <label for="poultryFreeRange">Free Range</label>
+                  <input type="number" id="poultryFreeRange" name="poultryFreeRange" min="0" />
+                </div>
+              </div>
+            </div>
+
+            <div data-stock-for="Fish">
+              <div class="form-group"><span class="form-group-label">Fish / Aquaculture</span></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fishCurrentStock">Current fish stock (estimated number)</label>
+                  <input type="number" id="fishCurrentStock" name="fishCurrentStock" min="0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Stock Health Checklist — commodity-specific -->
+            <div class="health-checklist-block">
+              <div class="form-group">
+                <span class="form-group-label">Current Stock Health Checklist</span>
+              </div>
+              <p class="form-hint form-hint--spaced">Tick each item that applies to your current stock. This helps DARDLEA assess the health status of animals already on the farm before new stock is delivered.</p>
+
+              <!-- Cattle (beef & dairy) -->
+              <div data-stock-for="Beef Cattle,Dairy Cattle">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Cattle</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>TB (Tuberculosis) test done within last 12 months</td>
+                      <td><input type="radio" name="healthCattleTB" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleTB" value="No" /></td>
+                      <td><input type="radio" name="healthCattleTB" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Brucellosis (CA) test done within last 12 months</td>
+                      <td><input type="radio" name="healthCattleBrucellosis" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleBrucellosis" value="No" /></td>
+                      <td><input type="radio" name="healthCattleBrucellosis" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Brucellosis (S19/RB51) vaccination — heifers 4-8 months</td>
+                      <td><input type="radio" name="healthCattleBrucellaVax" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleBrucellaVax" value="No" /></td>
+                      <td><input type="radio" name="healthCattleBrucellaVax" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Blackquarter vaccination (annual)</td>
+                      <td><input type="radio" name="healthCattleBlackquarter" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleBlackquarter" value="No" /></td>
+                      <td><input type="radio" name="healthCattleBlackquarter" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Anthrax vaccination (annual — compulsory in endemic areas)</td>
+                      <td><input type="radio" name="healthCattleAnthrax" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleAnthrax" value="No" /></td>
+                      <td><input type="radio" name="healthCattleAnthrax" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Lumpy Skin Disease vaccination (annual before summer)</td>
+                      <td><input type="radio" name="healthCattleLSD" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleLSD" value="No" /></td>
+                      <td><input type="radio" name="healthCattleLSD" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Botulism vaccination</td>
+                      <td><input type="radio" name="healthCattleBotulism" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleBotulism" value="No" /></td>
+                      <td><input type="radio" name="healthCattleBotulism" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Regular dipping for external parasites (ticks)</td>
+                      <td><input type="radio" name="healthCattleDipping" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleDipping" value="No" /></td>
+                      <td><input type="radio" name="healthCattleDipping" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Internal parasite dosing (roundworm, liver fluke)</td>
+                      <td><input type="radio" name="healthCattleDosing" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleDosing" value="No" /></td>
+                      <td><input type="radio" name="healthCattleDosing" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Rift Valley Fever vaccination (when outbreaks reported)</td>
+                      <td><input type="radio" name="healthCattleRVF" value="Yes" /></td>
+                      <td><input type="radio" name="healthCattleRVF" value="No" /></td>
+                      <td><input type="radio" name="healthCattleRVF" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Goats -->
+              <div data-stock-for="Goats">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Goats</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Pulpy kidney (Enterotoxaemia) vaccination</td>
+                      <td><input type="radio" name="healthGoatPulpyKidney" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatPulpyKidney" value="No" /></td>
+                      <td><input type="radio" name="healthGoatPulpyKidney" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Pasteurella vaccination</td>
+                      <td><input type="radio" name="healthGoatPasteurella" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatPasteurella" value="No" /></td>
+                      <td><input type="radio" name="healthGoatPasteurella" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Bluetongue vaccination (where applicable)</td>
+                      <td><input type="radio" name="healthGoatBluetongue" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatBluetongue" value="No" /></td>
+                      <td><input type="radio" name="healthGoatBluetongue" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Regular internal parasite dosing (wireworm, brown stomach worm)</td>
+                      <td><input type="radio" name="healthGoatDosing" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatDosing" value="No" /></td>
+                      <td><input type="radio" name="healthGoatDosing" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>External parasite control (ticks, lice, mange)</td>
+                      <td><input type="radio" name="healthGoatExternal" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatExternal" value="No" /></td>
+                      <td><input type="radio" name="healthGoatExternal" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Heartwater vaccination / tick control in heartwater areas</td>
+                      <td><input type="radio" name="healthGoatHeartwater" value="Yes" /></td>
+                      <td><input type="radio" name="healthGoatHeartwater" value="No" /></td>
+                      <td><input type="radio" name="healthGoatHeartwater" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Sheep -->
+              <div data-stock-for="Sheep">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Sheep</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Pulpy kidney (Enterotoxaemia) vaccination</td>
+                      <td><input type="radio" name="healthSheepPulpyKidney" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepPulpyKidney" value="No" /></td>
+                      <td><input type="radio" name="healthSheepPulpyKidney" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Bluetongue vaccination</td>
+                      <td><input type="radio" name="healthSheepBluetongue" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepBluetongue" value="No" /></td>
+                      <td><input type="radio" name="healthSheepBluetongue" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Pasteurella vaccination</td>
+                      <td><input type="radio" name="healthSheepPasteurella" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepPasteurella" value="No" /></td>
+                      <td><input type="radio" name="healthSheepPasteurella" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Regular shearing / wool management (if wool sheep)</td>
+                      <td><input type="radio" name="healthSheepShearing" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepShearing" value="No" /></td>
+                      <td><input type="radio" name="healthSheepShearing" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Internal parasite dosing</td>
+                      <td><input type="radio" name="healthSheepDosing" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepDosing" value="No" /></td>
+                      <td><input type="radio" name="healthSheepDosing" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>External parasite control (dipping / pour-on)</td>
+                      <td><input type="radio" name="healthSheepExternal" value="Yes" /></td>
+                      <td><input type="radio" name="healthSheepExternal" value="No" /></td>
+                      <td><input type="radio" name="healthSheepExternal" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pigs -->
+              <div data-stock-for="Pigs">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Pigs</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Iron injection — piglets at 3 days old</td>
+                      <td><input type="radio" name="healthPigIron" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigIron" value="No" /></td>
+                      <td><input type="radio" name="healthPigIron" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Erysipelas vaccination</td>
+                      <td><input type="radio" name="healthPigErysipelas" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigErysipelas" value="No" /></td>
+                      <td><input type="radio" name="healthPigErysipelas" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Deworming of sows before farrowing</td>
+                      <td><input type="radio" name="healthPigDeworming" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigDeworming" value="No" /></td>
+                      <td><input type="radio" name="healthPigDeworming" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Mange / external parasite treatment</td>
+                      <td><input type="radio" name="healthPigMange" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigMange" value="No" /></td>
+                      <td><input type="radio" name="healthPigMange" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>No contact with warthogs / bushpigs (ASF prevention)</td>
+                      <td><input type="radio" name="healthPigASFBarrier" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigASFBarrier" value="No" /></td>
+                      <td><input type="radio" name="healthPigASFBarrier" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>No swill feeding (illegal in SA)</td>
+                      <td><input type="radio" name="healthPigNoSwill" value="Yes" /></td>
+                      <td><input type="radio" name="healthPigNoSwill" value="No" /></td>
+                      <td><input type="radio" name="healthPigNoSwill" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Poultry -->
+              <div data-stock-for="Poultry">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Poultry</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Newcastle Disease (NCD) vaccination programme</td>
+                      <td><input type="radio" name="healthPoultryNCD" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryNCD" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryNCD" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Gumboro (Infectious Bursal Disease) vaccination</td>
+                      <td><input type="radio" name="healthPoultryGumboro" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryGumboro" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryGumboro" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Marek's Disease vaccination (day-old chicks)</td>
+                      <td><input type="radio" name="healthPoultryMareks" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryMareks" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryMareks" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Infectious Bronchitis vaccination</td>
+                      <td><input type="radio" name="healthPoultryIB" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryIB" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryIB" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Coccidiosis prevention / treatment</td>
+                      <td><input type="radio" name="healthPoultryCoccidiosis" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryCoccidiosis" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryCoccidiosis" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Deworming programme</td>
+                      <td><input type="radio" name="healthPoultryDeworming" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryDeworming" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryDeworming" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>All-in-all-out batch management</td>
+                      <td><input type="radio" name="healthPoultryAIAO" value="Yes" /></td>
+                      <td><input type="radio" name="healthPoultryAIAO" value="No" /></td>
+                      <td><input type="radio" name="healthPoultryAIAO" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Rabbits -->
+              <div data-stock-for="Rabbits">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Rabbits</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Coccidiosis prevention programme</td>
+                      <td><input type="radio" name="healthRabbitCoccidiosis" value="Yes" /></td>
+                      <td><input type="radio" name="healthRabbitCoccidiosis" value="No" /></td>
+                      <td><input type="radio" name="healthRabbitCoccidiosis" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Mange monitoring / treatment</td>
+                      <td><input type="radio" name="healthRabbitMange" value="Yes" /></td>
+                      <td><input type="radio" name="healthRabbitMange" value="No" /></td>
+                      <td><input type="radio" name="healthRabbitMange" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Pasteurellosis (snuffles) monitoring</td>
+                      <td><input type="radio" name="healthRabbitPasteurella" value="Yes" /></td>
+                      <td><input type="radio" name="healthRabbitPasteurella" value="No" /></td>
+                      <td><input type="radio" name="healthRabbitPasteurella" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Regular cage sanitation</td>
+                      <td><input type="radio" name="healthRabbitSanitation" value="Yes" /></td>
+                      <td><input type="radio" name="healthRabbitSanitation" value="No" /></td>
+                      <td><input type="radio" name="healthRabbitSanitation" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Fish -->
+              <div data-stock-for="Fish">
+                <table class="checklist-table health-checklist-table">
+                  <thead><tr><th>Health Item — Fish / Aquaculture</th><th>Yes</th><th>No</th><th>N/A</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>Regular water quality testing (pH, oxygen, ammonia, temp)</td>
+                      <td><input type="radio" name="healthFishWaterQuality" value="Yes" /></td>
+                      <td><input type="radio" name="healthFishWaterQuality" value="No" /></td>
+                      <td><input type="radio" name="healthFishWaterQuality" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Quarantine period for new fingerlings / broodstock</td>
+                      <td><input type="radio" name="healthFishQuarantine" value="Yes" /></td>
+                      <td><input type="radio" name="healthFishQuarantine" value="No" /></td>
+                      <td><input type="radio" name="healthFishQuarantine" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Disease monitoring (white-spot, columnaris, fungal)</td>
+                      <td><input type="radio" name="healthFishDisease" value="Yes" /></td>
+                      <td><input type="radio" name="healthFishDisease" value="No" /></td>
+                      <td><input type="radio" name="healthFishDisease" value="N/A" /></td>
+                    </tr>
+                    <tr>
+                      <td>Escape prevention screens / barriers in place</td>
+                      <td><input type="radio" name="healthFishEscape" value="Yes" /></td>
+                      <td><input type="radio" name="healthFishEscape" value="No" /></td>
+                      <td><input type="radio" name="healthFishEscape" value="N/A" /></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="form-group" style="margin-top: var(--space-4);">
+                <label for="healthChecklistNotes">Additional health notes or comments</label>
+                <textarea id="healthChecklistNotes" name="healthChecklistNotes" rows="3" placeholder="e.g. Last vaccination date, vet who administered, any recent disease incidents"></textarea>
+              </div>
+            </div>
+
+            <!-- Health / Vaccination Records Upload -->
+            <div class="health-records-block">
+              <div class="form-group">
+                <span class="form-group-label">Health &amp; Vaccination Records</span>
+              </div>
+              <p class="form-hint form-hint--spaced">Upload supporting health documentation for your current stock. These records help DARDLEA verify the health status of existing animals before new stock delivery. Accepted formats: PDF, JPG, PNG.</p>
+
+              <div data-stock-for="Beef Cattle,Dairy Cattle">
+                <div class="form-group">
+                  <label for="healthRecordTBCert">TB test certificate</label>
+                  <p class="form-doc-note">A recent TB test certificate (within the last 12 months) issued by a state or private veterinarian.</p>
+                  <input type="file" id="healthRecordTBCert" name="healthRecordTBCert" accept=".pdf,.jpg,.jpeg,.png" />
+                </div>
+                <div class="form-group">
+                  <label for="healthRecordBrucelCert">Brucellosis (CA) test certificate</label>
+                  <p class="form-doc-note">A Brucellosis test result certificate from an approved laboratory or state veterinarian.</p>
+                  <input type="file" id="healthRecordBrucelCert" name="healthRecordBrucelCert" accept=".pdf,.jpg,.jpeg,.png" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="healthRecordVaxCard">Vaccination record / card</label>
+                <p class="form-doc-note">Upload your vaccination record showing dates, vaccines administered, and administering veterinarian. This can be a stock card, vet visit report, or dip tank record.</p>
+                <input type="file" id="healthRecordVaxCard" name="healthRecordVaxCard" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+
+              <div data-stock-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs">
+                <div class="form-group">
+                  <label for="healthRecordDipCard">Dipping / dosing record</label>
+                  <p class="form-doc-note">Dip tank attendance records, dosing schedule, or pour-on treatment records from your local dip tank or private vet.</p>
+                  <input type="file" id="healthRecordDipCard" name="healthRecordDipCard" accept=".pdf,.jpg,.jpeg,.png" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="healthRecordVetReport">Veterinary inspection report (if available)</label>
+                <p class="form-doc-note">Any recent veterinary inspection or health clearance report for your herd/flock/stock.</p>
+                <input type="file" id="healthRecordVetReport" name="healthRecordVetReport" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+
+              <div class="form-group">
+                <label for="healthRecordOther">Other health documents</label>
+                <p class="form-doc-note">Any additional health-related documents such as livestock movement permits, disease clearance letters, or laboratory results.</p>
+                <input type="file" id="healthRecordOther" name="healthRecordOther" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+              </div>
+            </div>
+
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs,Poultry,Rabbits,Fish">
+              <div class="form-group">
+                <label class="label-block">Farm infrastructure capable to quarantine/separate current stock from new animals</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="quarantineInfrastructure" value="No" /> No</label>
+                </div>
+              </div>
+            </div>
+
+            <div data-infra-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs">
+              <div class="form-group">
+                <label class="label-block">Livestock Brand mark (if yes attach copy in Documents step)</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="livestockBrandMark" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="livestockBrandMark" value="No" /> No</label>
+                </div>
               </div>
             </div>
 
@@ -800,28 +1409,509 @@
               </div>
             </div>
 
-            <div class="form-group doc-optional">
+            <div class="form-group doc-optional" data-doc-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs,Poultry,Rabbits,Fish">
               <label for="offtakeAgreement">Markets / off-take agreement</label>
               <p class="form-doc-note">Off-take or market agreements show that you have realistic sales channels for your production.</p>
               <input type="file" id="offtakeAgreement" name="offtakeAgreement" accept=".pdf,.doc,.docx" />
             </div>
 
-            <div class="form-group doc-optional">
+            <div class="form-group doc-optional" data-doc-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs">
               <label for="brandCertificate">Brand mark certificate</label>
-              <p class="form-doc-note">A brand certificate supports livestock ownership and traceability requirements where applicable.</p>
+              <p class="form-doc-note">A brand certificate is required under the Animal Identification Act for cattle, goats, sheep, and pigs to support ownership and traceability.</p>
               <input type="file" id="brandCertificate" name="brandCertificate" accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
-            <div class="form-group doc-optional">
-              <label for="eia">EIA (if applicable)</label>
-              <p class="form-doc-note">An EIA or related approval may be required for projects with potential environmental impact.</p>
+            <div class="form-group doc-optional" data-doc-for="Fish,Pigs,Poultry">
+              <label for="eia">Environmental Impact Assessment (EIA)</label>
+              <p class="form-doc-note">An EIA or environmental authorisation may be required for aquaculture operations, large piggeries, and large poultry facilities under NEMA regulations.</p>
               <input type="file" id="eia" name="eia" accept=".pdf" />
             </div>
 
-            <div class="form-group doc-optional">
-              <label for="biosecurityPlan">Biosecurity plan (if applicable)</label>
-              <p class="form-doc-note">A biosecurity plan demonstrates how you will prevent disease introduction and spread on the farm.</p>
-              <input type="file" id="biosecurityPlan" name="biosecurityPlan" accept=".pdf,.doc,.docx" />
+            <div class="form-group doc-optional" data-doc-for="Fish">
+              <label for="aisPermit">Alien &amp; Invasive Species (AIS) permit</label>
+              <p class="form-doc-note">Required under NEMBA for farming Nile tilapia, trout, carp, and other alien species classified as Category 2 invasive species in South Africa.</p>
+              <input type="file" id="aisPermit" name="aisPermit" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional" data-doc-for="Fish">
+              <label for="waterUseLicence">Water use licence / authorisation</label>
+              <p class="form-doc-note">Aquaculture operations drawing from natural water sources require a water use licence from DWS under the National Water Act.</p>
+              <input type="file" id="waterUseLicence" name="waterUseLicence" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional" data-doc-for="Beef Cattle,Dairy Cattle,Goats,Sheep">
+              <label for="grazingPlan">Grazing / veld management plan</label>
+              <p class="form-doc-note">A grazing plan shows how you will manage pasture rotation and carrying capacity to prevent overgrazing, as recommended by DARDLEA extension officers.</p>
+              <input type="file" id="grazingPlan" name="grazingPlan" accept=".pdf,.doc,.docx" />
+            </div>
+
+            <div class="form-group doc-optional" data-doc-for="Poultry">
+              <label for="poultryHousingPlan">Poultry housing layout / plan</label>
+              <p class="form-doc-note">A layout plan of your poultry houses showing ventilation, feeding systems, and all-in-all-out batch management setup.</p>
+              <input type="file" id="poultryHousingPlan" name="poultryHousingPlan" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+            </div>
+
+            <div class="form-group doc-optional" data-doc-for="Pigs">
+              <label for="pigHousingPlan">Piggery housing / facility layout</label>
+              <p class="form-doc-note">A layout plan of your piggery showing farrowing crates, grower pens, drainage, and waste management infrastructure.</p>
+              <input type="file" id="pigHousingPlan" name="pigHousingPlan" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" />
+            </div>
+
+            <div class="form-group">
+              <span class="form-group-label">Biosecurity Plan</span>
+              <p class="form-doc-note">A biosecurity plan is required by DALRRD for livestock operations. It demonstrates how you will prevent the introduction and spread of diseases on your farm, in line with the Animal Diseases Act (Act 35 of 1984) and DAFF biosecurity guidelines.</p>
+
+              <div class="biosec-toggle" style="margin: var(--space-4) 0;">
+                <label class="radio-label"><input type="radio" name="biosecurityOption" value="upload" /> I already have a biosecurity plan — let me upload it</label>
+                <label class="radio-label"><input type="radio" name="biosecurityOption" value="template" checked /> I don't have one — let me complete the template below</label>
+              </div>
+
+              <div id="biosecUploadWrap" style="display: none;">
+                <div class="form-group">
+                  <label for="biosecurityPlan">Upload existing biosecurity plan</label>
+                  <input type="file" id="biosecurityPlan" name="biosecurityPlan" accept=".pdf,.doc,.docx" />
+                </div>
+              </div>
+
+              <div id="biosecTemplateWrap" class="biosec-template">
+                <div class="biosec-template-header">
+                  <h4>Biosecurity Plan Template</h4>
+                  <p class="form-hint">Complete each section below. This plan will be submitted with your application and assessed during farm inspection.</p>
+                </div>
+
+                <fieldset class="biosec-section">
+                  <legend>1. Farm Identification</legend>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="biosecFarmName">Farm name</label>
+                      <input type="text" id="biosecFarmName" name="biosecFarmName" placeholder="Auto-filled from earlier" />
+                    </div>
+                    <div class="form-group">
+                      <label for="biosecFarmOwner">Farm owner / manager</label>
+                      <input type="text" id="biosecFarmOwner" name="biosecFarmOwner" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="biosecFarmLocation">Physical location (nearest town/area)</label>
+                      <input type="text" id="biosecFarmLocation" name="biosecFarmLocation" />
+                    </div>
+                    <div class="form-group">
+                      <label for="biosecStateVet">State veterinary office / district</label>
+                      <input type="text" id="biosecStateVet" name="biosecStateVet" placeholder="e.g. Mbombela State Vet" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecSpecies">Species and estimated numbers on farm</label>
+                    <textarea id="biosecSpecies" name="biosecSpecies" rows="2" placeholder="e.g. 30 beef cattle, 15 goats"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>2. Access Control &amp; Visitor Management</legend>
+                  <div class="form-group">
+                    <label class="label-block">Is the farm boundary fenced?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecBoundaryFenced" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecBoundaryFenced" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecBoundaryFenced" value="Partial" /> Partial</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Do you have a controlled entry gate?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecEntryGate" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecEntryGate" value="No" /> No</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Do you keep a visitor register?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecVisitorRegister" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecVisitorRegister" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecVisitorRegister" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecAccessDetails">Describe measures to control people, vehicles, and equipment entering the farm</label>
+                    <textarea id="biosecAccessDetails" name="biosecAccessDetails" rows="3" placeholder="e.g. Signage at gate, visitors must report to office, vehicle wash/disinfection point at entrance"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>3. Quarantine &amp; Isolation Procedures</legend>
+                  <div class="form-group">
+                    <label class="label-block">Do you have a separate quarantine camp/pen?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecQuarantineFacility" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecQuarantineFacility" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecQuarantineFacility" value="Will build" /> Will build</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecQuarantinePeriod">Planned quarantine period for newly acquired animals (DALRRD recommends minimum 28 days)</label>
+                    <input type="text" id="biosecQuarantinePeriod" name="biosecQuarantinePeriod" placeholder="e.g. 28 days" />
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecIsolationProcess">How will you isolate sick animals from the rest of the herd/flock?</label>
+                    <textarea id="biosecIsolationProcess" name="biosecIsolationProcess" rows="3" placeholder="e.g. Separate camp away from main herd, dedicated feeding/watering equipment"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>4. Animal Health &amp; Veterinary Programme</legend>
+                  <div class="form-group">
+                    <label for="biosecVetName">Name of private / state veterinarian or animal health technician you use</label>
+                    <input type="text" id="biosecVetName" name="biosecVetName" placeholder="e.g. Dr Ndlovu, Mbombela State Vet" />
+                  </div>
+                  <div data-biosec-for="Beef Cattle,Dairy Cattle,Goats,Sheep">
+                    <div class="form-group">
+                      <label for="biosecVaccinationSchedule">Vaccination schedule (list planned vaccines)</label>
+                      <textarea id="biosecVaccinationSchedule" name="biosecVaccinationSchedule" rows="3" placeholder="e.g. Blackquarter — annually; Lumpy Skin Disease — annually before summer; Brucellosis — heifers 4-8 months; Anthrax — annually (compulsory in endemic areas)"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="biosecDippingDosing">Dipping / dosing programme for internal and external parasites</label>
+                      <textarea id="biosecDippingDosing" name="biosecDippingDosing" rows="3" placeholder="e.g. Dipping every 14 days in summer, monthly in winter; Strategic dosing for roundworm and liver fluke"></textarea>
+                    </div>
+                  </div>
+                  <div data-biosec-for="Pigs">
+                    <div class="form-group">
+                      <label for="biosecPigHealthPlan">Pig health programme (vaccines, deworming, iron injections)</label>
+                      <textarea id="biosecPigHealthPlan" name="biosecPigHealthPlan" rows="3" placeholder="e.g. Piglets — iron injection at 3 days; Erysipelas vaccine; Deworm sows before farrowing; Mange treatment as needed"></textarea>
+                    </div>
+                  </div>
+                  <div data-biosec-for="Poultry">
+                    <div class="form-group">
+                      <label for="biosecPoultryHealthPlan">Poultry vaccination &amp; medication programme</label>
+                      <textarea id="biosecPoultryHealthPlan" name="biosecPoultryHealthPlan" rows="3" placeholder="e.g. Day-old — Marek's, Newcastle Disease (NCD) at 7, 14, 21 days; Gumboro at 10 &amp; 18 days; Infectious Bronchitis; Deworming at 6 weeks"></textarea>
+                    </div>
+                  </div>
+                  <div data-biosec-for="Rabbits">
+                    <div class="form-group">
+                      <label for="biosecRabbitHealthPlan">Rabbit health management plan</label>
+                      <textarea id="biosecRabbitHealthPlan" name="biosecRabbitHealthPlan" rows="3" placeholder="e.g. Coccidiosis prevention in young kits; mange monitoring; regular cage sanitation; isolation of sick animals"></textarea>
+                    </div>
+                  </div>
+                  <div data-biosec-for="Fish">
+                    <div class="form-group">
+                      <label for="biosecFishHealthPlan">Fish health management plan</label>
+                      <textarea id="biosecFishHealthPlan" name="biosecFishHealthPlan" rows="3" placeholder="e.g. Water quality testing (pH, oxygen, ammonia) weekly; quarantine new stock 14 days; monitor for white-spot / columnaris; stress minimisation during handling"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Do you keep animal health records (treatment register)?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecHealthRecords" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecHealthRecords" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecHealthRecords" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section" data-biosec-for="Beef Cattle,Dairy Cattle,Goats,Sheep,Pigs">
+                  <legend>5. Animal Movement &amp; Traceability</legend>
+                  <p class="form-hint">Under the Animal Diseases Act and the Animal Identification Act (Act 6 of 2002), all livestock movements must be documented.</p>
+                  <div class="form-group">
+                    <label class="label-block">Do you have a registered livestock brand mark?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecBrandMark" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecBrandMark" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecBrandMark" value="Applied" /> Applied / in progress</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Do you obtain movement permits before transporting animals?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecMovementPermits" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecMovementPermits" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecMovementPermits" value="N/A" /> Not applicable yet</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecMovementProcedure">Describe how you manage animal movements in and out of the farm</label>
+                    <textarea id="biosecMovementProcedure" name="biosecMovementProcedure" rows="3" placeholder="e.g. All incoming animals require movement permit from state vet; record kept in farm register; no animals purchased from unknown sources"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section" data-biosec-for="Poultry">
+                  <legend>5. Poultry-Specific Biosecurity</legend>
+                  <p class="form-hint">Poultry biosecurity follows the DALRRD all-in-all-out principle. HPAI (Avian Influenza) is a controlled disease — any suspected case must be reported immediately.</p>
+                  <div class="form-group">
+                    <label class="label-block">Do you practise all-in-all-out production per house?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecAllInAllOut" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecAllInAllOut" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecAllInAllOut" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Is there a footbath / boot dip at the entrance of each poultry house?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecFootbath" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecFootbath" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecFootbath" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecPoultryDowntime">Downtime between batches (days)</label>
+                    <input type="text" id="biosecPoultryDowntime" name="biosecPoultryDowntime" placeholder="e.g. 14 days — clean, disinfect, rest before new batch" />
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecPoultrySource">Source of day-old chicks / point-of-lay hens</label>
+                    <input type="text" id="biosecPoultrySource" name="biosecPoultrySource" placeholder="e.g. Registered hatchery — Astral, Country Bird, Ross" />
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section" data-biosec-for="Fish">
+                  <legend>5. Aquaculture-Specific Biosecurity</legend>
+                  <p class="form-hint">Aquaculture biosecurity focuses on water quality management, stock source control, and preventing pathogen introduction.</p>
+                  <div class="form-group">
+                    <label for="biosecFishSource">Source of fingerlings / broodstock</label>
+                    <input type="text" id="biosecFishSource" name="biosecFishSource" placeholder="e.g. Registered fingerling supplier, government hatchery" />
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecWaterTesting">Water quality monitoring plan</label>
+                    <textarea id="biosecWaterTesting" name="biosecWaterTesting" rows="3" placeholder="e.g. pH, dissolved oxygen, ammonia, temperature tested weekly; records kept in log book"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Are screens / barriers in place to prevent fish escaping into natural waterways?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecFishEscapePrevention" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecFishEscapePrevention" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecFishEscapePrevention" value="Will install" /> Will install</label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section" data-biosec-for="Rabbits">
+                  <legend>5. Rabbit-Specific Biosecurity</legend>
+                  <div class="form-group">
+                    <label class="label-block">Are cages raised off the ground with wire mesh floors?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecRabbitCagesRaised" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecRabbitCagesRaised" value="No" /> No</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecRabbitWasteManagement">Droppings and cage cleaning routine</label>
+                    <textarea id="biosecRabbitWasteManagement" name="biosecRabbitWasteManagement" rows="2" placeholder="e.g. Droppings trays cleaned daily; cages disinfected weekly; soiled bedding composted"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecRabbitPredatorControl">Predator control measures</label>
+                    <textarea id="biosecRabbitPredatorControl" name="biosecRabbitPredatorControl" rows="2" placeholder="e.g. Secure housing with mesh, no gaps for snakes/rats; cats and dogs kept away"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section" data-biosec-for="Pigs">
+                  <legend>5b. Pig-Specific Biosecurity</legend>
+                  <p class="form-hint">African Swine Fever (ASF) has no vaccine — strict biosecurity is the only defence. ASF is a controlled disease under the Animal Diseases Act.</p>
+                  <div class="form-group">
+                    <label class="label-block">Is the piggery fenced to prevent contact with warthogs / bushpigs / feral pigs?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecPigWildlifeBarrier" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecPigWildlifeBarrier" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecPigWildlifeBarrier" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Do you confirm that NO swill (food waste) is fed to pigs?</label>
+                    <p class="form-hint">Swill feeding is illegal in South Africa under the Animal Diseases Act.</p>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecNoSwillFeeding" value="Confirmed" /> Confirmed — no swill feeding</label>
+                      <label class="radio-label"><input type="radio" name="biosecNoSwillFeeding" value="Currently feeding swill" /> Currently feeding swill (will stop)</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Is there a vehicle and equipment wash/disinfection point at the piggery entrance?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecPigWashStation" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecPigWashStation" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecPigWashStation" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>6. Feed &amp; Water Safety</legend>
+                  <div class="form-group">
+                    <label for="biosecFeedStorage">How and where is feed stored?</label>
+                    <textarea id="biosecFeedStorage" name="biosecFeedStorage" rows="2" placeholder="e.g. Enclosed storeroom, off the ground on pallets, rodent-proof containers"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecWaterSource">Primary water source for animals</label>
+                    <input type="text" id="biosecWaterSource" name="biosecWaterSource" placeholder="e.g. Borehole, river, municipal" />
+                  </div>
+                  <div class="form-group">
+                    <label class="label-block">Are water troughs/points cleaned regularly?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecWaterCleaning" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecWaterCleaning" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecWaterCleaning" value="Will implement" /> Will implement</label>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>7. Carcass &amp; Waste Disposal</legend>
+                  <p class="form-hint">Proper disposal of mortalities is a legal requirement under the Meat Safety Act and the Animal Diseases Act to prevent disease spread.</p>
+                  <div class="form-group">
+                    <label for="biosecMortalityDisposal">How will you dispose of dead animals?</label>
+                    <textarea id="biosecMortalityDisposal" name="biosecMortalityDisposal" rows="3" placeholder="e.g. Burial pit (at least 1.5 m deep, covered with lime); incineration; rendering service"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecManureManagement">Manure and waste management plan</label>
+                    <textarea id="biosecManureManagement" name="biosecManureManagement" rows="2" placeholder="e.g. Manure heap away from water sources, composted and used on pastures"></textarea>
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>8. Controlled &amp; Notifiable Disease Awareness</legend>
+                  <p class="form-hint">Under the Animal Diseases Act, certain diseases <strong>must</strong> be reported to the state veterinarian immediately. Failure to report is a criminal offence.</p>
+                  <div class="form-group">
+                    <label for="biosecNotifiableAwareness">List controlled/notifiable diseases relevant to your commodity that you are aware of</label>
+                    <textarea id="biosecNotifiableAwareness" name="biosecNotifiableAwareness" rows="3" placeholder="e.g. Foot-and-Mouth Disease, Lumpy Skin Disease, Rift Valley Fever, Anthrax, African Swine Fever, Avian Influenza"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecReportingProcedure">What will you do if you suspect a controlled disease on your farm?</label>
+                    <textarea id="biosecReportingProcedure" name="biosecReportingProcedure" rows="3" placeholder="e.g. Immediately isolate affected animals; contact state vet; do not move any animals off the farm; keep records of symptoms and mortality"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecStateVetContact">Your nearest state vet contact details</label>
+                    <input type="text" id="biosecStateVetContact" name="biosecStateVetContact" placeholder="e.g. Mbombela State Vet — 013 766 XXXX" />
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>9. Cleaning &amp; Disinfection</legend>
+                  <div class="form-group">
+                    <label for="biosecCleaningProcedure">Describe your cleaning and disinfection procedures for housing, equipment, and vehicles</label>
+                    <textarea id="biosecCleaningProcedure" name="biosecCleaningProcedure" rows="3" placeholder="e.g. Kraals scraped and limed between batches; equipment washed with disinfectant; footbath at poultry house entrance"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecDisinfectantsUsed">Disinfectants / products used</label>
+                    <input type="text" id="biosecDisinfectantsUsed" name="biosecDisinfectantsUsed" placeholder="e.g. Virkon S, Jeyes Fluid, agricultural lime" />
+                  </div>
+                </fieldset>
+
+                <fieldset class="biosec-section">
+                  <legend>10. Training &amp; Commitment</legend>
+                  <div class="form-group">
+                    <label class="label-block">Have you or your workers received any biosecurity training?</label>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="biosecTraining" value="Yes" /> Yes</label>
+                      <label class="radio-label"><input type="radio" name="biosecTraining" value="No" /> No</label>
+                      <label class="radio-label"><input type="radio" name="biosecTraining" value="Willing to attend" /> Willing to attend</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="biosecAdditionalMeasures">Any additional biosecurity measures you plan to implement</label>
+                    <textarea id="biosecAdditionalMeasures" name="biosecAdditionalMeasures" rows="3" placeholder="Optional — describe any further measures"></textarea>
+                  </div>
+                  <div class="form-group popia-checkbox-group">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="biosecDeclaration" value="yes" />
+                      <span>I declare that the information provided in this biosecurity plan is truthful and I commit to implementing and maintaining these biosecurity measures on my farm.</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+              </div>
+            </div>
+
+            <!-- Document Checklist -->
+            <div class="checklist-block">
+              <h4 class="checklist-heading">Checklist for Application Documents</h4>
+              <p class="form-hint">Tick each document you have attached. Required documents depend on your farmer category.</p>
+              <table class="checklist-table" id="checklistTable">
+                <thead>
+                  <tr>
+                    <th>Item / Document</th>
+                    <th>Subsistence</th>
+                    <th>Smallholder</th>
+                    <th>Commercial</th>
+                    <th>Attached</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fully completed application form</td>
+                    <td>Yes</td><td>Yes</td><td>Yes</td>
+                    <td><input type="checkbox" name="checkApplicationForm" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Certified ID copies of all applicants</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIdCopies" value="yes" /></td>
+                  </tr>
+                  <tr data-doc-for="Cooperative,CPA,Trust,PTY Ltd,Other">
+                    <td>Legal entity document (CK, Coop certificate, etc.)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLegalEntityDoc" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Proof of land access (title deed / lease / PTO / RTO)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLandProof" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Business plan / business profile</td>
+                    <td>Profile</td><td>Plan</td><td>Plan</td>
+                    <td><input type="checkbox" name="checkBusinessPlan" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Proof of farming income</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIncomeProof" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Markets / off-take agreement</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkMarketsOfftake" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Brand mark certificate</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkBrandMark" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>EIA (authorisation or exemption if applicable)</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkEia" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Biosecurity plan (if applicable)</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkBiosecurityPlan" value="yes" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Declaration -->
+            <div class="declaration-block">
+              <h4 class="declaration-heading">Declaration</h4>
+              <p>I hereby declare that the above-mentioned information is true and correct and acknowledge that any misleading information provided will lead to disqualification.</p>
+              <div class="form-row form-row-three">
+                <div class="form-group">
+                  <label for="declarationApplicant">Signature of applicant / representative</label>
+                  <input type="text" id="declarationApplicant" name="declarationApplicant" placeholder="Type full name as signature" />
+                </div>
+                <div class="form-group">
+                  <label for="declarationDate">Date</label>
+                  <input type="date" id="declarationDate" name="declarationDate" />
+                </div>
+              </div>
+              <p class="form-hint">The following signatures will be collected by DARDLEA staff during review:</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="declarationAdvisor">Signature of Agricultural Advisor</label>
+                  <input type="text" id="declarationAdvisor" name="declarationAdvisor" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="declarationManager">Signature of Agricultural Municipal Manager</label>
+                  <input type="text" id="declarationManager" name="declarationManager" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+              </div>
             </div>
 
             <div class="summary-box">
@@ -871,6 +1961,7 @@
   <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="application.js"></script>
   <script>
     (function () {

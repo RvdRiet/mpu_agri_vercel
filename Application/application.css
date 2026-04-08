@@ -231,6 +231,26 @@
   color: var(--color-text-muted);
 }
 
+.address-map-wrap .field-note {
+  margin-bottom: var(--space-2);
+}
+
+.address-map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.address-map {
+  width: 100%;
+  min-height: 260px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #f8f9fa;
+  overflow: hidden;
+}
+
 /* Definition of farmer category block */
 .definition-block {
   margin-top: var(--space-8);
@@ -631,5 +651,171 @@
 
   .summary-box {
     padding: var(--space-4);
+  }
+}
+
+[data-infra-for],
+[data-stock-for],
+[data-doc-for],
+[data-biosec-for] {
+  transition: opacity 0.2s ease;
+}
+[data-infra-for][style*="display: none"],
+[data-stock-for][style*="display: none"],
+[data-doc-for][style*="display: none"],
+[data-biosec-for][style*="display: none"] {
+  opacity: 0;
+}
+
+/* Biosecurity plan template */
+.biosec-template {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #fafbfc;
+  padding: var(--space-5);
+  margin-top: var(--space-3);
+}
+.biosec-template-header h4 {
+  margin: 0 0 var(--space-1) 0;
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+.biosec-section {
+  border: 1px solid #e0e4e8;
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-5);
+  background: #fff;
+}
+.biosec-section legend {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--color-primary);
+  padding: 0 var(--space-2);
+}
+.biosec-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Health checklist & records blocks */
+.health-checklist-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-6);
+  background: #fafbfc;
+}
+.health-checklist-table {
+  margin-bottom: var(--space-5);
+}
+.health-checklist-table td:first-child {
+  text-align: left !important;
+  min-width: 280px;
+}
+.health-checklist-table td:nth-child(n+2) {
+  text-align: center;
+  width: 60px;
+}
+.health-checklist-table input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+.health-records-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+  background: #fafbfc;
+}
+
+/* Checklist table */
+.checklist-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-6);
+  background: #fafbfc;
+}
+.checklist-heading {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+.checklist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin-top: var(--space-3);
+}
+.checklist-table th,
+.checklist-table td {
+  border: 1px solid #dde1e6;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+}
+.checklist-table th {
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.checklist-table td:nth-child(n+2) {
+  text-align: center;
+  white-space: nowrap;
+}
+.checklist-table tbody tr:nth-child(even) {
+  background: #f0f2f5;
+}
+.checklist-table input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+.checklist-table tr[data-checklist-cat] td:nth-child(2) {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Declaration block */
+.declaration-block {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-top: var(--space-6);
+  background: #fafbfc;
+}
+.declaration-heading {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+.declaration-block input[disabled] {
+  background: #eef0f2;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .biosec-template {
+    padding: var(--space-3);
+  }
+  .biosec-section {
+    padding: var(--space-3);
+  }
+  .checklist-block,
+  .declaration-block {
+    padding: var(--space-3);
+  }
+  .checklist-table {
+    font-size: var(--text-xs);
+  }
+  .checklist-table th,
+  .checklist-table td {
+    padding: var(--space-1) var(--space-2);
   }
 }
