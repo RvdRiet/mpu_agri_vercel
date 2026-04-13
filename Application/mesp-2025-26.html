@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../nav.css">
   <link rel="stylesheet" href="application.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
   <div class="page-wrapper">
@@ -50,7 +51,7 @@
             <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
             <div class="nav-dropdown" role="menu">
               <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
-              <a href="index.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Grant</span></span></a>
+              
               <a href="mesp-2025-26.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Masibuyele 2025/26</span></span></a>
               <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
               <div class="nav-dropdown__divider"></div>
@@ -67,7 +68,7 @@
       <div class="site-nav__mobile" id="mobileNav">
         <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="../index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#127968;</span> Home</a><a href="../weather.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9925;</span> Weather</a><a href="../alerts.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#9888;</span> Alerts</a><a href="../support.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128222;</span> Support</a></div>
         <div class="mobile-nav__section"><div class="mobile-nav__heading">Education</div><a href="../guides.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128214;</span> Guides</a><a href="../e-learning.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128218;</span> E-learning</a></div>
-        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant</a><a href="index.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Livestock Grant</a><a href="mesp-2025-26.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Masibuyele 2025/26</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant</a><a href="../track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="crop.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Crop Grant</a><a href="mesp-2025-26.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Masibuyele 2025/26</a><a href="environmental.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128196;</span> Environmental Grant</a><a href="../track.html" class="mobile-nav__link"><span class="mobile-nav__icon">&#128269;</span> Track Application</a></div>
         <div class="mobile-nav__actions"><a href="../login.html" class="btn btn--secondary btn--block">Login</a><a href="../register.html" class="btn btn--primary btn--block">Register</a></div>
       </div>
       <div class="mobile-nav-overlay" id="mobileOverlay"></div>
@@ -1009,9 +1010,51 @@
   <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     (function () {
       'use strict';
+      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+        window.location.href = '../login.html?return=' + encodeURIComponent('Application/mesp-2025-26.html');
+        return;
+      }
+      window.__MESP_MERGED_FORM_ACTIVE__ = true;
+      var cardBody = document.querySelector('.app-form-card .card__body');
+      if (!cardBody) return;
+
+      fetch('index.html', { cache: 'no-store' })
+        .then(function (res) { return res.text(); })
+        .then(function (html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var incomingSteps = doc.querySelector('.app-steps');
+          var incomingForm = doc.getElementById('applicationForm');
+          if (!incomingSteps || !incomingForm) return;
+
+          var currentSteps = cardBody.querySelector('.app-steps');
+          var currentForm = cardBody.querySelector('#applicationForm');
+          if (currentSteps) currentSteps.replaceWith(incomingSteps);
+          if (currentForm) currentForm.replaceWith(incomingForm);
+
+          var heading = cardBody.querySelector('.app-heading');
+          if (heading) {
+            heading.textContent = 'Masibuyele Esibayeni Programme Application (Merged Form)';
+          }
+
+          var script = document.createElement('script');
+          script.src = 'application.js';
+          document.body.appendChild(script);
+        })
+        .catch(function () {
+          // Fallback to built-in form if dynamic merge fails.
+          window.__MESP_MERGED_FORM_ACTIVE__ = false;
+        });
+    })();
+  </script>
+  <script>
+    (function () {
+      'use strict';
+      if (window.__MESP_MERGED_FORM_ACTIVE__) return;
       if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
         window.location.href = '../login.html?return=' + encodeURIComponent('Application/mesp-2025-26.html');
         return;
