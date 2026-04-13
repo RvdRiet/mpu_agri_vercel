@@ -613,10 +613,81 @@
           if (physicalAddressEl && payload.display_name && (!!forceOverwrite || !physicalAddressEl.value.trim())) {
             physicalAddressEl.value = payload.display_name;
           }
+          return refinePostCodeFromNearbySearch(lat, lon, payload.address, !!forceOverwrite);
         }
       })
       .catch(function () {
         // Non-blocking: coordinates are already captured even if reverse lookup fails.
+      });
+  }
+
+  function toRad(v) {
+    return (v * Math.PI) / 180;
+  }
+
+  function distanceMeters(lat1, lon1, lat2, lon2) {
+    var R = 6371000;
+    var dLat = toRad(lat2 - lat1);
+    var dLon = toRad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function refinePostCodeFromNearbySearch(lat, lon, reverseAddress, forceOverwrite) {
+    var postCodeEl = document.getElementById('physicalPostCode');
+    if (!postCodeEl) return Promise.resolve();
+    if (!forceOverwrite && postCodeEl.value && postCodeEl.value.trim()) return Promise.resolve();
+
+    var locality = reverseAddress.suburb || reverseAddress.neighbourhood || reverseAddress.village || reverseAddress.town || reverseAddress.city || '';
+    var street = [reverseAddress.house_number, reverseAddress.road].filter(function (v) { return !!v; }).join(' ');
+    var county = reverseAddress.municipality || reverseAddress.city_district || reverseAddress.county || '';
+    var stateDistrict = reverseAddress.state_district || '';
+    var top = lat + 0.05;
+    var bottom = lat - 0.05;
+    var left = lon - 0.05;
+    var right = lon + 0.05;
+
+    var params = new URLSearchParams();
+    params.set('format', 'jsonv2');
+    params.set('addressdetails', '1');
+    params.set('limit', '10');
+    params.set('countrycodes', 'za');
+    params.set('viewbox', left + ',' + top + ',' + right + ',' + bottom);
+    params.set('bounded', '1');
+    params.set('state', 'Mpumalanga');
+    if (street) params.set('street', street);
+    if (locality) params.set('city', locality);
+    if (county) params.set('county', county);
+    if (stateDistrict) params.set('state_district', stateDistrict);
+    params.set('q', [street, locality, county, stateDistrict, 'Mpumalanga', 'South Africa'].filter(function (v) { return !!v; }).join(', '));
+
+    return fetch('https://nominatim.openstreetmap.org/search?' + params.toString(), { headers: { 'Accept-Language': 'en' } })
+      .then(function (res) { return res.json(); })
+      .then(function (list) {
+        if (!Array.isArray(list) || !list.length) return;
+        var withPostCode = list.filter(function (item) {
+          return item && item.address && item.address.postcode;
+        });
+        if (!withPostCode.length) return;
+
+        var nearest = withPostCode.reduce(function (best, item) {
+          var itemLat = parseFloat(item.lat);
+          var itemLon = parseFloat(item.lon);
+          if (isNaN(itemLat) || isNaN(itemLon)) return best;
+          var d = distanceMeters(lat, lon, itemLat, itemLon);
+          if (!best || d < best.distance) return { distance: d, code: item.address.postcode };
+          return best;
+        }, null);
+
+        if (nearest && nearest.code) {
+          postCodeEl.value = nearest.code;
+        }
+      })
+      .catch(function () {
+        // Keep reverse-geocoded postcode if refinement fails.
       });
   }
 
