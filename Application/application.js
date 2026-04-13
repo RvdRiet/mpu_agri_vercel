@@ -414,7 +414,7 @@
         var dragLon = point.lng;
         if (gpsLat) gpsLat.value = dragLat.toFixed(6);
         if (gpsLon) gpsLon.value = dragLon.toFixed(6);
-        reverseGeocodeAndPopulate(dragLat, dragLon).finally(function () {
+        reverseGeocodeAndPopulate(dragLat, dragLon, true).finally(function () {
           setAddressMapStatus('Pin moved. Address and GPS fields updated from the new map location.');
         });
       });
@@ -574,7 +574,7 @@
     return false;
   }
 
-  function populateAddressFieldsFromNominatim(addr) {
+  function populateAddressFieldsFromNominatim(addr, forceOverwrite) {
     var mapped = parseNominatimAddress(addr);
     var physicalAddressEl = document.getElementById('physicalAddress');
     var areaNameEl = document.getElementById('areaName');
@@ -582,13 +582,13 @@
     var municipalityEl = document.getElementById('localMunicipality');
     var postCodeEl = document.getElementById('physicalPostCode');
 
-    if (physicalAddressEl && mapped.physicalAddress && !physicalAddressEl.value.trim()) {
+    if (physicalAddressEl && mapped.physicalAddress && (forceOverwrite || !physicalAddressEl.value.trim())) {
       physicalAddressEl.value = mapped.physicalAddress;
     }
-    if (areaNameEl && mapped.areaName && !areaNameEl.value.trim()) {
+    if (areaNameEl && mapped.areaName && (forceOverwrite || !areaNameEl.value.trim())) {
       areaNameEl.value = mapped.areaName;
     }
-    if (postCodeEl && mapped.postCode) {
+    if (postCodeEl && mapped.postCode && (forceOverwrite || !postCodeEl.value.trim())) {
       postCodeEl.value = mapped.postCode;
     }
     if (districtEl && mapped.district) {
@@ -602,15 +602,15 @@
     }
   }
 
-  function reverseGeocodeAndPopulate(lat, lon) {
+  function reverseGeocodeAndPopulate(lat, lon, forceOverwrite) {
     var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lon);
     return fetch(url, { headers: { 'Accept-Language': 'en' } })
       .then(function (res) { return res.json(); })
       .then(function (payload) {
         if (payload && payload.address) {
-          populateAddressFieldsFromNominatim(payload.address);
+          populateAddressFieldsFromNominatim(payload.address, !!forceOverwrite);
           var physicalAddressEl = document.getElementById('physicalAddress');
-          if (physicalAddressEl && payload.display_name && !physicalAddressEl.value.trim()) {
+          if (physicalAddressEl && payload.display_name && (!!forceOverwrite || !physicalAddressEl.value.trim())) {
             physicalAddressEl.value = payload.display_name;
           }
         }
