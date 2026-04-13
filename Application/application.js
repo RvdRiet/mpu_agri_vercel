@@ -365,6 +365,12 @@
   var addressMap = null;
   var addressMarker = null;
   var manualAddressLookupTimer = null;
+  var MPUMALANGA_VIEWBOX = {
+    left: 28.1,
+    top: -24.0,
+    right: 32.1,
+    bottom: -27.6
+  };
 
   function setAddressMapStatus(msg, isError) {
     var statusEl = document.getElementById('addressMapStatus');
@@ -383,6 +389,74 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(addressMap);
     return true;
+  }
+
+  function clearAddressCandidates() {
+    var wrap = document.getElementById('addressCandidates');
+    if (!wrap) return;
+    wrap.classList.remove('is-visible');
+    wrap.innerHTML = '';
+  }
+
+  function applyResolvedLocation(lat, lon, displayName) {
+    var gpsLat = document.getElementById('gpsLatitude');
+    var gpsLon = document.getElementById('gpsLongitude');
+    if (gpsLat) gpsLat.value = Number(lat).toFixed(6);
+    if (gpsLon) gpsLon.value = Number(lon).toFixed(6);
+
+    if (addressMarker) {
+      addressMarker.setLatLng([lat, lon]);
+    } else {
+      addressMarker = window.L.marker([lat, lon], { draggable: true }).addTo(addressMap);
+      addressMarker.on('dragend', function (evt) {
+        var point = evt.target.getLatLng();
+        var dragLat = point.lat;
+        var dragLon = point.lng;
+        if (gpsLat) gpsLat.value = dragLat.toFixed(6);
+        if (gpsLon) gpsLon.value = dragLon.toFixed(6);
+        reverseGeocodeAndPopulate(dragLat, dragLon).finally(function () {
+          setAddressMapStatus('Pin moved. Address and GPS fields updated from the new map location.');
+        });
+      });
+    }
+
+    addressMarker.bindPopup(displayName || 'Selected address').openPopup();
+    addressMap.setView([lat, lon], 15);
+    setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
+  }
+
+  function renderAddressCandidates(results) {
+    var wrap = document.getElementById('addressCandidates');
+    if (!wrap) return;
+    if (!Array.isArray(results) || !results.length) {
+      clearAddressCandidates();
+      return;
+    }
+
+    var top = results.slice(0, 5);
+    var html = '<p class="candidate-heading">Select the closest address match:</p><div class="candidate-list">';
+    top.forEach(function (item, idx) {
+      var label = item.display_name || ('Result ' + (idx + 1));
+      html += '<button type="button" class="candidate-option" data-candidate-idx="' + idx + '">' + label + '</button>';
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+    wrap.classList.add('is-visible');
+
+    wrap.querySelectorAll('.candidate-option').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(btn.getAttribute('data-candidate-idx'), 10);
+        var selected = top[idx];
+        if (!selected) return;
+        var lat = parseFloat(selected.lat);
+        var lon = parseFloat(selected.lon);
+        if (isNaN(lat) || isNaN(lon)) return;
+        applyResolvedLocation(lat, lon, selected.display_name || 'Selected address');
+        if (selected.address) populateAddressFieldsFromNominatim(selected.address);
+        clearAddressCandidates();
+        setAddressMapStatus('Address selected. GPS and related fields were auto-filled.');
+      });
+    });
   }
 
   function buildAddressQuery() {
@@ -412,8 +486,29 @@
       return;
     }
     setAddressMapStatus('Searching address on map...');
+    clearAddressCandidates();
 
-    var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+    var physicalAddress = document.getElementById('physicalAddress');
+    var localMunicipality = document.getElementById('localMunicipality');
+    var district = document.getElementById('district');
+    var areaName = document.getElementById('areaName');
+    var postCode = document.getElementById('physicalPostCode');
+    var params = new URLSearchParams();
+    params.set('format', 'jsonv2');
+    params.set('addressdetails', '1');
+    params.set('limit', '5');
+    params.set('countrycodes', 'za');
+    params.set('viewbox', MPUMALANGA_VIEWBOX.left + ',' + MPUMALANGA_VIEWBOX.top + ',' + MPUMALANGA_VIEWBOX.right + ',' + MPUMALANGA_VIEWBOX.bottom);
+    params.set('bounded', '1');
+    params.set('state', 'Mpumalanga');
+    if (physicalAddress && physicalAddress.value.trim()) params.set('street', physicalAddress.value.trim());
+    if (areaName && areaName.value.trim()) params.set('city', areaName.value.trim());
+    if (localMunicipality && localMunicipality.value.trim()) params.set('county', localMunicipality.value.trim());
+    if (district && district.value.trim()) params.set('state_district', district.value.trim());
+    if (postCode && postCode.value.trim()) params.set('postalcode', postCode.value.trim());
+    params.set('q', query);
+    var url = 'https://nominatim.openstreetmap.org/search?' + params.toString();
+
     fetch(url, { headers: { 'Accept-Language': 'en' } })
       .then(function (res) { return res.json(); })
       .then(function (list) {
@@ -421,28 +516,22 @@
           setAddressMapStatus('Address not found. Try adding street/area details.', true);
           return;
         }
-        var hit = list[0];
-        var lat = parseFloat(hit.lat);
-        var lon = parseFloat(hit.lon);
-        if (isNaN(lat) || isNaN(lon)) {
-          setAddressMapStatus('Coordinates could not be resolved for this address.', true);
+        if (list.length === 1) {
+          var hit = list[0];
+          var lat = parseFloat(hit.lat);
+          var lon = parseFloat(hit.lon);
+          if (isNaN(lat) || isNaN(lon)) {
+            setAddressMapStatus('Coordinates could not be resolved for this address.', true);
+            return;
+          }
+          applyResolvedLocation(lat, lon, hit.display_name || 'Selected address');
+          if (hit.address) populateAddressFieldsFromNominatim(hit.address);
+          setAddressMapStatus('Address found. GPS and related fields were auto-filled.');
           return;
         }
 
-        var gpsLat = document.getElementById('gpsLatitude');
-        var gpsLon = document.getElementById('gpsLongitude');
-        if (gpsLat) gpsLat.value = lat.toFixed(6);
-        if (gpsLon) gpsLon.value = lon.toFixed(6);
-
-        if (addressMarker) {
-          addressMarker.setLatLng([lat, lon]);
-        } else {
-          addressMarker = window.L.marker([lat, lon]).addTo(addressMap);
-        }
-        addressMarker.bindPopup(hit.display_name || 'Selected address').openPopup();
-        addressMap.setView([lat, lon], 15);
-        setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
-        setAddressMapStatus('Address found. GPS latitude/longitude fields were auto-filled.');
+        renderAddressCandidates(list);
+        setAddressMapStatus('Multiple matches found. Please select the correct address.');
       })
       .catch(function () {
         setAddressMapStatus('Could not look up the address right now. Please try again.', true);
@@ -520,6 +609,10 @@
       .then(function (payload) {
         if (payload && payload.address) {
           populateAddressFieldsFromNominatim(payload.address);
+          var physicalAddressEl = document.getElementById('physicalAddress');
+          if (physicalAddressEl && payload.display_name && !physicalAddressEl.value.trim()) {
+            physicalAddressEl.value = payload.display_name;
+          }
         }
       })
       .catch(function () {
@@ -547,15 +640,8 @@
       var gpsLon = document.getElementById('gpsLongitude');
       if (gpsLat) gpsLat.value = lat.toFixed(6);
       if (gpsLon) gpsLon.value = lon.toFixed(6);
-
-      if (addressMarker) {
-        addressMarker.setLatLng([lat, lon]);
-      } else {
-        addressMarker = window.L.marker([lat, lon]).addTo(addressMap);
-      }
-      addressMarker.bindPopup('Current location').openPopup();
-      addressMap.setView([lat, lon], 16);
-      setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
+      clearAddressCandidates();
+      applyResolvedLocation(lat, lon, 'Current location');
       reverseGeocodeAndPopulate(lat, lon).finally(function () {
         setAddressMapStatus('Current location captured. GPS and address fields were auto-filled (accuracy approx. ±' + Math.round(accuracyM || 0) + 'm).');
       });
