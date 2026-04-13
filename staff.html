@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#2d5a27">
-  <title>Staff Portal — Applications — Mpumalanga AgriSupport</title>
+  <title>Staff Portal - Mpumalanga AgriSupport</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,16 +13,202 @@
   <link rel="stylesheet" href="track.css">
   <link rel="stylesheet" href="account.css">
   <link rel="stylesheet" href="staff.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
   <div class="page-wrapper">
-
-    <!-- ===== NAVIGATION ===== -->
     <nav class="site-nav" role="navigation" aria-label="Main navigation">
       <div class="site-nav__inner">
-        ';
+        <a href="index.html" class="site-nav__brand">
+          <img src="images/mpumalanga.webp" alt="" class="site-nav__logo" aria-hidden="true" />
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Decision Support System</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
+          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
+          <div class="nav-item">
+            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
+            <div class="nav-dropdown" role="menu">
+              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
+              <a href="Application/mesp-2025-26.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Masibuyele 2025/26</span></span></a>
+              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
+            </div>
+          </div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="staff-login.html" class="nav-link">Staff Login</a>
+        </div>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
+      </div>
+      <div class="site-nav__mobile" id="mobileNav">
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link">Home</a><a href="support.html" class="mobile-nav__link">Support</a></div>
+        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link">Crop Grant</a><a href="Application/mesp-2025-26.html" class="mobile-nav__link">Masibuyele 2025/26</a><a href="Application/environmental.html" class="mobile-nav__link">Environmental Grant</a><a href="track.html" class="mobile-nav__link">Track Application</a></div>
+      </div>
+      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
+    </nav>
+
+    <main class="main-content account-page">
+      <div class="container">
+        <section class="card" style="margin-bottom: 1rem;">
+          <div class="card__body">
+            <div class="account-header">
+              <div>
+                <h1 style="margin:0;">Staff Portal</h1>
+                <p style="margin:.35rem 0 0;">Review applications, inspect captured details, and map applicant farm locations.</p>
+              </div>
+              <div class="account-actions">
+                <button id="btnRefreshData" class="btn-start-application" type="button">Refresh Data</button>
+                <button id="btnStaffLogout" class="btn-outline" type="button">Logout</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-bottom: 1rem;">
+          <div class="card__body">
+            <h2 style="margin:0 0 .75rem;">Applicant Farm Map</h2>
+            <p class="field-note" style="margin:0 0 .6rem;">Each pin represents an applicant farm location. Click a pin to inspect applicant details and open the full application.</p>
+            <div id="staffMapMeta" class="field-note" style="margin-bottom:.65rem;"></div>
+            <div id="staffMap" class="staff-map" aria-label="Applicant farm map"></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__body">
+            <h2 style="margin:0 0 .75rem;">All Applications</h2>
+            <div id="staffList" class="staff-groups" hidden></div>
+            <div id="staffEmpty" class="staff-empty" hidden>
+              <p>No applications available yet.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card staff-issues">
+          <div class="card__body">
+            <h2 style="margin:0 0 .75rem;">Reported Issues</h2>
+            <div id="staffIssuesList" class="staff-issue-grid" hidden></div>
+            <div id="staffIssuesEmpty" class="staff-empty" hidden>
+              <p>No reported issues available yet.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="detailModal" class="staff-modal-overlay" hidden>
+    <div class="staff-modal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+      <div class="staff-modal-header">
+        <h3 id="detailModalTitle">Application details</h3>
+        <button type="button" class="staff-modal-close" id="detailModalClose">Close</button>
+      </div>
+      <div class="staff-modal-body" id="detailModalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/staff-auth.js"></script>
+  <script src="js/applications.js"></script>
+  <script src="js/security.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+    (function () {
+      'use strict';
+      var staff = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
+      if (!staff) {
+        window.location.href = 'staff-login.html';
+        return;
+      }
+
+      var allItems = [];
+      var mapInstance = null;
+      var markerLayer = null;
+
+      function esc(v) {
+        if (window.FarmSecurity && typeof FarmSecurity.escapeHtml === 'function') return FarmSecurity.escapeHtml(v);
+        if (v == null) return '';
+        return String(v).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
         });
-        html += '</div>';
+      }
+
+      function formatDate(iso) {
+        if (!iso) return '—';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return '—';
+        return d.toLocaleString('en-ZA');
+      }
+
+      function formatLabel(key) {
+        return String(key || '').replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').replace(/\s+/g, ' ').trim().replace(/^./, function (c) { return c.toUpperCase(); });
+      }
+
+      function getGrantType(app) {
+        var t = (app && app.type) || '';
+        if (t === 'mesp_2025_26') return { key: 'mesp_2025_26', label: 'Masibuyele 2025/26 Applications' };
+        if (t === 'livestock') return { key: 'livestock', label: 'Livestock Grant Applications' };
+        if (t === 'crop') return { key: 'crop', label: 'Crop Grant Applications' };
+        if (t === 'environmental') return { key: 'environmental', label: 'Environmental Grant Applications' };
+        return { key: 'other', label: 'Other Applications' };
+      }
+
+      function statusClass(status) {
+        var v = String(status || '').toLowerCase();
+        if (v === 'approved') return 'staff-status-approved';
+        if (v === 'rejected' || v === 'denied') return 'staff-status-rejected';
+        if (v === 'additional documentation required') return 'staff-status-docs-required';
+        if (v.indexOf('review') !== -1 || v.indexOf('assessment') !== -1 || v.indexOf('approval') !== -1 || v.indexOf('induction') !== -1 || v.indexOf('procurement') !== -1 || v.indexOf('inspection') !== -1 || v.indexOf('monitoring') !== -1) return 'staff-status-under-review';
+        return 'staff-status-submitted';
+      }
+
+      function nextProcedureStage(current) {
+        var stages = [
+          'Submitted',
+          'Profiling and Shortlisting',
+          'Farm Assessment',
+          'HOD Approval',
+          'Induction',
+          'Procurement',
+          'Pre and Post Delivery Inspection',
+          'Monitoring Evaluation and Advisory',
+          'Approved'
+        ];
+        var idx = stages.indexOf(current || 'Submitted');
+        if (idx < 0) return stages[1];
+        if (idx >= stages.length - 1) return null;
+        return stages[idx + 1];
+      }
+
+      function collectStageEvidence(nextStage) {
+        var note = prompt('Provide evidence / note for stage: ' + nextStage);
+        if (note === null) return null;
+        note = note.trim();
+        if (!note) {
+          alert('Evidence note is required to advance stage.');
+          return null;
+        }
+        return { evidenceNote: note };
+      }
+
+      function renderValue(value) {
+        if (value === null || value === undefined || value === '') return '—';
+        if (Array.isArray(value)) return value.map(function (v) { return esc(v); }).join(', ');
+        if (typeof value === 'object') return '<pre class="staff-json">' + esc(JSON.stringify(value, null, 2)) + '</pre>';
+        return esc(value);
+      }
+
+      function renderDetails(details) {
+        var keys = Object.keys(details || {}).sort();
+        if (!keys.length) return '<p>—</p>';
+        var html = '<dl class="staff-detail-dl">';
+        keys.forEach(function (key) {
+          html += '<dt>' + esc(formatLabel(key)) + '</dt><dd>' + renderValue(details[key]) + '</dd>';
+        });
+        html += '</dl>';
         return html;
       }
 
@@ -30,104 +216,35 @@
         var body = document.getElementById('detailModalBody');
         var summary = app.summary || {};
         var details = app.details || {};
-        var docs = extractDocuments(app);
-        var html = '<p><strong>Reference:</strong> ' + esc(app.id) + '</p>';
+        var html = '';
+        html += '<p><strong>Reference:</strong> ' + esc(app.id) + '</p>';
         html += '<p><strong>Applicant ID:</strong> ' + esc(userId) + '</p>';
         html += '<p><strong>Submitted:</strong> ' + esc(formatDate(app.submittedAt)) + '</p>';
-        html += '<p><strong>Status:</strong> ' + esc(app.status) + '</p>';
-        if (app.statusMessage) {
-          html += '<div class="staff-status-message"><strong>Reviewer note:</strong> ' + esc(app.statusMessage) + '</div>';
-        }
-        if (app.stageEvidenceLatest) {
-          html += '<div class="staff-status-message"><strong>Latest stage evidence:</strong> ' + esc(app.stageEvidenceLatest) + '</div>';
-        }
-        html += '<p><strong>Commodity:</strong> ' + esc(summary.commodity) + ' &nbsp; <strong>Category:</strong> ' + esc(summary.farmerCategory) + '</p>';
-        html += '<p><strong>Applicant / Project:</strong> ' + esc(summary.registeredName) + '</p>';
-        html += '<p><strong>Farm:</strong> ' + esc(summary.farmName) + '</p>';
+        html += '<p><strong>Status:</strong> <span class="staff-status ' + statusClass(app.status) + '">' + esc(app.status || 'Submitted') + '</span></p>';
+        html += '<p><strong>Commodity:</strong> ' + esc(summary.commodity || '—') + ' &nbsp; <strong>Category:</strong> ' + esc(summary.farmerCategory || '—') + '</p>';
+        html += '<p><strong>Applicant / Project:</strong> ' + esc(summary.registeredName || '—') + '</p>';
+        html += '<p><strong>Farm:</strong> ' + esc(summary.farmName || '—') + '</p>';
+        if (app.statusMessage) html += '<div class="staff-status-message"><strong>Reviewer note:</strong> ' + esc(app.statusMessage) + '</div>';
+        if (app.stageEvidenceLatest) html += '<div class="staff-status-message"><strong>Latest stage evidence:</strong> ' + esc(app.stageEvidenceLatest) + '</div>';
+
         if (Array.isArray(app.stageHistory) && app.stageHistory.length) {
-          html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Stage history</h4><ul>';
+          html += '<h4 style="margin-top:1.1rem;">Stage history</h4><ul>';
           app.stageHistory.forEach(function (entry) {
-            var evidenceHtml = '';
-            if (entry.evidence && typeof entry.evidence === 'object') {
-              var parts = [];
-              Object.keys(entry.evidence).forEach(function (k) {
-                parts.push(esc(formatLabel(k)) + ': ' + esc(entry.evidence[k]));
-              });
-              evidenceHtml = parts.join(' | ');
-            }
-            html += '<li><strong>' + esc(entry.to || '—') + '</strong> from ' + esc(entry.from || '—') + ' on ' + esc(formatDate(entry.updatedAt)) + ' by ' + esc(entry.updatedBy || 'Staff') + '<br><span>' + (evidenceHtml || esc(entry.note || '')) + '</span></li>';
+            html += '<li><strong>' + esc(entry.to || '—') + '</strong> from ' + esc(entry.from || '—') + ' on ' + esc(formatDate(entry.updatedAt)) + ' by ' + esc(entry.updatedBy || 'Staff');
+            if (entry.note) html += '<br><span>' + esc(entry.note) + '</span>';
+            html += '</li>';
           });
           html += '</ul>';
         }
-        html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Supporting documents</h4>';
-        html += renderDocumentButtons(docs);
-        html += '<h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">All form details</h4>';
+
+        html += '<h4 style="margin-top:1.1rem;">All captured application details</h4>';
         html += renderDetails(details);
         body.innerHTML = html;
+        document.getElementById('detailModalTitle').textContent = 'Application ' + esc(app.id || '');
         document.getElementById('detailModal').hidden = false;
-        document.getElementById('detailModalTitle').textContent = 'Application ' + (app.id || '');
       }
 
-      function setStatus(userId, appId, status) {
-        if (!window.FarmApplications) return;
-        FarmApplications.updateApplicationStatus(userId, appId, status).then(function () {
-          renderList();
-        });
-      }
-
-      function advanceProcedureStage(item) {
-        if (!item || !item.application || !window.FarmApplications) return;
-        var app = item.application;
-        var current = app.status || 'Submitted';
-        if (current === 'Rejected' || current === 'Denied') {
-          alert('Rejected applications cannot advance to the next stage.');
-          return;
-        }
-        if (current === 'Additional Documentation Required') {
-          alert('Please resolve outstanding requested documentation before advancing.');
-          return;
-        }
-        var next = nextProcedureStage(current);
-        if (!next) {
-          alert('This application is already at the final stage in the procedure flow.');
-          return;
-        }
-        var evidenceMap = collectStageEvidence(next);
-        if (!evidenceMap) return;
-        var evidenceParts = [];
-        Object.keys(evidenceMap).forEach(function (k) {
-          evidenceParts.push(formatLabel(k) + ': ' + evidenceMap[k]);
-        });
-        var evidence = evidenceParts.join(' | ');
-        var history = Array.isArray(app.stageHistory) ? app.stageHistory.slice() : [];
-        history.push({
-          from: current,
-          to: next,
-          note: evidence,
-          evidence: evidenceMap,
-          updatedBy: (staff.name || staff.username || 'Staff'),
-          updatedAt: new Date().toISOString()
-        });
-        FarmApplications.updateApplicationStatus(item.userId, app.id, next, {
-          stageHistory: history,
-          stageEvidenceLatest: evidence,
-          stageEvidenceMapLatest: evidenceMap,
-          stageUpdatedBy: (staff.name || staff.username || 'Staff')
-        }).then(function () { renderList(); });
-      }
-
-      function formatValueForPdf(value) {
-        if (value === true) return 'Yes';
-        if (value === false) return 'No';
-        if (value === null || value === undefined || value === '') return '—';
-        if (Array.isArray(value)) return value.join(', ');
-        if (typeof value === 'object') {
-          try { return JSON.stringify(value); } catch (e) { return String(value); }
-        }
-        return String(value);
-      }
-
-      function buildPdfRows(app, userId) {
+      function buildPdfRows(userId, app) {
         var rows = [
           ['Reference', app.id || '—'],
           ['Applicant ID', userId || '—'],
@@ -135,203 +252,158 @@
           ['Status', app.status || 'Submitted'],
           ['Application Type', app.type || '—']
         ];
-
         var summary = app.summary || {};
-        Object.keys(summary).sort().forEach(function (key) {
-          rows.push(['Summary: ' + formatLabel(key), formatValueForPdf(summary[key])]);
-        });
-
+        Object.keys(summary).sort().forEach(function (k) { rows.push(['Summary: ' + formatLabel(k), String(summary[k] || '—')]); });
         var details = app.details || {};
-        Object.keys(details).sort().forEach(function (key) {
-          if (details[key] === '' || details[key] == null) return;
-          rows.push(['Detail: ' + formatLabel(key), formatValueForPdf(details[key])]);
-        });
-
+        Object.keys(details).sort().forEach(function (k) { rows.push(['Detail: ' + formatLabel(k), typeof details[k] === 'object' ? JSON.stringify(details[k]) : String(details[k] || '—')]); });
         return rows;
       }
 
       function downloadApplicationPdf(userId, app) {
-        if (!window.jspdf || !window.jspdf.jsPDF) {
-          alert('PDF generator is unavailable right now. Please refresh and try again.');
-          return;
-        }
-
+        if (!window.jspdf || !window.jspdf.jsPDF) return alert('PDF library unavailable.');
         var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
-        var pageWidth = doc.internal.pageSize.getWidth();
-        var pageHeight = doc.internal.pageSize.getHeight();
         var margin = 40;
+        var width = doc.internal.pageSize.getWidth() - margin * 2;
         var y = margin;
-        var contentWidth = pageWidth - (margin * 2);
-
-        function ensureSpace(heightNeeded) {
-          if (y + heightNeeded > pageHeight - margin) {
-            doc.addPage();
-            y = margin;
-          }
+        function ensure(h) {
+          if (y + h > doc.internal.pageSize.getHeight() - margin) { doc.addPage(); y = margin; }
         }
-
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(16);
-        doc.text('Mpumalanga AgriSupport - Application Export', margin, y);
-        y += 24;
-
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(10);
-        doc.text('Generated: ' + new Date().toLocaleString('en-ZA'), margin, y);
-        y += 18;
-
-        var rows = buildPdfRows(app, userId);
-        doc.setFontSize(11);
-        rows.forEach(function (row) {
-          var label = row[0] + ':';
-          var value = row[1];
-          var labelLines = doc.splitTextToSize(label, contentWidth);
-          var valueLines = doc.splitTextToSize(value, contentWidth);
-          var heightNeeded = ((labelLines.length + valueLines.length) * 14) + 8;
-          ensureSpace(heightNeeded);
-
-          doc.setFont('helvetica', 'bold');
-          doc.text(labelLines, margin, y);
-          y += labelLines.length * 14;
-
-          doc.setFont('helvetica', 'normal');
-          doc.text(valueLines, margin, y);
-          y += (valueLines.length * 14) + 8;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.text('Application Export', margin, y); y += 22;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.text('Generated: ' + new Date().toLocaleString('en-ZA'), margin, y); y += 16;
+        buildPdfRows(userId, app).forEach(function (row) {
+          var label = doc.splitTextToSize(row[0] + ':', width);
+          var value = doc.splitTextToSize(row[1], width);
+          ensure((label.length + value.length) * 13 + 6);
+          doc.setFont('helvetica', 'bold'); doc.text(label, margin, y); y += label.length * 13;
+          doc.setFont('helvetica', 'normal'); doc.text(value, margin, y); y += value.length * 13 + 6;
         });
-
-        var safeRef = String(app.id || 'application').replace(/[^a-zA-Z0-9_-]/g, '_');
-        doc.save('application-' + safeRef + '.pdf');
+        doc.save('application-' + String(app.id || 'export').replace(/[^a-zA-Z0-9_-]/g, '_') + '.pdf');
       }
 
-      function renderList() {
-        var promise = window.FarmApplications ? FarmApplications.getAllApplicationsForStaff() : Promise.resolve([]);
-        promise.then(function (list) {
-          list = list || [];
-          var listWrap = document.getElementById('staffList');
-          var emptyEl = document.getElementById('staffEmpty');
+      function parseCoords(app) {
+        var d = (app && app.details) || {};
+        var lat = parseFloat(d.gpsLatitude);
+        var lon = parseFloat(d.gpsLongitude);
+        if (isFinite(lat) && isFinite(lon)) return { lat: lat, lon: lon };
+        if (d.gpsCoordinates) {
+          var m = String(d.gpsCoordinates).match(/(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);
+          if (m) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
+        }
+        return null;
+      }
 
-          if (list.length === 0) {
-            listWrap.hidden = true;
-            emptyEl.hidden = false;
-            return;
-          }
-          emptyEl.hidden = true;
-          listWrap.hidden = false;
+      function initMap() {
+        if (mapInstance || !window.L) return;
+        mapInstance = window.L.map('staffMap').setView([-25.5, 30.9], 7);
+        window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mapInstance);
+        markerLayer = window.L.layerGroup().addTo(mapInstance);
+      }
 
-          var grouped = {};
-          list.forEach(function (item) {
-            var grant = getGrantType(item.application);
-            if (!grouped[grant.key]) grouped[grant.key] = { label: grant.label, items: [] };
-            grouped[grant.key].items.push(item);
-          });
+      function renderMap(items) {
+        initMap();
+        if (!markerLayer) return;
+        markerLayer.clearLayers();
 
-          var order = ['mesp_2025_26', 'livestock', 'crop', 'environmental', 'other'];
-          var sectionsHtml = '';
-          order.forEach(function (key) {
-            if (!grouped[key] || grouped[key].items.length === 0) return;
-            var group = grouped[key];
-            sectionsHtml += '<section class="staff-group-card">';
-            sectionsHtml += '<div class="staff-group-head"><h3>' + esc(group.label) + '</h3><span class="staff-group-count">' + group.items.length + '</span></div>';
-            sectionsHtml += '<div class="staff-table-wrap"><table class="staff-table"><thead><tr><th>Reference</th><th>Applicant ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-            sectionsHtml += group.items.map(function (item) {
-              var uid = item.userId;
-              var app = item.application;
-              var ref = app.id || '—';
-              var submitted = formatDate(app.submittedAt);
-              var status = app.status || 'Submitted';
-              var statusCls = statusClass(status);
-              var approved = status === 'Approved';
-              var rejected = status === 'Rejected' || status === 'Denied';
-              var docsRequested = status === 'Additional Documentation Required';
-              var docCount = extractDocuments(app).length;
-              return (
-                '<tr>' +
-                  '<td>' + esc(ref) + '</td>' +
-                  '<td>' + esc(uid) + '</td>' +
-                  '<td>' + esc(submitted) + '</td>' +
-                  '<td><span class="staff-status ' + statusCls + '">' + esc(status) + '</span></td>' +
-                  '<td class="staff-actions-cell">' +
-                    '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="view">View details</button>' +
-                    '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="download">Download PDF</button>' +
-                    '<button type="button" class="staff-btn staff-btn-doc" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="docs"' + (docCount ? '' : ' disabled') + '>Documents' + (docCount ? ' (' + docCount + ')' : '') + '</button>' +
-                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-request-docs" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="request-docs">Request Docs</button>' : '') +
-                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-view" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="advance">Advance Stage</button>' : '') +
-                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-approve" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="approve">Approve</button>' : '') +
-                    (!approved && !rejected ? '<button type="button" class="staff-btn staff-btn-deny" data-userid="' + esc(uid) + '" data-appid="' + esc(ref) + '" data-action="deny">Deny</button>' : '') +
-                  '</td>' +
-                '</tr>'
-              );
-            }).join('');
-            sectionsHtml += '</tbody></table></div></section>';
-          });
-
-          listWrap.innerHTML = sectionsHtml;
-
-          listWrap.querySelectorAll('[data-action="view"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              var uid = btn.getAttribute('data-userid');
-              var appId = btn.getAttribute('data-appid');
-              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-              if (item) openDetail(uid, item.application);
-            });
-          });
-          listWrap.querySelectorAll('[data-action="download"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              var uid = btn.getAttribute('data-userid');
-              var appId = btn.getAttribute('data-appid');
-              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-              if (item) downloadApplicationPdf(uid, item.application);
-            });
-          });
-          listWrap.querySelectorAll('[data-action="docs"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              var uid = btn.getAttribute('data-userid');
-              var appId = btn.getAttribute('data-appid');
-              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-              if (!item) return;
-              openDetail(uid, item.application);
-            });
-          });
-          listWrap.querySelectorAll('[data-action="approve"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              if (confirm('Approve this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Approved');
-            });
-          });
-          listWrap.querySelectorAll('[data-action="advance"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              var uid = btn.getAttribute('data-userid');
-              var appId = btn.getAttribute('data-appid');
-              var item = list.find(function (i) { return i.userId === uid && i.application.id === appId; });
-              if (item) advanceProcedureStage(item);
-            });
-          });
-          listWrap.querySelectorAll('[data-action="deny"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              if (confirm('Deny this application?')) setStatus(btn.getAttribute('data-userid'), btn.getAttribute('data-appid'), 'Rejected');
-            });
-          });
-          listWrap.querySelectorAll('[data-action="request-docs"]').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-              var message = prompt('Describe the additional documentation required from the applicant:');
-              if (message === null) return;
-              message = message.trim();
-              if (!message) { alert('Please provide a description of what documentation is needed.'); return; }
-              var uid = btn.getAttribute('data-userid');
-              var appId = btn.getAttribute('data-appid');
-              if (window.FarmApplications) {
-                FarmApplications.updateApplicationStatus(uid, appId, 'Additional Documentation Required', {
-                  statusMessage: message,
-                  docsRequestedBy: (staff.name || staff.username),
-                  docsRequestedAt: new Date().toISOString()
-                }).then(function () { renderList(); });
-              }
-            });
-          });
-        }).catch(function () {
-          document.getElementById('staffList').hidden = true;
-          document.getElementById('staffEmpty').hidden = false;
-          document.getElementById('staffEmpty').querySelector('p').textContent = 'Unable to load applications. Ensure you are signed in as staff.';
+        var withCoords = [];
+        (items || []).forEach(function (item) {
+          var app = item.application || {};
+          var coords = parseCoords(app);
+          if (!coords) return;
+          withCoords.push({ item: item, coords: coords });
+          var sum = app.summary || {};
+          var popup = ''
+            + '<div class="staff-map-popup">'
+            + '<p><strong>' + esc(sum.registeredName || item.userId || 'Applicant') + '</strong></p>'
+            + '<p>Farm: ' + esc(sum.farmName || '—') + '</p>'
+            + '<p>Status: ' + esc(app.status || 'Submitted') + '</p>'
+            + '<p>Ref: ' + esc(app.id || '—') + '</p>'
+            + '<button type="button" class="staff-btn staff-btn-view js-map-view" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">View full application</button>'
+            + '</div>';
+          window.L.marker([coords.lat, coords.lon]).addTo(markerLayer).bindPopup(popup);
         });
+
+        var meta = document.getElementById('staffMapMeta');
+        if (meta) meta.textContent = withCoords.length + ' of ' + (items || []).length + ' applications have map coordinates.';
+
+        if (withCoords.length) {
+          var group = window.L.featureGroup(withCoords.map(function (x) { return window.L.marker([x.coords.lat, x.coords.lon]); }));
+          mapInstance.fitBounds(group.getBounds().pad(0.2));
+        }
+      }
+
+      function setStatus(userId, appId, status, extra) {
+        if (!window.FarmApplications) return;
+        FarmApplications.updateApplicationStatus(userId, appId, status, extra || {}).then(loadAll);
+      }
+
+      function advanceStage(item) {
+        var app = item.application;
+        var next = nextProcedureStage(app.status || 'Submitted');
+        if (!next) return alert('Application already at final stage.');
+        var evidence = collectStageEvidence(next);
+        if (!evidence) return;
+        var history = Array.isArray(app.stageHistory) ? app.stageHistory.slice() : [];
+        history.push({
+          from: app.status || 'Submitted',
+          to: next,
+          note: evidence.evidenceNote,
+          updatedBy: staff.name || staff.username || 'Staff',
+          updatedAt: new Date().toISOString()
+        });
+        setStatus(item.userId, app.id, next, {
+          stageHistory: history,
+          stageEvidenceLatest: evidence.evidenceNote
+        });
+      }
+
+      function renderList(items) {
+        var listWrap = document.getElementById('staffList');
+        var emptyEl = document.getElementById('staffEmpty');
+        if (!items.length) {
+          listWrap.hidden = true;
+          emptyEl.hidden = false;
+          return;
+        }
+        emptyEl.hidden = true;
+        listWrap.hidden = false;
+
+        var grouped = {};
+        items.forEach(function (item) {
+          var g = getGrantType(item.application);
+          if (!grouped[g.key]) grouped[g.key] = { label: g.label, items: [] };
+          grouped[g.key].items.push(item);
+        });
+
+        var order = ['mesp_2025_26', 'livestock', 'crop', 'environmental', 'other'];
+        var html = '';
+        order.forEach(function (key) {
+          if (!grouped[key] || !grouped[key].items.length) return;
+          html += '<section class="staff-group-card">';
+          html += '<div class="staff-group-head"><h3>' + esc(grouped[key].label) + '</h3><span class="staff-group-count">' + grouped[key].items.length + '</span></div>';
+          html += '<div class="staff-table-wrap"><table class="staff-table"><thead><tr><th>Reference</th><th>Applicant ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+          grouped[key].items.forEach(function (item) {
+            var app = item.application || {};
+            html += '<tr>'
+              + '<td>' + esc(app.id || '—') + '</td>'
+              + '<td>' + esc(item.userId || '—') + '</td>'
+              + '<td>' + esc(formatDate(app.submittedAt)) + '</td>'
+              + '<td><span class="staff-status ' + statusClass(app.status) + '">' + esc(app.status || 'Submitted') + '</span></td>'
+              + '<td class="staff-actions-cell">'
+              + '<button class="staff-btn staff-btn-view" data-action="view" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">View Full</button>'
+              + '<button class="staff-btn staff-btn-view" data-action="pdf" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Download PDF</button>'
+              + '<button class="staff-btn staff-btn-view" data-action="advance" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Advance Stage</button>'
+              + '<button class="staff-btn staff-btn-request-docs" data-action="request-docs" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Request Docs</button>'
+              + '<button class="staff-btn staff-btn-approve" data-action="approve" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Approve</button>'
+              + '<button class="staff-btn staff-btn-deny" data-action="deny" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Reject</button>'
+              + '</td>'
+              + '</tr>';
+          });
+          html += '</tbody></table></div></section>';
+        });
+        listWrap.innerHTML = html;
       }
 
       function issueStatusClass(status) {
@@ -345,19 +417,13 @@
         try {
           var raw = localStorage.getItem('farm_issue_reports');
           var list = raw ? JSON.parse(raw) : [];
-          list.sort(function (a, b) {
-            return new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0);
-          });
+          list.sort(function (a, b) { return new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0); });
           return list;
-        } catch (e) {
-          return [];
-        }
+        } catch (e) { return []; }
       }
 
       function saveIssueReports(list) {
-        try {
-          localStorage.setItem('farm_issue_reports', JSON.stringify(list || []));
-        } catch (e) {}
+        try { localStorage.setItem('farm_issue_reports', JSON.stringify(list || [])); } catch (e) {}
       }
 
       function updateIssueStatus(issueId, status) {
@@ -366,7 +432,6 @@
           if (list[i].id === issueId) {
             list[i].status = status;
             list[i].statusUpdatedAt = new Date().toISOString();
-            break;
           }
         }
         saveIssueReports(list);
@@ -377,49 +442,46 @@
         var listWrap = document.getElementById('staffIssuesList');
         var emptyEl = document.getElementById('staffIssuesEmpty');
         var list = getIssueReports();
-
-        if (!listWrap || !emptyEl) return;
         if (!list.length) {
           listWrap.hidden = true;
           emptyEl.hidden = false;
           return;
         }
-
         emptyEl.hidden = true;
         listWrap.hidden = false;
         listWrap.innerHTML = list.map(function (issue) {
           var status = issue.status || 'Submitted';
-          return (
-            '<article class="staff-issue-card">' +
-              '<div class="staff-issue-head">' +
-                '<h3 class="staff-issue-title">' + esc(issue.issueType || 'Issue') + '</h3>' +
-                '<span class="staff-status ' + issueStatusClass(status) + '">' + esc(status) + '</span>' +
-              '</div>' +
-              '<p class="staff-issue-meta"><strong>Ref:</strong> ' + esc(issue.id || '—') + ' &nbsp; <strong>User:</strong> ' + esc(issue.userName || issue.userId || '—') + ' &nbsp; <strong>Submitted:</strong> ' + esc(formatDate(issue.submittedAt)) + '</p>' +
-              '<p class="staff-issue-desc">' + esc(issue.description || '') + '</p>' +
-              '<div class="staff-issue-actions">' +
-                '<button type="button" class="staff-btn staff-btn-view" data-issueid="' + esc(issue.id || '') + '" data-issue-action="submitted">Mark Submitted</button>' +
-                '<button type="button" class="staff-btn staff-btn-request-docs" data-issueid="' + esc(issue.id || '') + '" data-issue-action="inprogress">Mark In Progress</button>' +
-                '<button type="button" class="staff-btn staff-btn-approve" data-issueid="' + esc(issue.id || '') + '" data-issue-action="resolved">Mark Resolved</button>' +
-              '</div>' +
-            '</article>'
-          );
+          return '<article class="staff-issue-card">'
+            + '<div class="staff-issue-head"><h3 class="staff-issue-title">' + esc(issue.issueType || 'Issue') + '</h3><span class="staff-status ' + issueStatusClass(status) + '">' + esc(status) + '</span></div>'
+            + '<p class="staff-issue-meta"><strong>Ref:</strong> ' + esc(issue.id || '—') + ' &nbsp; <strong>User:</strong> ' + esc(issue.userName || issue.userId || '—') + ' &nbsp; <strong>Submitted:</strong> ' + esc(formatDate(issue.submittedAt)) + '</p>'
+            + '<p class="staff-issue-desc">' + esc(issue.description || '') + '</p>'
+            + '<div class="staff-issue-actions">'
+            + '<button type="button" class="staff-btn staff-btn-view" data-issue-action="submitted" data-issueid="' + esc(issue.id || '') + '">Mark Submitted</button>'
+            + '<button type="button" class="staff-btn staff-btn-request-docs" data-issue-action="progress" data-issueid="' + esc(issue.id || '') + '">Mark In Progress</button>'
+            + '<button type="button" class="staff-btn staff-btn-approve" data-issue-action="resolved" data-issueid="' + esc(issue.id || '') + '">Mark Resolved</button>'
+            + '</div></article>';
         }).join('');
+      }
 
-        listWrap.querySelectorAll('[data-issue-action="submitted"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            updateIssueStatus(btn.getAttribute('data-issueid'), 'Submitted');
-          });
-        });
-        listWrap.querySelectorAll('[data-issue-action="inprogress"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            updateIssueStatus(btn.getAttribute('data-issueid'), 'In Progress');
-          });
-        });
-        listWrap.querySelectorAll('[data-issue-action="resolved"]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            updateIssueStatus(btn.getAttribute('data-issueid'), 'Resolved');
-          });
+      function findItem(userId, appId) {
+        for (var i = 0; i < allItems.length; i++) {
+          if (allItems[i].userId === userId && (allItems[i].application && allItems[i].application.id === appId)) return allItems[i];
+        }
+        return null;
+      }
+
+      function loadAll() {
+        var p = window.FarmApplications ? FarmApplications.getAllApplicationsForStaff() : Promise.resolve([]);
+        p.then(function (items) {
+          allItems = items || [];
+          renderList(allItems);
+          renderMap(allItems);
+          renderIssues();
+        }).catch(function () {
+          allItems = [];
+          renderList(allItems);
+          renderMap(allItems);
+          renderIssues();
         });
       }
 
@@ -430,8 +492,62 @@
         if (e.target === document.getElementById('detailModal')) document.getElementById('detailModal').hidden = true;
       });
 
-      renderList();
-      renderIssues();
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('button');
+        if (!btn) return;
+
+        if (btn.id === 'btnRefreshData') {
+          loadAll();
+          return;
+        }
+        if (btn.id === 'btnStaffLogout') {
+          if (window.FarmStaffAuth) FarmStaffAuth.logout();
+          window.location.href = 'staff-login.html';
+          return;
+        }
+
+        var mapView = btn.closest('.js-map-view');
+        if (mapView) {
+          var mapItem = findItem(mapView.getAttribute('data-userid'), mapView.getAttribute('data-appid'));
+          if (mapItem) openDetail(mapItem.userId, mapItem.application);
+          return;
+        }
+
+        var issueAction = btn.getAttribute('data-issue-action');
+        if (issueAction) {
+          var issueId = btn.getAttribute('data-issueid');
+          if (issueAction === 'submitted') updateIssueStatus(issueId, 'Submitted');
+          if (issueAction === 'progress') updateIssueStatus(issueId, 'In Progress');
+          if (issueAction === 'resolved') updateIssueStatus(issueId, 'Resolved');
+          return;
+        }
+
+        var action = btn.getAttribute('data-action');
+        if (!action) return;
+        var userId = btn.getAttribute('data-userid');
+        var appId = btn.getAttribute('data-appid');
+        var item = findItem(userId, appId);
+        if (!item) return;
+        var app = item.application;
+        if (action === 'view') openDetail(userId, app);
+        if (action === 'pdf') downloadApplicationPdf(userId, app);
+        if (action === 'advance') advanceStage(item);
+        if (action === 'approve') setStatus(userId, appId, 'Approved');
+        if (action === 'deny') setStatus(userId, appId, 'Rejected');
+        if (action === 'request-docs') {
+          var message = prompt('Describe the additional documentation required from the applicant:');
+          if (message === null) return;
+          message = message.trim();
+          if (!message) return alert('Please provide a description.');
+          setStatus(userId, appId, 'Additional Documentation Required', {
+            statusMessage: message,
+            docsRequestedBy: (staff.name || staff.username),
+            docsRequestedAt: new Date().toISOString()
+          });
+        }
+      });
+
+      loadAll();
     })();
   </script>
 </body>

@@ -367,3 +367,25 @@
   flex-wrap: wrap;
   gap: var(--space-2);
 }
+
+.staff-map {
+  width: 100%;
+  min-height: 420px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #f7faf8;
+}
+
+.staff-map-popup p {
+  margin: 0 0 0.35rem;
+  font-size: var(--text-sm);
+}
+
+.staff-json {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
