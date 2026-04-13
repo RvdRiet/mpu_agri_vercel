@@ -364,6 +364,7 @@
 
   var addressMap = null;
   var addressMarker = null;
+  var manualAddressLookupTimer = null;
 
   function setAddressMapStatus(msg, isError) {
     var statusEl = document.getElementById('addressMapStatus');
@@ -448,6 +449,84 @@
       });
   }
 
+  function parseNominatimAddress(addr) {
+    if (!addr) return {};
+    var roadPart = [addr.house_number, addr.road].filter(function (v) { return !!v; }).join(' ');
+    var locality = addr.suburb || addr.neighbourhood || addr.village || addr.town || addr.city || addr.hamlet || '';
+    var municipality = addr.municipality || addr.city_district || addr.county || '';
+    var district = addr.state_district || addr.county || '';
+    return {
+      physicalAddress: [roadPart, locality].filter(function (v) { return !!v; }).join(', '),
+      areaName: locality,
+      localMunicipality: municipality,
+      district: district,
+      postCode: addr.postcode || ''
+    };
+  }
+
+  function setSelectValueByText(selectEl, valueText) {
+    if (!selectEl || !valueText) return false;
+    var target = String(valueText).toLowerCase().trim();
+    var matchedValue = '';
+    for (var i = 0; i < selectEl.options.length; i++) {
+      var opt = selectEl.options[i];
+      var label = String(opt.textContent || '').toLowerCase().trim();
+      var value = String(opt.value || '').toLowerCase().trim();
+      if (!value) continue;
+      if (label === target || value === target || label.indexOf(target) >= 0 || target.indexOf(label) >= 0) {
+        matchedValue = opt.value;
+        break;
+      }
+    }
+    if (matchedValue) {
+      selectEl.value = matchedValue;
+      return true;
+    }
+    return false;
+  }
+
+  function populateAddressFieldsFromNominatim(addr) {
+    var mapped = parseNominatimAddress(addr);
+    var physicalAddressEl = document.getElementById('physicalAddress');
+    var areaNameEl = document.getElementById('areaName');
+    var districtEl = document.getElementById('district');
+    var municipalityEl = document.getElementById('localMunicipality');
+    var postCodeEl = document.getElementById('physicalPostCode');
+
+    if (physicalAddressEl && mapped.physicalAddress && !physicalAddressEl.value.trim()) {
+      physicalAddressEl.value = mapped.physicalAddress;
+    }
+    if (areaNameEl && mapped.areaName && !areaNameEl.value.trim()) {
+      areaNameEl.value = mapped.areaName;
+    }
+    if (postCodeEl && mapped.postCode) {
+      postCodeEl.value = mapped.postCode;
+    }
+    if (districtEl && mapped.district) {
+      var districtMatched = setSelectValueByText(districtEl, mapped.district);
+      if (districtMatched) {
+        updateLocalMunicipalityOptions();
+      }
+    }
+    if (municipalityEl && mapped.localMunicipality) {
+      setSelectValueByText(municipalityEl, mapped.localMunicipality);
+    }
+  }
+
+  function reverseGeocodeAndPopulate(lat, lon) {
+    var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lon);
+    return fetch(url, { headers: { 'Accept-Language': 'en' } })
+      .then(function (res) { return res.json(); })
+      .then(function (payload) {
+        if (payload && payload.address) {
+          populateAddressFieldsFromNominatim(payload.address);
+        }
+      })
+      .catch(function () {
+        // Non-blocking: coordinates are already captured even if reverse lookup fails.
+      });
+  }
+
   function useCurrentLocationOnMap() {
     if (!navigator.geolocation) {
       setAddressMapStatus('Geolocation is not supported by this browser.', true);
@@ -477,7 +556,9 @@
       addressMarker.bindPopup('Current location').openPopup();
       addressMap.setView([lat, lon], 16);
       setTimeout(function () { if (addressMap) addressMap.invalidateSize(); }, 100);
-      setAddressMapStatus('Current location captured. GPS fields updated (accuracy approx. ±' + Math.round(accuracyM || 0) + 'm).');
+      reverseGeocodeAndPopulate(lat, lon).finally(function () {
+        setAddressMapStatus('Current location captured. GPS and address fields were auto-filled (accuracy approx. ±' + Math.round(accuracyM || 0) + 'm).');
+      });
     }, function () {
       setAddressMapStatus('Could not access your location. Please allow location permission and try again.', true);
     }, {
@@ -527,6 +608,27 @@
   if (useCurrentLocationBtn) {
     useCurrentLocationBtn.addEventListener('click', useCurrentLocationOnMap);
   }
+
+  function triggerManualAddressLookup() {
+    if (manualAddressLookupTimer) clearTimeout(manualAddressLookupTimer);
+    manualAddressLookupTimer = setTimeout(function () {
+      var query = buildAddressQuery();
+      if (!query || query.length < 10) return;
+      geocodeAddressToMap();
+    }, 900);
+  }
+
+  var physicalAddressEl = document.getElementById('physicalAddress');
+  var localMunicipalityEl = document.getElementById('localMunicipality');
+  var districtEl = document.getElementById('district');
+  var physicalPostCodeEl = document.getElementById('physicalPostCode');
+
+  [physicalAddressEl, localMunicipalityEl, districtEl, physicalPostCodeEl].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener('input', triggerManualAddressLookup);
+    el.addEventListener('change', triggerManualAddressLookup);
+    el.addEventListener('blur', triggerManualAddressLookup);
+  });
 
   var totalMembersInput = document.getElementById('totalMembers');
   if (totalMembersInput) {
