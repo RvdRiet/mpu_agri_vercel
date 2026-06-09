@@ -1,0 +1,37 @@
+'use strict';
+
+const { getMonthReport } = require('../lib/analytics-store');
+const { isValidMonth } = require('../lib/analytics-core');
+const { requireStaff } = require('../lib/staff-api-auth');
+const { sendJson, setCors, parseQuery } = require('../lib/http');
+
+async function handler(req, res) {
+  setCors(res, 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  }
+  if (req.method !== 'GET') {
+    return sendJson(res, 405, { error: 'Method not allowed' });
+  }
+  if (!requireStaff(req)) {
+    return sendJson(res, 401, { error: 'Unauthorized' });
+  }
+
+  try {
+    var query = parseQuery(req.url);
+    var month = query.month || new Date().toISOString().slice(0, 7);
+    if (!isValidMonth(month)) {
+      return sendJson(res, 400, { error: 'Invalid month. Use YYYY-MM.' });
+    }
+    var report = await getMonthReport(month);
+    report.generatedAt = new Date().toISOString();
+    return sendJson(res, 200, report);
+  } catch (e) {
+    console.error('analytics report error', e);
+    return sendJson(res, 500, { error: 'Failed to build report' });
+  }
+}
+
+module.exports = handler;
+module.exports.default = handler;

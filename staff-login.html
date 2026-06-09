@@ -175,14 +175,15 @@
         }
         if (hasError) return;
 
-        var result = FarmStaffAuth.login(username, password);
-        if (result && result.ok) {
-          window.location.href = 'staff.html';
-        } else {
+        FarmStaffAuth.login(username, password).then(function (result) {
+          if (result && result.ok) {
+            window.location.href = 'staff.html';
+            return;
+          }
           formError.textContent = (result && result.error) || 'Login failed.';
           usernameEl.classList.add('input-error');
           passwordEl.classList.add('input-error');
-        }
+        });
       });
     })();
   </script>

@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { handleApiRequest } = require('./api/router');
 
 const port = 3050;
 const root = __dirname;
@@ -16,10 +17,24 @@ const mime = {
   '.gif': 'image/gif',
   '.ico': 'image/x-icon',
   '.svg': 'image/svg+xml',
+  '.csv': 'text/csv',
 };
 
-const server = http.createServer((req, res) => {
-  let p = req.url.split('?')[0];
+const server = http.createServer(async (req, res) => {
+  const urlPath = (req.url || '/').split('?')[0];
+  if (urlPath.startsWith('/api/')) {
+    try {
+      await handleApiRequest(req, res);
+    } catch (err) {
+      console.error('API error', err);
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: 'Internal server error' }));
+    }
+    return;
+  }
+
+  let p = urlPath;
   if (p === '/') p = '/index.html';
   const filePath = path.join(root, p);
 
@@ -49,5 +64,6 @@ function serve(filePath, res) {
 
 server.listen(port, () => {
   console.log('Serving at http://localhost:' + port + '/');
+  console.log('Analytics API at http://localhost:' + port + '/api/analytics/');
   console.log('Press Ctrl+C to stop.');
 });

@@ -117,4 +117,24 @@
   } else {
     reveals.forEach(function (el) { el.classList.add('is-visible'); });
   }
+
+  /* Usage analytics (public pages only — not staff portal) */
+  (function () {
+    var path = (window.location && window.location.pathname) || '';
+    if (/staff(-login|-insights)?\.html/i.test(path) || /\/staff\.html/i.test(path)) return;
+    var scripts = document.getElementsByTagName('script');
+    var navSrc = '';
+    for (var i = 0; i < scripts.length; i++) {
+      if (scripts[i].src && scripts[i].src.indexOf('nav.js') !== -1) {
+        navSrc = scripts[i].src;
+        break;
+      }
+    }
+    if (!navSrc) return;
+    var base = navSrc.replace(/js\/nav\.js(\?.*)?$/i, '');
+    var tag = document.createElement('script');
+    tag.src = base + 'js/analytics.js';
+    tag.async = true;
+    document.head.appendChild(tag);
+  })();
 })();

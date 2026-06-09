@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../nav.css">
   <link rel="stylesheet" href="application.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
   <div class="page-wrapper">
@@ -51,7 +52,6 @@
             <button class="nav-link" type="button">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
             <div class="nav-dropdown" role="menu">
               <a href="crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
-              
               <a href="mesp-2025-26.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Masibuyele 2025/26</span></span></a>
               <a href="environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
               <div class="nav-dropdown__divider"></div>
@@ -77,6 +77,9 @@
     <main class="main-content app-page">
       <div class="container">
         <a href="../environmental.html" class="back-link">← Back to Environmental Enrichment programme</a>
+
+        <div class="card app-form-card">
+          <div class="card__body">
         <h2 class="app-heading">Environmental Enrichment Grant Application</h2>
 
         <nav class="app-steps" aria-label="Application steps">
@@ -89,7 +92,7 @@
           </ol>
         </nav>
 
-        <form id="applicationForm" class="app-form" novalidate>
+        <form id="applicationForm" class="app-form" novalidate data-application-type="environmental">
           <!-- Step 1: Conservation Focus -->
           <section class="app-step-panel active" id="panel-1" data-step="1">
             <h3 class="panel-title">Conservation Focus</h3>
@@ -124,9 +127,9 @@
             <div class="form-group">
               <label class="label-block">Farmer Category <span class="label-required">*</span></label>
               <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> Subsistence (up to R50,000)</label>
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Smallholder" /> Smallholder (R50,001–R1,000,000)</label>
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> Commercial (&gt;R1,000,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> <strong>Subsistence</strong></label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Small Holder" /> <strong>Small Holder</strong></label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> <strong>Commercial</strong></label>
               </div>
               <span class="field-error" id="farmerCategoryError" aria-live="polite"></span>
             </div>
@@ -144,8 +147,19 @@
               <textarea id="envGrantDetails" name="envGrantDetails" rows="3" placeholder="Previous grant details"></textarea>
             </div>
 
+            <div class="form-group">
+              <button type="button" class="btn-link" id="btnShowDefinition" aria-expanded="false">Definition of farmer category</button>
+            </div>
+            <div class="definition-block" id="definitionBlock">
+              <h4 class="definition-heading">Definition of farmer category</h4>
+              <p><strong>"Subsistence farmer"</strong> — practices agriculture mainly for household food security. These producers are not classified as indigents by their municipality and they produce mainly for household consumption. They may market limited surplus production with an annual turnover of up to R50,000 per annum.</p>
+              <p><strong>"Smallholder farmer"</strong> — produces for household consumption and markets, with an annual turnover ranging from R50,001 to R1,000,000.00 per annum aspiring to produce for markets and make profit.</p>
+              <p><strong>"Commercial producer"</strong> — a commercial operation defined as an established farming venture undertaken by an individual or business entity for the purpose of production and sale of agricultural products to make a profit. The farm income must exceed R1,000,000.00 per annum.</p>
+              <button type="button" class="btn-close-definition" id="btnCloseDefinition">Close</button>
+            </div>
+
             <div class="form-actions">
-              <button type="button" class="btn-next" data-next="2">Next</button>
+              <button type="button" class="btn-next" data-next="2"><strong>Next</strong></button>
             </div>
           </section>
 
@@ -157,12 +171,18 @@
               <label for="legalEntityType">Type of Legal Entity</label>
               <select id="legalEntityType" name="legalEntityType">
                 <option value="">-- Select --</option>
-                <option value="Individual">Individual</option>
+                <option value="Sole Proprietor">Sole Proprietor</option>
                 <option value="Cooperative">Cooperative</option>
-                <option value="Company">Company</option>
+                <option value="CPA">CPA (Communal Property Association)</option>
                 <option value="Trust">Trust</option>
+                <option value="PTY Ltd">PTY Ltd (Private Company)</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+
+            <div class="form-group legal-entity-other-wrap" id="legalEntityOtherWrap" style="display: none;">
+              <label for="legalEntityOther">Legal Entity Other (please specify)</label>
+              <input type="text" id="legalEntityOther" name="legalEntityOther" placeholder="Specify legal entity type" />
             </div>
 
             <div class="form-group">
@@ -183,8 +203,7 @@
 
             <div class="form-group">
               <label for="representativeId">Representative SA ID (13 digits)</label>
-              <input type="text" id="representativeId" name="representativeId" maxlength="13" pattern="[0-9]{13}" placeholder="13 digits" />
-              <span class="field-error" id="representativeIdError" aria-live="polite"></span>
+              <input type="text" id="representativeId" name="representativeId" maxlength="13" pattern="\d{13}" placeholder="13 digits" />
             </div>
 
             <div class="form-row">
@@ -199,18 +218,95 @@
             </div>
 
             <div class="form-group">
-              <label for="physicalAddress">Physical address</label>
-              <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+              <label for="fax">Fax</label>
+              <input type="text" id="fax" name="fax" />
             </div>
 
             <div class="form-group">
-              <label for="postalCode">Postal code</label>
-              <input type="text" id="postalCode" name="postalCode" placeholder="Postal code" />
+              <label class="label-block">Applying as a group or individual</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="applicationType" value="Group" /> Group</label>
+                <label class="radio-label"><input type="radio" name="applicationType" value="Individual" /> Individual</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="physicalAddress">Physical / business address</label>
+              <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group address-map-wrap">
+              <div class="address-map-actions">
+                <button type="button" class="btn-link" id="btnLocateAddress">Find address on map</button>
+                <button type="button" class="btn-link btn-current-location" id="btnUseCurrentLocation">Use current location</button>
+              </div>
+              <p class="form-hint">Uses OpenStreetMap geocoding (no Google API). If found, coordinates are auto-filled in the GPS fields.</p>
+              <p class="form-doc-note">Accuracy tip: enter street/farm name, area, municipality, district, and postcode where possible. Then use <strong>Use current location</strong> while standing on-site to improve coordinate accuracy.</p>
+              <div id="addressMapStatus" class="field-note"></div>
+              <div id="addressCandidates" class="address-candidates" aria-live="polite"></div>
+              <div id="addressMap" class="address-map" aria-label="Address map preview"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="physicalPostCode">Post Code</label>
+                <input type="text" id="physicalPostCode" name="physicalPostCode" placeholder="Physical address post code" />
+              </div>
+              <div class="form-group">
+                <label for="postalPostCode">Post Code</label>
+                <input type="text" id="postalPostCode" name="postalPostCode" placeholder="Postal address post code" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="postalAddress">Postal Address</label>
+              <textarea id="postalAddress" name="postalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email address (optional)</label>
+              <input type="email" id="contactEmail" name="contactEmail" placeholder="name@example.com" />
+              <p class="form-hint">Optional. Provide an email if you want to receive updates electronically.</p>
+            </div>
+            <div class="form-group">
+              <label class="label-block">Preferred method of communication (optional)</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactPhone" value="Phone call" /> Phone call</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactSms" value="SMS" /> SMS</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactEmail" value="Email" /> Email</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactWhatsapp" value="WhatsApp" /> WhatsApp</label>
+              </div>
             </div>
 
             <div class="form-group">
               <label for="totalMembers">Total project members</label>
               <input type="number" id="totalMembers" name="totalMembers" min="0" />
+            </div>
+
+            <div class="form-row form-row-four">
+              <div class="form-group">
+                <label for="numberOfMen">Men</label>
+                <input type="number" id="numberOfMen" name="numberOfMen" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberOfWomen">Women</label>
+                <input type="number" id="numberOfWomen" name="numberOfWomen" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberOfYouths">Youth</label>
+                <input type="number" id="numberOfYouths" name="numberOfYouths" min="0" />
+              </div>
+              <div class="form-group">
+                <label for="numberWithDisability">People with disability</label>
+                <input type="number" id="numberWithDisability" name="numberWithDisability" min="0" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="projectDescription">Project Description</label>
+              <textarea id="projectDescription" name="projectDescription" rows="4" placeholder="Brief description of your conservation project"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="businessPlan">Business plan / Business profile summary</label>
+              <textarea id="businessPlan" name="businessPlan" rows="4" placeholder="Summary or attach separately"></textarea>
             </div>
 
             <div class="form-actions">
@@ -242,17 +338,30 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="district">District</label>
-                <input type="text" id="district" name="district" />
+                <select id="district" name="district">
+                  <option value="">-- Select district --</option>
+                  <option value="Ehlanzeni District Municipality">Ehlanzeni District Municipality</option>
+                  <option value="Gert Sibande District Municipality">Gert Sibande District Municipality</option>
+                  <option value="Nkangala District Municipality">Nkangala District Municipality</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="localMunicipality">Local municipality</label>
-                <input type="text" id="localMunicipality" name="localMunicipality" />
+                <select id="localMunicipality" name="localMunicipality">
+                  <option value="">-- Select local municipality --</option>
+                </select>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="wardNumber">Ward number</label>
-              <input type="text" id="wardNumber" name="wardNumber" />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="areaName">Area Name</label>
+                <input type="text" id="areaName" name="areaName" />
+              </div>
+              <div class="form-group">
+                <label for="wardNumber">Ward number</label>
+                <input type="text" id="wardNumber" name="wardNumber" />
+              </div>
             </div>
 
             <div class="form-row">
@@ -272,10 +381,16 @@
                 <option value="">-- Select --</option>
                 <option value="Own">Own</option>
                 <option value="Lease">Lease</option>
-                <option value="PTO">PTO</option>
-                <option value="RTO">RTO</option>
+                <option value="Communal">Communal</option>
+                <option value="PTO">PTO (Permission to Occupy)</option>
+                <option value="RTO">RTO (Right to Occupy)</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+
+            <div class="form-group lease-period-wrap" id="leasePeriodWrap" style="display: none;">
+              <label for="leasePeriodYears">If Lease Agreement, indicate period of lease (years)</label>
+              <input type="number" id="leasePeriodYears" name="leasePeriodYears" min="0" placeholder="e.g. 5" />
             </div>
 
             <div class="form-group">
@@ -364,39 +479,142 @@
             <p class="app-step-intro">Upload your documents and review your application before submitting.</p>
 
             <div class="form-group">
-              <label>Certified ID copies</label>
-              <p class="form-doc-note">ID copies are required to verify applicant identity and maintain fair programme access.</p>
-              <input type="file" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+              <label for="idCopies">Certified ID copies of all beneficiaries</label>
+              <p class="form-doc-note">Upload one certified ID copy per listed project member. The number of required uploads is based on <strong>Total project members</strong> in Applicant Details.</p>
+              <div id="idCopiesDynamicWrap"></div>
+              <span class="field-error" id="idCopiesError" aria-live="polite"></span>
             </div>
 
             <div class="form-group">
-              <label>Proof of land</label>
+              <label for="landProof">Proof of land</label>
               <p class="form-doc-note">Proof of land confirms legal access to the site where conservation actions will be implemented.</p>
-              <input type="file" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
+              <input type="file" id="landProof" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
             <div class="form-group">
-              <label>Conservation plan / EIA</label>
-              <p class="form-doc-note">This document helps reviewers evaluate environmental impact, compliance, and project feasibility.</p>
-              <input type="file" name="conservationPlan" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+              <label for="conservationPlan">Conservation plan / EIA</label>
+              <p class="form-doc-note">This document helps reviewers evaluate environmental impact, compliance, and project feasibility. Include your conservation management plan or EIA authorisation where applicable.</p>
+              <input type="file" id="conservationPlan" name="conservationPlan" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
             </div>
 
             <div class="form-group doc-optional">
-              <label>Farm map/sketch (optional)</label>
+              <label for="farmMap">Farm map/sketch (optional)</label>
               <p class="form-doc-note">A map makes it easier to assess location, access routes, and the proposed intervention area.</p>
-              <input type="file" name="farmMap" accept=".pdf,.jpg,.jpeg,.png" />
+              <input type="file" id="farmMap" name="farmMap" accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
             <div class="form-group doc-optional">
-              <label>Quotes for materials (optional)</label>
+              <label for="quotesMaterials">Quotes for materials (optional)</label>
               <p class="form-doc-note">Quotes support budget realism and help estimate the level of assistance required.</p>
-              <input type="file" name="quotesMaterials" accept=".pdf,.jpg,.jpeg,.png" />
+              <input type="file" id="quotesMaterials" name="quotesMaterials" accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
             <div class="form-group doc-optional">
-              <label>Proof of farming activity (optional)</label>
+              <label for="farmingProof">Proof of farming activity (optional)</label>
               <p class="form-doc-note">This can help verify current farm operations and readiness to implement the project.</p>
-              <input type="file" name="farmingProof" accept=".pdf,.jpg,.jpeg,.png" />
+              <input type="file" id="farmingProof" name="farmingProof" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="doc-optional" id="financialDocsWrap" style="display: none;">
+              <div class="form-group">
+                <label for="incomeProof">Proof of income (registered business entities)</label>
+                <p class="form-doc-note">Required for registered entities to verify financial activity and farmer category.</p>
+                <input type="file" id="incomeProof" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+              <div class="form-group">
+                <label for="bankStatementProof">Bank statement (registered business entities)</label>
+                <p class="form-doc-note">Provide a recent bank statement as supporting financial evidence for registered entities.</p>
+                <input type="file" id="bankStatementProof" name="bankStatementProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+            </div>
+
+            <div class="checklist-block">
+              <h4 class="checklist-heading">Checklist for Application Documents</h4>
+              <p class="form-hint">Tick each document you have attached. Required documents depend on your farmer category and project scope.</p>
+              <table class="checklist-table" id="checklistTable">
+                <thead>
+                  <tr>
+                    <th>Item / Document</th>
+                    <th>Subsistence</th>
+                    <th>Smallholder</th>
+                    <th>Commercial</th>
+                    <th>Attached</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fully completed application form</td>
+                    <td>Yes</td><td>Yes</td><td>Yes</td>
+                    <td><input type="checkbox" name="checkApplicationForm" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Certified ID copies of all applicants</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIdCopies" value="yes" /></td>
+                  </tr>
+                  <tr data-doc-for="Cooperative,CPA,Trust,PTY Ltd,Other">
+                    <td>Legal entity document (CK, Coop certificate, etc.)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLegalEntityDoc" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Proof of land access (title deed / lease / PTO / RTO)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLandProof" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Conservation plan / environmental management plan</td>
+                    <td>Profile</td><td>Plan</td><td>Plan</td>
+                    <td><input type="checkbox" name="checkConservationPlan" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>EIA (authorisation, exemption, or screening report if applicable)</td>
+                    <td>If req.</td><td>If req.</td><td>If req.</td>
+                    <td><input type="checkbox" name="checkEia" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Proof of farming income</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIncomeProof" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Farm map / sketch of intervention area</td>
+                    <td>Optional</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkFarmMap" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Quotes for materials / infrastructure</td>
+                    <td>Optional</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkQuotes" value="yes" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="declaration-block">
+              <h4 class="declaration-heading">Declaration</h4>
+              <p>I hereby declare that the above-mentioned information is true and correct and acknowledge that any misleading information provided will lead to disqualification.</p>
+              <div class="form-row form-row-three">
+                <div class="form-group">
+                  <label for="declarationApplicant">Signature of applicant / representative</label>
+                  <input type="text" id="declarationApplicant" name="declarationApplicant" placeholder="Type full name as signature" />
+                </div>
+                <div class="form-group">
+                  <label for="declarationDate">Date</label>
+                  <input type="date" id="declarationDate" name="declarationDate" />
+                </div>
+              </div>
+              <p class="form-hint">The following signatures will be collected by DARDLEA staff during review:</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="declarationAdvisor">Signature of Agricultural Advisor</label>
+                  <input type="text" id="declarationAdvisor" name="declarationAdvisor" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="declarationManager">Signature of Agricultural Municipal Manager</label>
+                  <input type="text" id="declarationManager" name="declarationManager" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+              </div>
             </div>
 
             <div class="summary-box">
@@ -425,6 +643,8 @@
             </div>
           </section>
         </form>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -440,145 +660,41 @@
     </footer>
   </div>
 
-  <script src="../js/auth.js"></script>
   <script src="../js/security.js"></script>
+  <script src="../js/auth.js"></script>
   <script src="../js/applications.js"></script>
   <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="application-shared.js"></script>
+  <script src="application-environmental.js"></script>
   <script>
     (function () {
       'use strict';
-      var user = window.FarmAuth && FarmAuth.requireAuth('../login.html');
-      if (!user) return;
+      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+        window.location.href = '../login.html?return=' + encodeURIComponent('Application/environmental.html');
+        return;
+      }
 
-      var form = document.getElementById('applicationForm');
-      var panels = document.querySelectorAll('.app-step-panel');
-      var steps = document.querySelectorAll('.app-step');
-      var currentStep = 1;
-      var totalSteps = 5;
-      var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
-
-      if (window.FarmAutosave && form) FarmAutosave.init(form, 'environmental');
-
-      function showPanel(stepNum) {
-        stepNum = parseInt(stepNum, 10);
-        if (stepNum < 1 || stepNum > totalSteps) return;
-        currentStep = stepNum;
-        panels.forEach(function (panel) {
-          var n = parseInt(panel.getAttribute('data-step'), 10);
-          panel.classList.toggle('active', n === stepNum);
-        });
-        steps.forEach(function (step) {
-          var n = parseInt(step.getAttribute('data-step'), 10);
-          step.classList.remove('active', 'completed');
-          if (n === stepNum) step.classList.add('active');
-          else if (n < stepNum) step.classList.add('completed');
+      var block = document.getElementById('definitionBlock');
+      var btnClose = document.getElementById('btnCloseDefinition');
+      var btnShow = document.getElementById('btnShowDefinition');
+      if (block && btnShow) {
+        block.style.display = 'block';
+        btnShow.setAttribute('aria-expanded', 'true');
+      }
+      if (block && btnClose) {
+        btnClose.addEventListener('click', function () {
+          block.style.display = 'none';
+          if (btnShow) btnShow.setAttribute('aria-expanded', 'false');
         });
       }
-
-      function clearStepErrors(stepNum) {
-        var panel = document.getElementById('panel-' + stepNum);
-        if (!panel) return;
-        panel.querySelectorAll('.field-error').forEach(function (el) { el.textContent = ''; });
-        panel.querySelectorAll('.input-error').forEach(function (el) { el.classList.remove('input-error'); });
-      }
-
-      function setFieldError(fieldId, errorId, message) {
-        var field = fieldId ? document.getElementById(fieldId) : null;
-        var errEl = errorId ? document.getElementById(errorId) : null;
-        if (field) field.classList.toggle('input-error', !!message);
-        if (errEl) errEl.textContent = message || '';
-      }
-
-      function validateStep1() {
-        clearStepErrors(1);
-        var ok = true;
-        var primary = document.getElementById('primaryFocus');
-        if (!primary || !primary.value) {
-          setFieldError('primaryFocus', 'primaryFocusError', 'Please select a primary focus area.');
-          ok = false;
-        } else setFieldError('primaryFocus', 'primaryFocusError', '');
-        var category = document.querySelector('input[name="farmerCategory"]:checked');
-        if (!category) {
-          if (document.getElementById('farmerCategoryError')) document.getElementById('farmerCategoryError').textContent = 'Please select your farmer category.';
-          ok = false;
-        } else setFieldError(null, 'farmerCategoryError', '');
-        return ok;
-      }
-
-      function validateStep2() {
-        clearStepErrors(2);
-        var reg = document.getElementById('registeredName');
-        var val = reg ? reg.value.trim() : '';
-        if (!val) {
-          setFieldError('registeredName', 'registeredNameError', 'Registered name / applicant name is required.');
-          return false;
-        }
-        var repId = document.getElementById('representativeId');
-        if (repId && repId.value.trim()) {
-          var idVal = repId.value.replace(/\s/g, '');
-          if (!/^\d{13}$/.test(idVal)) {
-            setFieldError('representativeId', 'representativeIdError', 'SA ID must be 13 digits.');
-            return false;
-          }
-        }
-        setFieldError('registeredName', 'registeredNameError', '');
-        setFieldError('representativeId', 'representativeIdError', '');
-        return true;
-      }
-
-      function validateStep4() {
-        clearStepErrors(4);
-        var challenge = document.getElementById('environmentalChallenge');
-        var val = challenge ? challenge.value.trim() : '';
-        if (!val) {
-          setFieldError('environmentalChallenge', 'environmentalChallengeError', 'Please describe the environmental challenge.');
-          return false;
-        }
-        setFieldError('environmentalChallenge', 'environmentalChallengeError', '');
-        return true;
-      }
-
-      function validateStep(stepNum) {
-        if (stepNum === 1) return validateStep1();
-        if (stepNum === 2) return validateStep2();
-        if (stepNum === 4) return validateStep4();
-        return true;
-      }
-
-      function validatePopiaConsent() {
-        var consent = document.getElementById('popiaConsent');
-        var errEl = document.getElementById('popiaConsentError');
-        if (!consent || !consent.checked) {
-          if (errEl) errEl.textContent = 'You must read and consent to the POPIA compliance before we can accept your application.';
-          if (consent) consent.closest('.form-group') && consent.closest('.form-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return false;
-        }
-        if (errEl) errEl.textContent = '';
-        return true;
-      }
-
-      function updateSummary() {
-        var safe = function (v) { return (v != null && String(v).trim ? String(v).trim() : '') || '—'; };
-        var primary = document.getElementById('primaryFocus');
-        var category = document.querySelector('input[name="farmerCategory"]:checked');
-        var reg = document.getElementById('registeredName');
-        var farm = document.getElementById('farmName');
-        var budget = document.getElementById('estimatedBudget');
-        var budgetVal = budget && budget.value ? Number(budget.value).toLocaleString('en-ZA') : '—';
-
-        var summaryPrimaryFocus = document.getElementById('summaryPrimaryFocus');
-        var summaryCategory = document.getElementById('summaryCategory');
-        var summaryApplicant = document.getElementById('summaryApplicant');
-        var summaryFarm = document.getElementById('summaryFarm');
-        var summaryBudget = document.getElementById('summaryBudget');
-
-        if (summaryPrimaryFocus) summaryPrimaryFocus.textContent = primary && primary.value ? primary.value : '—';
-        if (summaryCategory) summaryCategory.textContent = category ? category.value : '—';
-        if (summaryApplicant) summaryApplicant.textContent = reg ? safe(reg.value) : '—';
-        if (summaryFarm) summaryFarm.textContent = farm ? safe(farm.value) : '—';
-        if (summaryBudget) summaryBudget.textContent = budgetVal;
+      if (block && btnShow) {
+        btnShow.addEventListener('click', function () {
+          block.style.display = 'block';
+          btnShow.setAttribute('aria-expanded', 'true');
+        });
       }
 
       var envGrantWrap = document.getElementById('envGrantDetailsWrap');
@@ -589,126 +705,9 @@
             envGrantWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
           });
         });
+        var checked = document.querySelector('input[name="envGrantPreviously"]:checked');
+        if (checked && checked.value === 'Yes') envGrantWrap.style.display = 'block';
       }
-
-      form.addEventListener('click', function (e) {
-        var nextBtn = e.target.closest('.btn-next');
-        var prevBtn = e.target.closest('.btn-prev');
-        if (nextBtn) {
-          e.preventDefault();
-          var next = nextBtn.getAttribute('data-next');
-          if (next) {
-            var nextNum = parseInt(next, 10);
-            if (!validateStep(currentStep)) return;
-            if (nextNum === 5) updateSummary();
-            showPanel(next);
-          }
-        }
-        if (prevBtn) {
-          e.preventDefault();
-          showPanel(prevBtn.getAttribute('data-prev'));
-        }
-      });
-
-      function serializeFormDetails(formEl) {
-        var details = {};
-        var els = formEl.querySelectorAll('input, select, textarea');
-        for (var i = 0; i < els.length; i++) {
-          var el = els[i];
-          var name = el.name;
-          if (!name) continue;
-          if (el.type === 'file') continue;
-          if (el.type === 'radio') {
-            if (el.checked) details[name] = el.value;
-          } else if (el.type === 'checkbox') {
-            if (name === 'activity') {
-              if (!details[name]) details[name] = [];
-              if (el.checked) details[name].push(el.value);
-            } else if (el.checked) {
-              details[name] = el.value;
-            }
-          } else {
-            details[name] = el.value || '';
-          }
-        }
-        if (details.activity && Array.isArray(details.activity)) details.activity = details.activity.join(', ');
-        if (sanitize && typeof sanitize === 'function') details = sanitize(details);
-        return details;
-      }
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var user = window.FarmAuth && FarmAuth.getCurrentUser();
-        if (!user) {
-          alert('Session expired. Please log in again.');
-          window.location.href = '../login.html';
-          return;
-        }
-        updateSummary();
-        if (!validatePopiaConsent()) {
-          document.getElementById('panel-5').scrollIntoView({ behavior: 'smooth', block: 'start' });
-          showPanel(5);
-          return;
-        }
-
-        var details = serializeFormDetails(form);
-        details.popiaConsent = true;
-        details.popiaConsentAt = new Date().toISOString();
-
-        var primary = document.getElementById('primaryFocus');
-        var category = document.querySelector('input[name="farmerCategory"]:checked');
-        var reg = document.getElementById('registeredName');
-        var farm = document.getElementById('farmName');
-        var budget = document.getElementById('estimatedBudget');
-        var safeVal = function (v) { return (v != null && String(v).trim ? String(v).trim() : '') || '—'; };
-        var summaryPrimary = primary && primary.value ? primary.value : '—';
-        var summaryCategory = category ? category.value : '—';
-        var summaryApplicant = reg ? safeVal(reg.value) : '—';
-        var summaryFarm = farm ? safeVal(farm.value) : '—';
-        var summaryBudget = budget && budget.value ? 'R' + Number(budget.value).toLocaleString('en-ZA') : '—';
-        if (window.FarmSecurity && window.FarmSecurity.sanitizeString) {
-          summaryPrimary = window.FarmSecurity.sanitizeString(summaryPrimary);
-          summaryCategory = window.FarmSecurity.sanitizeString(summaryCategory);
-          summaryApplicant = window.FarmSecurity.sanitizeString(summaryApplicant);
-          summaryFarm = window.FarmSecurity.sanitizeString(summaryFarm);
-        }
-
-        var application = {
-          type: 'environmental',
-          status: 'Submitted',
-          submittedAt: new Date().toISOString(),
-          summary: {
-            applicationType: 'environmental',
-            primaryFocus: summaryPrimary,
-            farmerCategory: summaryCategory,
-            registeredName: summaryApplicant,
-            farmName: summaryFarm,
-            budget: summaryBudget
-          },
-          details: details
-        };
-
-        if (window.FarmAutosave) FarmAutosave.clearDraft('environmental');
-
-        if (window.FarmApplications) {
-          FarmApplications.saveApplication(user.id, application).then(function () {
-            window.location.href = '../track.html';
-          }).catch(function () {
-            window.location.href = '../track.html';
-          });
-        } else {
-          window.location.href = '../track.html';
-        }
-      });
-
-      steps.forEach(function (step) {
-        step.addEventListener('click', function () {
-          var n = parseInt(step.getAttribute('data-step'), 10);
-          if (n <= currentStep || step.classList.contains('completed')) showPanel(n);
-        });
-      });
-
-      showPanel(1);
     })();
   </script>
 </body>

@@ -1,3 +1,6 @@
+# Analytics data (local dev persistence)
+data/analytics/
+
 # Dependencies
 node_modules/
 

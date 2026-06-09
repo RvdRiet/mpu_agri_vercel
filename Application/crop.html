@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../nav.css">
   <link rel="stylesheet" href="application.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
   <div class="page-wrapper">
@@ -91,7 +92,7 @@
           </ol>
         </nav>
 
-        <form id="applicationForm" class="app-form" novalidate>
+        <form id="applicationForm" class="app-form" novalidate data-application-type="crop">
           <!-- Step 1: Crop Selection -->
           <section class="app-step-panel active" id="panel-1" data-step="1">
             <h3 class="panel-title">Crop Selection</h3>
@@ -123,11 +124,28 @@
             </div>
 
             <div class="form-group">
+              <label for="secondCropChoice">Second choice crop</label>
+              <select id="secondCropChoice" name="secondCropChoice">
+                <option value="">-- Select --</option>
+                <option value="Maize">Maize</option>
+                <option value="Sorghum">Sorghum</option>
+                <option value="Vegetables">Vegetables</option>
+                <option value="Fruit">Fruit</option>
+                <option value="Sugarcane">Sugarcane</option>
+                <option value="Nuts">Nuts</option>
+                <option value="Sunflower">Sunflower</option>
+                <option value="Soybeans">Soybeans</option>
+                <option value="Dry Beans">Dry Beans</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label class="label-block">Farmer Category <span class="label-required">*</span></label>
               <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence (up to R50,000)" /> <strong>Subsistence</strong> (up to R50,000)</label>
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Smallholder (R50,001–R1,000,000)" /> <strong>Smallholder</strong> (R50,001–R1,000,000)</label>
-                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial (>R1,000,000)" /> <strong>Commercial</strong> (&gt;R1,000,000)</label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Subsistence" /> <strong>Subsistence</strong></label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Small Holder" /> <strong>Small Holder</strong></label>
+                <label class="radio-label"><input type="radio" name="farmerCategory" value="Commercial" /> <strong>Commercial</strong></label>
               </div>
               <span class="field-error" id="farmerCategoryError" aria-live="polite"></span>
             </div>
@@ -145,6 +163,17 @@
               <textarea id="previousGrantDetails" name="previousGrantDetails" rows="3" placeholder="Previous grant programme, date, amount received"></textarea>
             </div>
 
+            <div class="form-group">
+              <button type="button" class="btn-link" id="btnShowDefinition" aria-expanded="false">Definition of farmer category</button>
+            </div>
+            <div class="definition-block" id="definitionBlock">
+              <h4 class="definition-heading">Definition of farmer category</h4>
+              <p><strong>"Subsistence farmer"</strong> — practices agriculture mainly for household food security. These producers are not classified as indigents by their municipality and they produce mainly for household consumption. They may market limited surplus production with an annual turnover of up to R50,000 per annum.</p>
+              <p><strong>"Smallholder farmer"</strong> — produces for household consumption and markets, with an annual turnover ranging from R50,001 to R1,000,000.00 per annum aspiring to produce for markets and make profit.</p>
+              <p><strong>"Commercial producer"</strong> — a commercial operation defined as an established farming venture undertaken by an individual or business entity for the purpose of production and sale of agricultural products to make a profit. The farm income must exceed R1,000,000.00 per annum.</p>
+              <button type="button" class="btn-close-definition" id="btnCloseDefinition">Close</button>
+            </div>
+
             <div class="form-actions">
               <button type="button" class="btn-next" data-next="2"><strong>Next</strong></button>
             </div>
@@ -158,12 +187,18 @@
               <label for="legalEntityType">Type of Legal Entity</label>
               <select id="legalEntityType" name="legalEntityType">
                 <option value="">-- Select --</option>
-                <option value="Individual">Individual</option>
+                <option value="Sole Proprietor">Sole Proprietor</option>
                 <option value="Cooperative">Cooperative</option>
-                <option value="Company">Company</option>
+                <option value="CPA">CPA (Communal Property Association)</option>
                 <option value="Trust">Trust</option>
+                <option value="PTY Ltd">PTY Ltd (Private Company)</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+
+            <div class="form-group legal-entity-other-wrap" id="legalEntityOtherWrap" style="display: none;">
+              <label for="legalEntityOther">Legal Entity Other (please specify)</label>
+              <input type="text" id="legalEntityOther" name="legalEntityOther" placeholder="Specify legal entity type" />
             </div>
 
             <div class="form-group">
@@ -199,12 +234,61 @@
             </div>
 
             <div class="form-group">
-              <label for="physicalAddress">Physical address</label>
+              <label for="fax">Fax</label>
+              <input type="text" id="fax" name="fax" />
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Applying as a group or individual</label>
+              <div class="radio-group">
+                <label class="radio-label"><input type="radio" name="applicationType" value="Group" /> Group</label>
+                <label class="radio-label"><input type="radio" name="applicationType" value="Individual" /> Individual</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="physicalAddress">Physical / business address</label>
               <textarea id="physicalAddress" name="physicalAddress" rows="2"></textarea>
             </div>
+            <div class="form-group address-map-wrap">
+              <div class="address-map-actions">
+                <button type="button" class="btn-link" id="btnLocateAddress">Find address on map</button>
+                <button type="button" class="btn-link btn-current-location" id="btnUseCurrentLocation">Use current location</button>
+              </div>
+              <p class="form-hint">Uses OpenStreetMap geocoding (no Google API). If found, coordinates are auto-filled in the GPS fields.</p>
+              <p class="form-doc-note">Accuracy tip: enter street/farm name, area, municipality, district, and postcode where possible. Then use <strong>Use current location</strong> while standing on-site to improve coordinate accuracy.</p>
+              <div id="addressMapStatus" class="field-note"></div>
+              <div id="addressCandidates" class="address-candidates" aria-live="polite"></div>
+              <div id="addressMap" class="address-map" aria-label="Address map preview"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="physicalPostCode">Post Code</label>
+                <input type="text" id="physicalPostCode" name="physicalPostCode" placeholder="Physical address post code" />
+              </div>
+              <div class="form-group">
+                <label for="postalPostCode">Post Code</label>
+                <input type="text" id="postalPostCode" name="postalPostCode" placeholder="Postal address post code" />
+              </div>
+            </div>
+
             <div class="form-group">
-              <label for="postalCode">Postal code</label>
-              <input type="text" id="postalCode" name="postalCode" placeholder="Postal code" />
+              <label for="postalAddress">Postal Address</label>
+              <textarea id="postalAddress" name="postalAddress" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email address (optional)</label>
+              <input type="email" id="contactEmail" name="contactEmail" placeholder="name@example.com" />
+              <p class="form-hint">Optional. Provide an email if you want to receive updates electronically.</p>
+            </div>
+            <div class="form-group">
+              <label class="label-block">Preferred method of communication (optional)</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactPhone" value="Phone call" /> Phone call</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactSms" value="SMS" /> SMS</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactEmail" value="Email" /> Email</label>
+                <label class="checkbox-label"><input type="checkbox" name="preferredContactWhatsapp" value="WhatsApp" /> WhatsApp</label>
+              </div>
             </div>
 
             <div class="form-group">
@@ -222,13 +306,23 @@
                 <input type="number" id="numberOfWomen" name="numberOfWomen" min="0" />
               </div>
               <div class="form-group">
-                <label for="numberOfYouth">Youth</label>
-                <input type="number" id="numberOfYouth" name="numberOfYouth" min="0" />
+                <label for="numberOfYouths">Youth</label>
+                <input type="number" id="numberOfYouths" name="numberOfYouths" min="0" />
               </div>
               <div class="form-group">
                 <label for="numberWithDisability">People with disability</label>
                 <input type="number" id="numberWithDisability" name="numberWithDisability" min="0" />
               </div>
+            </div>
+
+            <div class="form-group">
+              <label for="projectDescription">Project Description</label>
+              <textarea id="projectDescription" name="projectDescription" rows="4" placeholder="Brief description of your farming project"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="businessPlan">Business plan / Business profile summary</label>
+              <textarea id="businessPlan" name="businessPlan" rows="4" placeholder="Summary or attach separately"></textarea>
             </div>
 
             <div class="form-actions">
@@ -268,20 +362,38 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label for="arable">Arable (ha)</label>
+              <input type="number" id="arable" name="arable" min="0" step="0.01" />
+            </div>
+
             <div class="form-row">
               <div class="form-group">
                 <label for="district">District</label>
-                <input type="text" id="district" name="district" />
+                <select id="district" name="district">
+                  <option value="">-- Select district --</option>
+                  <option value="Ehlanzeni District Municipality">Ehlanzeni District Municipality</option>
+                  <option value="Gert Sibande District Municipality">Gert Sibande District Municipality</option>
+                  <option value="Nkangala District Municipality">Nkangala District Municipality</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="localMunicipality">Local municipality</label>
-                <input type="text" id="localMunicipality" name="localMunicipality" />
+                <select id="localMunicipality" name="localMunicipality">
+                  <option value="">-- Select local municipality --</option>
+                </select>
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="wardNumber">Ward number</label>
-              <input type="text" id="wardNumber" name="wardNumber" />
+            <div class="form-row">
+              <div class="form-group">
+                <label for="areaName">Area Name</label>
+                <input type="text" id="areaName" name="areaName" />
+              </div>
+              <div class="form-group">
+                <label for="wardNumber">Ward number</label>
+                <input type="text" id="wardNumber" name="wardNumber" />
+              </div>
             </div>
 
             <div class="form-row">
@@ -301,10 +413,16 @@
                 <option value="">-- Select --</option>
                 <option value="Own">Own</option>
                 <option value="Lease">Lease</option>
-                <option value="PTO">PTO</option>
-                <option value="RTO">RTO</option>
+                <option value="Communal">Communal</option>
+                <option value="PTO">PTO (Permission to Occupy)</option>
+                <option value="RTO">RTO (Right to Occupy)</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+
+            <div class="form-group lease-period-wrap" id="leasePeriodWrap" style="display: none;">
+              <label for="leasePeriodYears">If Lease Agreement, indicate period of lease (years)</label>
+              <input type="number" id="leasePeriodYears" name="leasePeriodYears" min="0" placeholder="e.g. 5" />
             </div>
 
             <div class="form-group">
@@ -334,18 +452,18 @@
             </div>
           </section>
 
-          <!-- Step 4: Infrastructure & Support Needed -->
+          <!-- Step 4: Infrastructure & Production -->
           <section class="app-step-panel" id="panel-4" data-step="4">
-            <h3 class="panel-title">Infrastructure &amp; Support Needed</h3>
+            <h3 class="panel-title">Infrastructure &amp; Production</h3>
 
             <div class="form-group">
               <label class="label-block">What support are you applying for?</label>
               <div class="checkbox-group">
                 <label class="checkbox-label"><input type="checkbox" name="supportSeeds" value="yes" /> Seeds/Seedlings</label>
                 <label class="checkbox-label"><input type="checkbox" name="supportFertiliser" value="yes" /> Fertiliser</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportEquipment" value="yes" /> Equipment/Mechanisation</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportEquipment" value="yes" /> Equipment</label>
                 <label class="checkbox-label"><input type="checkbox" name="supportIrrigation" value="yes" /> Irrigation</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportStorage" value="yes" /> Storage Facilities</label>
+                <label class="checkbox-label"><input type="checkbox" name="supportStorage" value="yes" /> Storage</label>
                 <label class="checkbox-label"><input type="checkbox" name="supportFencing" value="yes" /> Fencing</label>
                 <label class="checkbox-label"><input type="checkbox" name="supportPestControl" value="yes" /> Pest Control</label>
                 <label class="checkbox-label"><input type="checkbox" name="supportTraining" value="yes" /> Training</label>
@@ -366,6 +484,42 @@
             </div>
 
             <div class="form-group">
+              <span class="form-group-label">Water sources</span>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label-block">River</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterRiver" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterRiver" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Borehole</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="label-block">Dam</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterDam" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterDam" value="No" /> No</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="label-block">Municipal</label>
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="waterMunicipal" value="Yes" /> Yes</label>
+                  <label class="radio-label"><input type="radio" name="waterMunicipal" value="No" /> No</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
               <label class="label-block">Current storage</label>
               <div class="radio-group">
                 <label class="radio-label"><input type="radio" name="currentStorage" value="Yes" /> Yes</label>
@@ -382,11 +536,30 @@
             </div>
 
             <div class="form-group">
-              <label class="label-block">Business plan available</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="businessPlanAvailable" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="businessPlanAvailable" value="No" /> No</label>
+              <label for="conditionOfFencing">Condition of fencing</label>
+              <select id="conditionOfFencing" name="conditionOfFencing">
+                <option value="">-- Select --</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hectaresCurrentlyPlanted">Hectares currently planted</label>
+                <input type="number" id="hectaresCurrentlyPlanted" name="hectaresCurrentlyPlanted" min="0" step="0.01" />
               </div>
+              <div class="form-group">
+                <label for="expectedYield">Expected yield (tons/ha or units)</label>
+                <input type="text" id="expectedYield" name="expectedYield" placeholder="e.g. 4 tons/ha" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="marketsDescription">Markets / off-take description</label>
+              <textarea id="marketsDescription" name="marketsDescription" rows="3" placeholder="Describe your current or planned markets and buyers"></textarea>
             </div>
 
             <div class="form-actions">
@@ -401,21 +574,35 @@
             <p class="app-step-intro">Upload required documents and review your application before submitting.</p>
 
             <div class="form-group">
-              <label for="idCopies">Certified ID copies</label>
-              <p class="form-doc-note">We use ID copies to verify the identity of all applicants and prevent duplicate applications.</p>
-              <input type="file" id="idCopies" name="idCopies" accept=".pdf,.jpg,.jpeg,.png" multiple />
+              <label for="idCopies">Certified ID copies of all beneficiaries</label>
+              <p class="form-doc-note">Upload one certified ID copy per listed project member. The number of required uploads is based on <strong>Total project members</strong> in Applicant Details.</p>
+              <div id="idCopiesDynamicWrap"></div>
+              <span class="field-error" id="idCopiesError" aria-live="polite"></span>
             </div>
 
             <div class="form-group">
-              <label for="proofOfLand">Proof of land</label>
+              <label for="landProof">Proof of land</label>
               <p class="form-doc-note">Land proof confirms that you have legal access to the land where crop activities will take place.</p>
-              <input type="file" id="proofOfLand" name="proofOfLand" accept=".pdf,.jpg,.jpeg,.png" />
+              <input type="file" id="landProof" name="landProof" accept=".pdf,.jpg,.jpeg,.png" />
             </div>
 
             <div class="form-group">
               <label for="businessPlanDoc">Business plan</label>
               <p class="form-doc-note">Your business plan helps us assess viability, expected yields, and how support will be used.</p>
               <input type="file" id="businessPlanDoc" name="businessPlanDoc" accept=".pdf,.doc,.docx" />
+            </div>
+
+            <div class="doc-optional" id="financialDocsWrap" style="display: none;">
+              <div class="form-group">
+                <label for="incomeProof">Proof of income (registered business entities)</label>
+                <p class="form-doc-note">Required for registered entities to verify financial activity and farmer category.</p>
+                <input type="file" id="incomeProof" name="incomeProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+              <div class="form-group">
+                <label for="bankStatementProof">Bank statement (registered business entities)</label>
+                <p class="form-doc-note">Provide a recent bank statement as supporting financial evidence for registered entities.</p>
+                <input type="file" id="bankStatementProof" name="bankStatementProof" accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
             </div>
 
             <div class="form-group doc-optional">
@@ -428,6 +615,96 @@
               <label for="proofOfFarming">Proof of farming activity (optional)</label>
               <p class="form-doc-note">This helps confirm that farming activities are active or already established on site.</p>
               <input type="file" id="proofOfFarming" name="proofOfFarming" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+
+            <div class="form-group doc-optional">
+              <label for="offtakeAgreement">Markets / off-take agreement</label>
+              <p class="form-doc-note">Off-take or market agreements show that you have realistic sales channels for your production.</p>
+              <input type="file" id="offtakeAgreement" name="offtakeAgreement" accept=".pdf,.doc,.docx" />
+            </div>
+
+            <div class="checklist-block">
+              <h4 class="checklist-heading">Checklist for Application Documents</h4>
+              <p class="form-hint">Tick each document you have attached. Required documents depend on your farmer category.</p>
+              <table class="checklist-table" id="checklistTable">
+                <thead>
+                  <tr>
+                    <th>Item / Document</th>
+                    <th>Subsistence</th>
+                    <th>Smallholder</th>
+                    <th>Commercial</th>
+                    <th>Attached</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Fully completed application form</td>
+                    <td>Yes</td><td>Yes</td><td>Yes</td>
+                    <td><input type="checkbox" name="checkApplicationForm" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Certified ID copies of all applicants</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIdCopies" value="yes" /></td>
+                  </tr>
+                  <tr data-doc-for="Cooperative,CPA,Trust,PTY Ltd,Other">
+                    <td>Legal entity document (CK, Coop certificate, etc.)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLegalEntityDoc" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Proof of land access (title deed / lease / PTO / RTO)</td>
+                    <td>Attach</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkLandProof" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Business plan / business profile</td>
+                    <td>Profile</td><td>Plan</td><td>Plan</td>
+                    <td><input type="checkbox" name="checkBusinessPlan" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Proof of farming income</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkIncomeProof" value="yes" /></td>
+                  </tr>
+                  <tr data-checklist-cat="Small Holder,Commercial">
+                    <td>Markets / off-take agreement</td>
+                    <td>N/A</td><td>Attach</td><td>Attach</td>
+                    <td><input type="checkbox" name="checkMarketsOfftake" value="yes" /></td>
+                  </tr>
+                  <tr>
+                    <td>Soil test report</td>
+                    <td>Optional</td><td>Optional</td><td>Optional</td>
+                    <td><input type="checkbox" name="checkSoilTest" value="yes" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="declaration-block">
+              <h4 class="declaration-heading">Declaration</h4>
+              <p>I hereby declare that the above-mentioned information is true and correct and acknowledge that any misleading information provided will lead to disqualification.</p>
+              <div class="form-row form-row-three">
+                <div class="form-group">
+                  <label for="declarationApplicant">Signature of applicant / representative</label>
+                  <input type="text" id="declarationApplicant" name="declarationApplicant" placeholder="Type full name as signature" />
+                </div>
+                <div class="form-group">
+                  <label for="declarationDate">Date</label>
+                  <input type="date" id="declarationDate" name="declarationDate" />
+                </div>
+              </div>
+              <p class="form-hint">The following signatures will be collected by DARDLEA staff during review:</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="declarationAdvisor">Signature of Agricultural Advisor</label>
+                  <input type="text" id="declarationAdvisor" name="declarationAdvisor" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="declarationManager">Signature of Agricultural Municipal Manager</label>
+                  <input type="text" id="declarationManager" name="declarationManager" placeholder="To be completed by DARDLEA" disabled />
+                </div>
+              </div>
             </div>
 
             <div class="summary-box">
@@ -471,282 +748,29 @@
     </footer>
   </div>
 
-  <script src="../js/auth.js"></script>
   <script src="../js/security.js"></script>
+  <script src="../js/auth.js"></script>
   <script src="../js/applications.js"></script>
   <script src="../js/autosave.js"></script>
   <script src="../js/nav.js"></script>
   <script src="../js/feedback.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="application-shared.js"></script>
+  <script src="application-crop.js"></script>
   <script>
-    (function () {
-      if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
-        window.location.href = '../login.html?return=' + encodeURIComponent('Application/crop.html');
-        return;
-      }
-
-      var form = document.getElementById('applicationForm');
-      var panels = document.querySelectorAll('.app-step-panel');
-      var steps = document.querySelectorAll('.app-step');
-      var currentStep = 1;
-      var totalSteps = 5;
-      var sanitize = window.FarmSecurity && window.FarmSecurity.sanitizeForStorage;
-
-      if (window.FarmAutosave && form) FarmAutosave.init(form, 'crop');
-
-      function showPanel(stepNum) {
-        stepNum = parseInt(stepNum, 10);
-        if (stepNum < 1 || stepNum > totalSteps) return;
-        currentStep = stepNum;
-
-        panels.forEach(function (panel) {
-          var n = parseInt(panel.getAttribute('data-step'), 10);
-          panel.classList.toggle('active', n === stepNum);
-        });
-
-        steps.forEach(function (step) {
-          var n = parseInt(step.getAttribute('data-step'), 10);
-          step.classList.remove('active', 'completed');
-          if (n === stepNum) step.classList.add('active');
-          else if (n < stepNum) step.classList.add('completed');
-        });
-      }
-
-      function clearStepErrors(stepNum) {
-        var panel = document.getElementById('panel-' + stepNum);
-        if (!panel) return;
-        panel.querySelectorAll('.field-error').forEach(function (el) { el.textContent = ''; });
-        panel.querySelectorAll('.input-error').forEach(function (el) { el.classList.remove('input-error'); });
-      }
-
-      function setFieldError(fieldId, errorId, message) {
-        var field = fieldId ? document.getElementById(fieldId) : null;
-        var errEl = errorId ? document.getElementById(errorId) : null;
-        if (field) field.classList.toggle('input-error', !!message);
-        if (errEl) errEl.textContent = message || '';
-      }
-
-      function validateStep1() {
-        var cropType = document.getElementById('cropType');
-        var category = document.querySelector('input[name="farmerCategory"]:checked');
-        var ok = true;
-        if (!cropType || !cropType.value) {
-          setFieldError('cropType', 'cropTypeError', 'Please select the crop type.');
-          ok = false;
-        } else {
-          setFieldError('cropType', 'cropTypeError', '');
-        }
-        if (!category) {
-          setFieldError(null, 'farmerCategoryError', 'Please select your farmer category.');
-          ok = false;
-        } else {
-          setFieldError(null, 'farmerCategoryError', '');
-        }
-        return ok;
-      }
-
-      function validateStep2() {
-        var registered = document.getElementById('registeredName');
-        var val = registered ? registered.value.trim() : '';
-        if (!val) {
-          setFieldError('registeredName', 'registeredNameError', 'Registered name or applicant name is required.');
-          return false;
-        }
-        setFieldError('registeredName', 'registeredNameError', '');
-        return true;
-      }
-
-      function validateStep(stepNum) {
-        clearStepErrors(stepNum);
-        if (stepNum === 1) return validateStep1();
-        if (stepNum === 2) return validateStep2();
-        return true;
-      }
-
-      function validatePopiaConsent() {
-        var consent = document.getElementById('popiaConsent');
-        var errEl = document.getElementById('popiaConsentError');
-        if (!consent || !consent.checked) {
-          if (errEl) errEl.textContent = 'You must read and consent to the POPIA compliance before we can accept your application.';
-          if (consent) (consent.closest('.form-group') || document.body).scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return false;
-        }
-        if (errEl) errEl.textContent = '';
-        return true;
-      }
-
-      function updateSummary() {
-        var cropType = document.getElementById('cropType');
-        var category = document.querySelector('input[name="farmerCategory"]:checked');
-        var applicant = document.getElementById('registeredName');
-        var farm = document.getElementById('farmName');
-
-        var elCrop = document.getElementById('summaryCropType');
-        var elCat = document.getElementById('summaryCategory');
-        var elApp = document.getElementById('summaryApplicant');
-        var elFarm = document.getElementById('summaryFarm');
-
-        if (elCrop) elCrop.textContent = cropType && cropType.value ? cropType.value : '—';
-        if (elCat) elCat.textContent = category ? category.value : '—';
-        if (elApp) elApp.textContent = applicant && applicant.value ? applicant.value.trim() : '—';
-        if (elFarm) elFarm.textContent = farm && farm.value ? farm.value.trim() : '—';
-      }
-
-      var previousGrantRadios = document.querySelectorAll('input[name="previousGrant"]');
-      var previousGrantWrap = document.getElementById('previousGrantDetailsWrap');
-      var cropTypeEl = document.getElementById('cropType');
-      var cropVarietyEl = document.getElementById('cropVariety');
-
-      function setCropVarietyOptions() {
-        if (!cropTypeEl || !cropVarietyEl) return;
-        var cropType = cropTypeEl.value;
-        var current = cropVarietyEl.value;
-        var options = ['Not sure'];
-
-        if (cropType === 'Maize') options = ['Not sure', 'White maize hybrid', 'Yellow maize hybrid', 'Open-pollinated maize', 'Sweet corn'];
-        else if (cropType === 'Sorghum') options = ['Not sure', 'Grain sorghum', 'Sweet sorghum', 'Forage sorghum'];
-        else if (cropType === 'Vegetables') options = ['Not sure', 'Tomato', 'Onion', 'Cabbage', 'Spinach', 'Butternut', 'Potato', 'Carrot', 'Green pepper', 'Other vegetable'];
-        else if (cropType === 'Fruit') options = ['Not sure', 'Citrus (orange/lemon)', 'Mango', 'Avocado', 'Banana', 'Litchi', 'Peach/Nectarine', 'Apple/Pear', 'Grapes', 'Other fruit'];
-        else if (cropType === 'Sugarcane') options = ['Not sure', 'Early maturing variety', 'Mid-season variety', 'Late maturing variety'];
-        else if (cropType === 'Nuts') options = ['Not sure', 'Macadamia', 'Pecan', 'Almond', 'Cashew', 'Other nuts'];
-        else if (cropType === 'Sunflower') options = ['Not sure', 'Oilseed sunflower hybrid', 'Confection sunflower'];
-        else if (cropType === 'Soybeans') options = ['Not sure', 'Early maturity soybean', 'Medium maturity soybean', 'Late maturity soybean'];
-        else if (cropType === 'Dry Beans') options = ['Not sure', 'Sugar beans', 'Red speckled beans', 'Navy beans', 'Small white beans', 'Other dry beans'];
-        else if (cropType === 'Other') options = ['Not sure', 'Other (specify in project description)'];
-
-        cropVarietyEl.innerHTML = '<option value="">-- Select crop variety / Not sure --</option>' +
-          options.map(function (opt) { return '<option value="' + opt + '">' + opt + '</option>'; }).join('');
-
-        if (current && options.indexOf(current) !== -1) cropVarietyEl.value = current;
-      }
-
-      if (cropTypeEl) {
-        cropTypeEl.addEventListener('change', setCropVarietyOptions);
-        setCropVarietyOptions();
-      }
-
-      previousGrantRadios.forEach(function (r) {
-        r.addEventListener('change', function () {
-          previousGrantWrap.style.display = this.value === 'Yes' ? 'block' : 'none';
-        });
-      });
-      if (document.querySelector('input[name="previousGrant"]:checked') && document.querySelector('input[name="previousGrant"]:checked').value === 'Yes') {
-        previousGrantWrap.style.display = 'block';
-      }
-
-      form.addEventListener('click', function (e) {
-        var nextBtn = e.target.closest('.btn-next');
-        var prevBtn = e.target.closest('.btn-prev');
-
-        if (nextBtn) {
-          e.preventDefault();
-          var next = nextBtn.getAttribute('data-next');
-          if (next) {
-            var nextNum = parseInt(next, 10);
-            if (!validateStep(currentStep)) return;
-            if (nextNum === 5) updateSummary();
-            showPanel(next);
-          }
-        }
-
-        if (prevBtn) {
-          e.preventDefault();
-          showPanel(prevBtn.getAttribute('data-prev'));
-        }
-      });
-
-      function serializeFormDetails(formEl) {
-        var details = {};
-        var els = formEl.querySelectorAll('input, select, textarea');
-        for (var i = 0; i < els.length; i++) {
-          var el = els[i];
-          var name = el.name;
-          if (!name) continue;
-          if (el.type === 'file') continue;
-          if (el.type === 'radio') {
-            if (el.checked) details[name] = el.value;
-          } else if (el.type === 'checkbox') {
-            details[name] = el.checked ? el.value || 'yes' : '';
-          } else {
-            details[name] = el.value || '';
-          }
-        }
-        if (sanitize && typeof sanitize === 'function') details = sanitize(details);
-        return details;
-      }
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var user = window.FarmAuth && FarmAuth.getCurrentUser();
-        if (!user) {
-          alert('Session expired. Please log in again.');
-          window.location.href = '../login.html?return=' + encodeURIComponent('Application/crop.html');
-          return;
-        }
-
-        updateSummary();
-
-        if (!validatePopiaConsent()) {
-          document.getElementById('panel-5').scrollIntoView({ behavior: 'smooth', block: 'start' });
-          showPanel(5);
-          return;
-        }
-
-        var cropTypeEl = document.getElementById('cropType');
-        var categoryEl = document.querySelector('input[name="farmerCategory"]:checked');
-        var applicantEl = document.getElementById('registeredName');
-        var farmEl = document.getElementById('farmName');
-
-        var safeVal = function (v) { return v != null && String(v).trim ? String(v).trim() : ''; };
-        var summaryCrop = safeVal(cropTypeEl && cropTypeEl.value);
-        var summaryCat = safeVal(categoryEl && categoryEl.value);
-        var summaryApp = safeVal(applicantEl && applicantEl.value);
-        var summaryFarm = safeVal(farmEl && farmEl.value);
-        if (window.FarmSecurity && window.FarmSecurity.sanitizeString) {
-          summaryCrop = window.FarmSecurity.sanitizeString(summaryCrop);
-          summaryCat = window.FarmSecurity.sanitizeString(summaryCat);
-          summaryApp = window.FarmSecurity.sanitizeString(summaryApp);
-          summaryFarm = window.FarmSecurity.sanitizeString(summaryFarm);
-        }
-
-        var details = serializeFormDetails(form);
-        details.popiaConsent = true;
-        details.popiaConsentAt = new Date().toISOString();
-
-        var application = {
-          type: 'crop',
-          status: 'Submitted',
-          summary: {
-            type: 'crop',
-            cropType: summaryCrop || '—',
-            farmerCategory: summaryCat || '—',
-            applicantName: summaryApp || '—',
-            farmName: summaryFarm || '—'
-          },
-          details: details
-        };
-
-        if (window.FarmAutosave) FarmAutosave.clearDraft('crop');
-
-        if (window.FarmApplications) {
-          FarmApplications.saveApplication(user.id, application).then(function () {
-            window.location.href = '../track.html';
-          }).catch(function () {
-            window.location.href = '../track.html';
-          });
-        } else {
-          window.location.href = '../track.html';
-        }
-      });
-
-      steps.forEach(function (step) {
-        step.addEventListener('click', function () {
-          var n = parseInt(step.getAttribute('data-step'), 10);
-          if (n <= currentStep || step.classList.contains('completed')) showPanel(n);
-        });
-      });
-
-      showPanel(1);
-    })();
+(function () {
+  if (!window.FarmAuth || !FarmAuth.getCurrentUser()) {
+    window.location.href = '../login.html?return=' + encodeURIComponent('Application/crop.html');
+    return;
+  }
+  var block = document.getElementById('definitionBlock');
+  var btnClose = document.getElementById('btnCloseDefinition');
+  var btnShow = document.getElementById('btnShowDefinition');
+  if (btnShow && block) {
+    btnShow.addEventListener('click', function () { block.style.display = 'block'; btnShow.setAttribute('aria-expanded', 'true'); });
+  }
+  if (btnClose && block) btnClose.addEventListener('click', function () { block.style.display = 'none'; if (btnShow) btnShow.setAttribute('aria-expanded', 'false'); });
+})();
   </script>
 </body>
 </html>

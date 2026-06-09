@@ -1,0 +1,30 @@
+'use strict';
+
+const { listMonths } = require('../lib/analytics-store');
+const { requireStaff } = require('../lib/staff-api-auth');
+const { sendJson, setCors } = require('../lib/http');
+
+async function handler(req, res) {
+  setCors(res, 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  }
+  if (req.method !== 'GET') {
+    return sendJson(res, 405, { error: 'Method not allowed' });
+  }
+  if (!requireStaff(req)) {
+    return sendJson(res, 401, { error: 'Unauthorized' });
+  }
+
+  try {
+    var months = await listMonths();
+    return sendJson(res, 200, { months: months });
+  } catch (e) {
+    console.error('analytics months error', e);
+    return sendJson(res, 500, { error: 'Failed to list months' });
+  }
+}
+
+module.exports = handler;
+module.exports.default = handler;

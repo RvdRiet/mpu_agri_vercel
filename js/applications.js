@@ -66,6 +66,28 @@
     }));
   }
 
+  function trackApplicationSubmitted(userId, application) {
+    if (!global.FarmAnalytics || !global.FarmAnalytics.trackEvent) return;
+    var summary = application.summary || {};
+    var details = application.details || {};
+    global.FarmAnalytics.trackEvent('application_submitted', {
+      id: application.id,
+      grantType: summary.programmeType || summary.grantType || details.programmeType || application.type || 'other',
+      status: application.status || 'Submitted',
+      name: summary.fullName || summary.applicantName || details.fullName || '—',
+      userId: userId,
+      farmerCategory: summary.farmerCategory || details.farmerCategory || 'Unknown'
+    });
+  }
+
+  function trackApplicationStatus(applicationId, status) {
+    if (!global.FarmAnalytics || !global.FarmAnalytics.trackEvent) return;
+    global.FarmAnalytics.trackEvent('application_status', {
+      id: applicationId,
+      status: status
+    });
+  }
+
   function saveApplication(userId, application) {
     if (!userId || !application) return Promise.resolve(null);
     application.submittedAt = application.submittedAt || new Date().toISOString();
@@ -83,6 +105,7 @@
         .add(doc)
         .then(function (ref) {
           application.id = ref.id;
+          trackApplicationSubmitted(userId, application);
           return ref.id;
         })
         .catch(function (err) {
@@ -96,6 +119,7 @@
     list.push(application);
     data[userId] = list;
     saveAll(data);
+    trackApplicationSubmitted(userId, application);
     return Promise.resolve(application.id);
   }
 
@@ -145,7 +169,10 @@
       return global.firebaseDb.collection(FIRESTORE_COLLECTION)
         .doc(applicationId)
         .update(updatePayload)
-        .then(function () { return true; })
+        .then(function () {
+          trackApplicationStatus(applicationId, status);
+          return true;
+        })
         .catch(function (err) {
           console.warn('Firestore updateApplicationStatus failed', err);
           return false;
@@ -162,6 +189,7 @@
           }
         }
         saveAll(data);
+        trackApplicationStatus(applicationId, status);
         return Promise.resolve(true);
       }
     }

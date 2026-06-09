@@ -4,5 +4,8 @@
   "description": "Mpumalanga Livestock Development Programme",
   "scripts": {
     "start": "node server.js"
+  },
+  "optionalDependencies": {
+    "@vercel/blob": "^0.27.0"
   }
 }

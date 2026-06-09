@@ -1619,6 +1619,9 @@
             status: 'Submitted',
             submittedAt: new Date().toISOString()
           });
+          if (window.FarmAnalytics && FarmAnalytics.trackEvent) {
+            FarmAnalytics.trackEvent('issue_reported', { status: 'Submitted' });
+          }
 
           reportForm.reset();
           setIssueMessage('Issue report submitted successfully. Our team will review it.', false);

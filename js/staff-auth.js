@@ -1,11 +1,12 @@
 /**
- * Staff authentication (frontend-only). Separate from applicant auth.
+ * Staff authentication (frontend + server API token).
  */
 (function (global) {
   'use strict';
 
   var STORAGE_STAFF = 'farm_staff_users';
   var SESSION_STAFF = 'farm_staffCurrentUser';
+  var SESSION_TOKEN = 'farm_staffApiToken';
 
   function getStaffUsers() {
     try {
@@ -28,28 +29,70 @@
     }
   }
 
+  function getApiToken() {
+    try {
+      return sessionStorage.getItem(SESSION_TOKEN) || '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function setSession(staff) {
+    try {
+      sessionStorage.setItem(SESSION_STAFF, JSON.stringify({ username: staff.username, name: staff.name }));
+    } catch (e) {}
+  }
+
   function login(username, password) {
     username = (username || '').trim();
-    if (!username || !password) return { ok: false, error: 'Username and password required.' };
+    if (!username || !password) return Promise.resolve({ ok: false, error: 'Username and password required.' });
     var lower = username.toLowerCase();
     var users = getStaffUsers();
     var user = users[lower];
-    if (!user || user.password !== password) return { ok: false, error: 'Invalid username or password.' };
-    try {
-      sessionStorage.setItem(SESSION_STAFF, JSON.stringify({ username: lower, name: user.name }));
-    } catch (e) {}
-    return { ok: true };
+    if (!user || user.password !== password) {
+      return Promise.resolve({ ok: false, error: 'Invalid username or password.' });
+    }
+
+    return fetch('/api/staff/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: lower, password: password })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.token) {
+          try { sessionStorage.setItem(SESSION_TOKEN, data.token); } catch (e) {}
+        }
+        setSession({ username: lower, name: user.name });
+        return { ok: true, hasApiToken: !!(data && data.token) };
+      })
+      .catch(function () {
+        setSession({ username: lower, name: user.name });
+        return { ok: true, hasApiToken: false, warning: 'Server analytics token unavailable. Restart the dev server or deploy API routes.' };
+      });
   }
 
   function logout() {
     try {
       sessionStorage.removeItem(SESSION_STAFF);
+      sessionStorage.removeItem(SESSION_TOKEN);
     } catch (e) {}
+  }
+
+  function requireStaff(loginUrl) {
+    var staff = getCurrentStaff();
+    if (!staff) {
+      window.location.href = loginUrl || 'staff-login.html';
+      return null;
+    }
+    return staff;
   }
 
   global.FarmStaffAuth = {
     getCurrentStaff: getCurrentStaff,
+    getApiToken: getApiToken,
     login: login,
-    logout: logout
+    logout: logout,
+    requireStaff: requireStaff
   };
 })(typeof window !== 'undefined' ? window : this);

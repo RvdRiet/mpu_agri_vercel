@@ -147,6 +147,9 @@
       complaint: complaintText || undefined,
       general: generalText || undefined
     });
+    if (window.FarmAnalytics && FarmAnalytics.trackEvent) {
+      FarmAnalytics.trackEvent('feedback_submitted', { rating: stars });
+    }
     var body = document.querySelector('.feedback-modal__body');
     var thanks = document.getElementById('feedbackThanks');
     if (body) body.style.display = 'none';

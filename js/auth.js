@@ -68,6 +68,9 @@
         .then(function (userCred) {
           return userCred.user.updateProfile({ displayName: name }).then(function () {
             setCurrentUser({ id: saId, name: name });
+            if (global.FarmAnalytics && global.FarmAnalytics.trackEvent) {
+              global.FarmAnalytics.trackEvent('user_registered', {});
+            }
             return { ok: true };
           });
         })
@@ -89,6 +92,9 @@
     users[saId] = { id: saId, password: password, name: fullName.trim() };
     try { localStorage.setItem(STORAGE_USERS, JSON.stringify(users)); } catch (e) {}
     setCurrentUser({ id: saId, name: fullName.trim() });
+    if (global.FarmAnalytics && global.FarmAnalytics.trackEvent) {
+      global.FarmAnalytics.trackEvent('user_registered', {});
+    }
     return Promise.resolve({ ok: true });
   }
 
