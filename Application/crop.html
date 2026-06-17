@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,7 +31,6 @@
             <button class="nav-link" type="button">Programmes <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
             <div class="nav-dropdown" role="menu">
               <a href="../crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127806;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Management</span><span class="nav-dropdown__desc">Crop farming support &amp; grants</span></span></a>
-              <a href="../livestock.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128004;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Livestock Management</span><span class="nav-dropdown__desc">Livestock development &amp; grants</span></span></a>
               <a href="../environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#127795;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Enrichment</span><span class="nav-dropdown__desc">Conservation &amp; sustainability</span></span></a>
               <div class="nav-dropdown__divider"></div>
               <a href="../livestock.html#mesp-2025-26" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128017;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Masibuyele 2025/26 Intake</span><span class="nav-dropdown__desc">Mpumalanga Livestock Development Programme</span></span></a>
@@ -87,7 +86,7 @@
             <li class="app-step active" data-step="1"><span class="step-label">Crop Selection</span></li>
             <li class="app-step" data-step="2"><span class="step-label">Applicant Details</span></li>
             <li class="app-step" data-step="3"><span class="step-label">Farm &amp; Land</span></li>
-            <li class="app-step" data-step="4"><span class="step-label">Infrastructure</span></li>
+            <li class="app-step" data-step="4"><span class="step-label">SFG Grant Supply</span></li>
             <li class="app-step" data-step="5"><span class="step-label">Documents &amp; Submit</span></li>
           </ol>
         </nav>
@@ -97,6 +96,10 @@
           <section class="app-step-panel active" id="panel-1" data-step="1">
             <h3 class="panel-title">Crop Selection</h3>
 
+            <div class="programme-notice" role="note">
+              <p><strong>About this grant:</strong> Approved applicants receive <strong>Smart Food Growing (SFG)</strong> systems from <a href="https://sfgtec.com/" target="_blank" rel="noopener noreferrer">SFG Technologies (SFG Tec)</a> — self-watering boxes, trays, and hydroponic units based on Square Foot Gardening principles. These systems are ideal for vegetables, herbs, and compact fruit production at home, on the farm, or in community gardens.</p>
+            </div>
+
             <div class="form-group">
               <label for="cropType">Crop Type <span class="label-required">*</span></label>
               <select id="cropType" name="cropType" required aria-describedby="cropTypeError">
@@ -104,7 +107,8 @@
                 <option value="Maize">Maize</option>
                 <option value="Sorghum">Sorghum</option>
                 <option value="Vegetables">Vegetables</option>
-                <option value="Fruit">Fruit</option>
+                <option value="Herbs">Herbs</option>
+                <option value="Fruit">Fruit (compact / container-suited)</option>
                 <option value="Sugarcane">Sugarcane</option>
                 <option value="Nuts">Nuts</option>
                 <option value="Sunflower">Sunflower</option>
@@ -130,7 +134,8 @@
                 <option value="Maize">Maize</option>
                 <option value="Sorghum">Sorghum</option>
                 <option value="Vegetables">Vegetables</option>
-                <option value="Fruit">Fruit</option>
+                <option value="Herbs">Herbs</option>
+                <option value="Fruit">Fruit (compact / container-suited)</option>
                 <option value="Sugarcane">Sugarcane</option>
                 <option value="Nuts">Nuts</option>
                 <option value="Sunflower">Sunflower</option>
@@ -452,108 +457,248 @@
             </div>
           </section>
 
-          <!-- Step 4: Infrastructure & Production -->
+          <!-- Step 4: SFG Grant Supply -->
           <section class="app-step-panel" id="panel-4" data-step="4">
-            <h3 class="panel-title">Infrastructure &amp; Production</h3>
+            <h3 class="panel-title">SFG Grant Supply</h3>
+            <p class="app-step-intro">Select the <a href="https://sfgtec.com/" target="_blank" rel="noopener noreferrer">SFG Technologies</a> Smart Food Growing systems you need (maximum <strong>5 units</strong> per application). See the <a href="../guides.html">SFG Grant Boxes guide</a> for product details and care instructions. Approved grants supply these units — allocation is subject to review and farmer category limits.</p>
 
-            <div class="form-group">
-              <label class="label-block">What support are you applying for?</label>
-              <div class="checkbox-group">
-                <label class="checkbox-label"><input type="checkbox" name="supportSeeds" value="yes" /> Seeds/Seedlings</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportFertiliser" value="yes" /> Fertiliser</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportEquipment" value="yes" /> Equipment</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportIrrigation" value="yes" /> Irrigation</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportStorage" value="yes" /> Storage</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportFencing" value="yes" /> Fencing</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportPestControl" value="yes" /> Pest Control</label>
-                <label class="checkbox-label"><input type="checkbox" name="supportTraining" value="yes" /> Training</label>
-              </div>
+            <div class="programme-notice" role="note">
+              <p><strong>Supplier:</strong> SFG Technologies (SFG Tec), White River, Mpumalanga — makers of WickBox™, HydroGrow™, EcoGrow™, GrowRaft™, and VersaTray™ systems based on Square Foot Gardening principles. Units are self-watering or hydroponic, water-efficient, and suitable for indoor or outdoor use. Approved applicants also receive access to the <strong>SFG App</strong> for planting and harvesting guidance.</p>
             </div>
 
             <div class="form-group">
-              <label for="irrigationType">Irrigation type</label>
-              <select id="irrigationType" name="irrigationType">
+              <label for="growingLocation">Where will the growing systems be used?</label>
+              <select id="growingLocation" name="growingLocation" required>
                 <option value="">-- Select --</option>
-                <option value="None">None</option>
-                <option value="Drip">Drip</option>
-                <option value="Sprinkler">Sprinkler</option>
-                <option value="Centre-pivot">Centre-pivot</option>
-                <option value="Flood">Flood</option>
+                <option value="Home / backyard">Home / backyard</option>
+                <option value="Farm homestead">Farm homestead</option>
+                <option value="Community garden">Community garden</option>
+                <option value="School / institution">School / institution</option>
+                <option value="Urban plot">Urban plot</option>
+                <option value="Greenhouse / tunnel">Greenhouse / tunnel</option>
                 <option value="Other">Other</option>
               </select>
-            </div>
-
-            <div class="form-group">
-              <span class="form-group-label">Water sources</span>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="label-block">River</label>
-                <div class="radio-group">
-                  <label class="radio-label"><input type="radio" name="waterRiver" value="Yes" /> Yes</label>
-                  <label class="radio-label"><input type="radio" name="waterRiver" value="No" /> No</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="label-block">Borehole</label>
-                <div class="radio-group">
-                  <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
-                  <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
-                </div>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="label-block">Dam</label>
-                <div class="radio-group">
-                  <label class="radio-label"><input type="radio" name="waterDam" value="Yes" /> Yes</label>
-                  <label class="radio-label"><input type="radio" name="waterDam" value="No" /> No</label>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="label-block">Municipal</label>
-                <div class="radio-group">
-                  <label class="radio-label"><input type="radio" name="waterMunicipal" value="Yes" /> Yes</label>
-                  <label class="radio-label"><input type="radio" name="waterMunicipal" value="No" /> No</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="label-block">Current storage</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="currentStorage" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="currentStorage" value="No" /> No</label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="label-block">Existing fencing</label>
-              <div class="radio-group">
-                <label class="radio-label"><input type="radio" name="existingFencing" value="Yes" /> Yes</label>
-                <label class="radio-label"><input type="radio" name="existingFencing" value="No" /> No</label>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="conditionOfFencing">Condition of fencing</label>
-              <select id="conditionOfFencing" name="conditionOfFencing">
-                <option value="">-- Select --</option>
-                <option value="Excellent">Excellent</option>
-                <option value="Good">Good</option>
-                <option value="Fair">Fair</option>
-                <option value="Poor">Poor</option>
-              </select>
+              <span class="field-error" id="growingLocationError" aria-live="polite"></span>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="hectaresCurrentlyPlanted">Hectares currently planted</label>
+                <label for="spaceAvailable">Approximate space available (m²)</label>
+                <input type="number" id="spaceAvailable" name="spaceAvailable" min="1" step="1" placeholder="e.g. 20" />
+                <span class="field-error" id="spaceAvailableError" aria-live="polite"></span>
+              </div>
+              <div class="form-group">
+                <label for="sfgGrowingSurface">Growing surface</label>
+                <select id="sfgGrowingSurface" name="sfgGrowingSurface">
+                  <option value="">-- Select --</option>
+                  <option value="Paved / concrete">Paved / concrete</option>
+                  <option value="Soil / open ground">Soil / open ground</option>
+                  <option value="Balcony / patio">Balcony / patio</option>
+                  <option value="Indoor room">Indoor room</option>
+                  <option value="Water body (dam / pond)">Water body (dam / pond)</option>
+                  <option value="Mixed">Mixed</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label-block">Select SFG growing systems and quantities</label>
+              <p class="form-doc-note">Tick each product you are applying for and enter the number of units required. <strong>Maximum 5 units per application</strong> across all products combined. Final allocation may differ based on eligibility and availability.</p>
+              <p class="sfg-qty-counter" id="sfgQtyCounter" aria-live="polite">0 of 5 units selected</p>
+              <span class="field-error" id="sfgProductError" aria-live="polite"></span>
+
+              <div class="sfg-product-grid" id="sfgProductGrid">
+                <div class="sfg-product-card" data-product="wickbox">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="WickBox™" />
+                      <span><strong>WickBox™</strong> <span class="sfg-product-card__tag">Self-watering</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for WickBox</span>
+                      <input type="number" name="sfgQtyWickbox" min="0" max="5" value="0" aria-label="WickBox quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Elegant self-watering grow box for vegetables, herbs, and small fruit trees. Indoor or outdoor. Optional castors for mobility.</p>
+                  <div class="sfg-product-card__options" id="wickboxOptionsWrap" hidden>
+                    <span class="form-group-label">WickBox™ castors preference</span>
+                    <div class="radio-group">
+                      <label class="radio-label"><input type="radio" name="wickboxCastors" value="With castors" /> With castors</label>
+                      <label class="radio-label"><input type="radio" name="wickboxCastors" value="Without castors" /> Without castors</label>
+                      <label class="radio-label"><input type="radio" name="wickboxCastors" value="No preference" checked /> No preference</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sfg-product-card" data-product="wicktray">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="WickTray™" />
+                      <span><strong>WickTray™</strong> <span class="sfg-product-card__tag">Self-watering</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for WickTray</span>
+                      <input type="number" name="sfgQtyWicktray" min="0" max="5" value="0" aria-label="WickTray quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Compact wicking tray for herbs, leafy greens, and small vegetable crops in tight spaces.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="ecogrow">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="EcoGrow™" />
+                      <span><strong>EcoGrow™</strong> <span class="sfg-product-card__tag">SFG system</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for EcoGrow</span>
+                      <input type="number" name="sfgQtyEcogrow" min="0" max="5" value="0" aria-label="EcoGrow quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Smart Food Growing system for efficient small-space production with minimal water use.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="hydrogrow_box">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="HydroGrow™ Box" />
+                      <span><strong>HydroGrow™ Box</strong> <span class="sfg-product-card__tag">Hydroponic</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for HydroGrow Box</span>
+                      <input type="number" name="sfgQtyHydrogrowBox" min="0" max="5" value="0" aria-label="HydroGrow Box quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Dual Root Zone hydroponic grow system (~695×695 mm) for higher yields with less water.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="hydrogrow_micro">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="HydroGrow™ Micro" />
+                      <span><strong>HydroGrow™ Micro</strong> <span class="sfg-product-card__tag">Hydroponic</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for HydroGrow Micro</span>
+                      <input type="number" name="sfgQtyHydrogrowMicro" min="0" max="5" value="0" aria-label="HydroGrow Micro quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Compact hydroponic unit for starter production and limited spaces.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="hydrogrow_pro_dwc">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="HydroGrow™ Pro DWC" />
+                      <span><strong>HydroGrow™ Pro DWC</strong> <span class="sfg-product-card__tag">Hydroponic</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for HydroGrow Pro DWC</span>
+                      <input type="number" name="sfgQtyHydrogrowProDwc" min="0" max="5" value="0" aria-label="HydroGrow Pro DWC quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Professional deep water culture system for intensive vegetable and herb production.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="hydrogrow_pro_planter">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="HydroGrow™ Pro Planter" />
+                      <span><strong>HydroGrow™ Pro Planter</strong> <span class="sfg-product-card__tag">Hydroponic</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for HydroGrow Pro Planter</span>
+                      <input type="number" name="sfgQtyHydrogrowProPlanter" min="0" max="5" value="0" aria-label="HydroGrow Pro Planter quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Professional planter for sustained hydroponic crop cycles.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="growraft_crops">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="GrowRaft™ Floated Crops" />
+                      <span><strong>GrowRaft™ Floated Crops</strong> <span class="sfg-product-card__tag">Aquaculture</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for GrowRaft Floated Crops</span>
+                      <input type="number" name="sfgQtyGrowraftCrops" min="0" max="5" value="0" aria-label="GrowRaft Floated Crops quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Floating crop raft for water-based growing environments (dam, pond, or tank).</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="growraft_solar">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="GrowRaft™ Floated Solar" />
+                      <span><strong>GrowRaft™ Floated Solar</strong> <span class="sfg-product-card__tag">Aquaculture</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for GrowRaft Floated Solar</span>
+                      <input type="number" name="sfgQtyGrowraftSolar" min="0" max="5" value="0" aria-label="GrowRaft Floated Solar quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Floating system combining crop production with solar integration on water bodies.</p>
+                </div>
+
+                <div class="sfg-product-card" data-product="versatray">
+                  <div class="sfg-product-card__header">
+                    <label class="checkbox-label sfg-product-card__select">
+                      <input type="checkbox" name="sfgProduct" value="VersaTray™" />
+                      <span><strong>VersaTray™</strong> <span class="sfg-product-card__tag">Tray system</span></span>
+                    </label>
+                    <label class="sfg-product-card__qty">
+                      <span class="visually-hidden">Quantity for VersaTray</span>
+                      <input type="number" name="sfgQtyVersatray" min="0" max="5" value="0" aria-label="VersaTray quantity" />
+                    </label>
+                  </div>
+                  <p class="sfg-product-card__desc">Versatile tray module for seedlings, herbs, and compact vegetable crops.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sfgSupplyNotes">Additional supply notes (optional)</label>
+              <textarea id="sfgSupplyNotes" name="sfgSupplyNotes" rows="2" placeholder="e.g. preferred delivery area, access constraints, crop types you plan to grow in the systems"></textarea>
+            </div>
+
+            <div class="form-group">
+              <span class="form-group-label">Water access for filling growing systems</span>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="label-block">Municipal tap</label>
+                  <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="waterMunicipal" value="Yes" /> Yes</label>
+                    <label class="radio-label"><input type="radio" name="waterMunicipal" value="No" /> No</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="label-block">Borehole / rainwater</label>
+                  <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="waterBorehole" value="Yes" /> Yes</label>
+                    <label class="radio-label"><input type="radio" name="waterBorehole" value="No" /> No</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="sfgAppAck" value="yes" />
+                <span>I understand that approved applicants receive access to the <strong>SFG App</strong> for technical guidance from planting to harvest.</span>
+              </label>
+              <span class="field-error" id="sfgAppAckError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="hectaresCurrentlyPlanted">Hectares currently planted (if applicable)</label>
                 <input type="number" id="hectaresCurrentlyPlanted" name="hectaresCurrentlyPlanted" min="0" step="0.01" />
               </div>
               <div class="form-group">
-                <label for="expectedYield">Expected yield (tons/ha or units)</label>
-                <input type="text" id="expectedYield" name="expectedYield" placeholder="e.g. 4 tons/ha" />
+                <label for="expectedYield">Expected yield from SFG systems</label>
+                <input type="text" id="expectedYield" name="expectedYield" placeholder="e.g. 50 kg vegetables/month" />
               </div>
             </div>
 
@@ -712,6 +857,7 @@
               <p><strong>Farmer category:</strong> <span id="summaryCategory">—</span></p>
               <p><strong>Applicant name:</strong> <span id="summaryApplicant">—</span></p>
               <p><strong>Farm name:</strong> <span id="summaryFarm">—</span></p>
+              <p><strong>SFG systems requested:</strong> <span id="summarySfgSupply">—</span></p>
             </div>
 
             <div class="popia-consent-block">
@@ -740,7 +886,7 @@
     <footer class="site-footer">
       <div class="footer__top"><div class="container"><div class="footer__grid">
         <div><p class="footer__brand-name">Mpumalanga AgriSupport</p><p class="footer__brand-text">Agricultural Decision Support System for the Mpumalanga Department of Agriculture.</p></div>
-        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="../crop.html">Crop Management</a><a href="../livestock.html">Livestock Management</a><a href="../environmental.html">Environmental Enrichment</a></div></div>
+        <div><h4 class="footer__heading">Programmes</h4><div class="footer__links"><a href="../crop.html">Crop Management</a><a href="../livestock.html#mesp-2025-26">Masibuyele Esibayeni</a><a href="../environmental.html">Environmental Enrichment</a></div></div>
         <div><h4 class="footer__heading">Resources</h4><div class="footer__links"><a href="../weather.html">Weather Data</a><a href="../alerts.html">Farming Alerts</a><a href="../guides.html">Advisory Guides</a><a href="../support.html">Support Contacts</a><a href="../track.html">Track Application</a></div></div>
         <div><h4 class="footer__heading">Legal</h4><div class="footer__links"><a href="../popia.html">POPIA Compliance</a><a href="../terms.html">Terms of Service</a><a href="../staff-login.html">Staff Portal</a></div></div>
       </div></div></div>
