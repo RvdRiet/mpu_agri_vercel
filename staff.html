@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#2d5a27">
+  <meta name="robots" content="noindex, nofollow">
   <title>Staff Portal - Mpumalanga AgriSupport</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,76 +19,99 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <nav class="site-nav site-nav--staff" role="navigation" aria-label="Staff portal navigation">
       <div class="site-nav__inner">
-        <a href="index.html" class="site-nav__brand">
+        <a href="staff.html" class="site-nav__brand">
           <img src="images/mpumalanga.webp" alt="" class="site-nav__logo" aria-hidden="true" />
           <span class="site-nav__brand-text">
             <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
-            <span class="site-nav__brand-sub">Decision Support System</span>
+            <span class="site-nav__brand-sub">Staff Portal</span>
           </span>
         </a>
         <div class="site-nav__links">
-          <div class="nav-item"><a href="index.html" class="nav-link">Home</a></div>
-          <div class="nav-item"><a href="support.html" class="nav-link">Support</a></div>
-          <div class="nav-item">
-            <button class="nav-link" type="button" aria-expanded="false">Apply <span class="nav-link__arrow" aria-hidden="true">&#9660;</span></button>
-            <div class="nav-dropdown" role="menu">
-              <a href="Application/crop.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Crop Grant</span></span></a>
-              <a href="Application/mesp-2025-26.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Masibuyele 2025/26</span></span></a>
-              <a href="Application/environmental.html" class="nav-dropdown__link" role="menuitem"><span class="nav-dropdown__icon">&#128196;</span><span class="nav-dropdown__text"><span class="nav-dropdown__label">Environmental Grant</span></span></a>
-            </div>
-          </div>
+          <div class="nav-item"><a href="index.html" class="nav-link">Public site</a></div>
         </div>
         <div class="site-nav__actions">
-          <a href="staff-login.html" class="nav-link">Staff Login</a>
+          <a href="staff.html" class="nav-link active" aria-current="page">Application Review</a>
+          <a href="staff-insights.html" class="nav-link">Stats &amp; Insights</a>
         </div>
-        <button class="nav-toggle" id="navToggle" type="button" aria-label="Toggle menu" aria-expanded="false"><span class="nav-toggle__bar"></span></button>
       </div>
-      <div class="site-nav__mobile" id="mobileNav">
-        <div class="mobile-nav__section"><div class="mobile-nav__heading">Navigation</div><a href="index.html" class="mobile-nav__link">Home</a><a href="support.html" class="mobile-nav__link">Support</a></div>
-        <div class="mobile-nav__section"><div class="mobile-nav__heading">Applications</div><a href="Application/crop.html" class="mobile-nav__link">Crop Grant</a><a href="Application/mesp-2025-26.html" class="mobile-nav__link">Masibuyele 2025/26</a><a href="Application/environmental.html" class="mobile-nav__link">Environmental Grant</a><a href="track.html" class="mobile-nav__link">Track Application</a></div>
-      </div>
-      <div class="mobile-nav-overlay" id="mobileOverlay"></div>
     </nav>
 
-    <main class="main-content account-page">
+    <main class="main-content staff-portal-page">
       <div class="container">
         <nav class="insights-nav-tabs" aria-label="Staff sections">
           <a href="staff.html" class="is-active" aria-current="page">Application Review</a>
           <a href="staff-insights.html">Stats &amp; Insights</a>
         </nav>
 
-        <section class="card" style="margin-bottom: 1rem;">
-          <div class="card__body">
-            <div class="account-header">
-              <div>
-                <h1 style="margin:0;">Staff Portal</h1>
-                <p style="margin:.35rem 0 0;">Review applications, inspect captured details, and map applicant farm locations.</p>
+        <header class="staff-review-hero">
+          <div class="staff-review-hero__intro">
+            <h1>Application Review</h1>
+            <p>Review grant applications, progress them through the approval workflow, and record decisions with a clear audit trail.</p>
+          </div>
+          <div class="staff-review-hero__actions staff-portal-actions">
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Session</span>
+              <div class="staff-portal-actions__buttons">
+                <span class="insights-staff-pill">Signed in as <span id="staffUserName">Staff</span></span>
+                <button id="btnStaffLogout" class="staff-portal-btn staff-portal-btn--outline" type="button">Logout</button>
               </div>
-              <div class="account-actions">
-                <button id="btnRefreshData" class="btn-start-application" type="button">Refresh Data</button>
-                <button id="btnStaffLogout" class="btn-outline" type="button">Logout</button>
+            </div>
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Data</span>
+              <div class="staff-portal-actions__buttons">
+                <button id="btnRefreshData" class="staff-portal-btn staff-portal-btn--primary" type="button">Refresh</button>
               </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="staff-stats" id="staffStats" aria-label="Application status summary"></section>
+
+        <section class="staff-toolbar card">
+          <div class="card__body staff-toolbar__inner">
+            <div class="staff-toolbar__search">
+              <label for="staffSearch" class="visually-hidden">Search applications</label>
+              <input type="search" id="staffSearch" class="staff-search-input" placeholder="Search by name, reference, ID, or farm…" autocomplete="off">
+            </div>
+            <div class="staff-toolbar__filter">
+              <label for="staffProgrammeFilter">Programme</label>
+              <select id="staffProgrammeFilter">
+                <option value="all">All programmes</option>
+                <option value="mesp_2025_26">Masibuyele 2025/26</option>
+                <option value="livestock">Livestock Grant</option>
+                <option value="crop">Crop Grant</option>
+                <option value="environmental">Environmental Grant</option>
+              </select>
             </div>
           </div>
         </section>
 
-        <section class="card" style="margin-bottom: 1rem;">
+        <section class="card staff-queue-section">
           <div class="card__body">
-            <h2 style="margin:0 0 .75rem;">Applicant Farm Map</h2>
-            <p class="field-note" style="margin:0 0 .6rem;">Each pin represents an applicant farm location. Click a pin to inspect applicant details and open the full application.</p>
-            <div id="staffMapMeta" class="field-note" style="margin-bottom:.65rem;"></div>
-            <div id="staffMap" class="staff-map" aria-label="Applicant farm map"></div>
+            <div class="staff-queue-header">
+              <h2>Review queue</h2>
+              <p id="staffQueueCount" class="staff-queue-count">0 applications</p>
+            </div>
+            <div id="staffList" class="staff-queue" hidden></div>
+            <div id="staffEmpty" class="staff-empty" hidden>
+              <p>No applications match your filters.</p>
+              <p class="staff-empty__hint">Try clearing the search or selecting a different status above.</p>
+            </div>
           </div>
         </section>
 
-        <section class="card">
+        <section class="card staff-map-section-wrap">
           <div class="card__body">
-            <h2 style="margin:0 0 .75rem;">All Applications</h2>
-            <div id="staffList" class="staff-groups" hidden></div>
-            <div id="staffEmpty" class="staff-empty" hidden>
-              <p>No applications available yet.</p>
+            <button type="button" class="staff-map-toggle" id="staffMapToggle" aria-expanded="false" aria-controls="staffMapSection">
+              <span>Show applicant farm map</span>
+              <span class="staff-map-toggle__icon" aria-hidden="true">▼</span>
+            </button>
+            <div id="staffMapSection" class="staff-map-section" hidden>
+              <p class="field-note">Each pin is an applicant farm location. Open a pin to start the review.</p>
+              <div id="staffMapMeta" class="field-note staff-map-meta"></div>
+              <div id="staffMap" class="staff-map" aria-label="Applicant farm map"></div>
             </div>
           </div>
         </section>
@@ -105,13 +129,42 @@
     </main>
   </div>
 
-  <div id="detailModal" class="staff-modal-overlay" hidden>
-    <div class="staff-modal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
-      <div class="staff-modal-header">
-        <h3 id="detailModalTitle">Application details</h3>
-        <button type="button" class="staff-modal-close" id="detailModalClose">Close</button>
+  <div id="reviewPanel" class="staff-review-panel" hidden>
+    <div class="staff-review-panel__backdrop" id="reviewPanelBackdrop"></div>
+    <aside class="staff-review-panel__drawer" role="dialog" aria-modal="true" aria-labelledby="reviewPanelTitle">
+      <header class="staff-review-panel__header">
+        <div class="staff-review-panel__heading">
+          <p class="staff-review-panel__eyebrow">Application review</p>
+          <h2 id="reviewPanelTitle">Applicant name</h2>
+          <p id="reviewPanelSubtitle" class="staff-review-panel__subtitle"></p>
+        </div>
+        <div class="staff-review-panel__header-meta">
+          <span id="reviewPanelStatus" class="staff-status staff-status-submitted">Submitted</span>
+          <button type="button" class="staff-review-panel__close" id="reviewPanelClose">Close</button>
+        </div>
+      </header>
+      <div class="staff-review-panel__progress-wrap">
+        <h3 class="staff-review-panel__progress-title">Approval workflow</h3>
+        <div id="reviewPanelProgress"></div>
       </div>
-      <div class="staff-modal-body" id="detailModalBody"></div>
+      <div class="staff-review-panel__body" id="reviewPanelBody"></div>
+      <footer class="staff-review-panel__footer" id="reviewPanelActions"></footer>
+    </aside>
+  </div>
+
+  <div id="actionModal" class="staff-action-modal" hidden>
+    <div class="staff-action-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="actionModalTitle">
+      <h3 id="actionModalTitle">Confirm action</h3>
+      <p id="actionModalDesc" class="staff-action-modal__desc"></p>
+      <label class="staff-action-modal__field" for="actionModalInput">
+        <span id="actionModalLabel">Note</span>
+        <textarea id="actionModalInput" rows="4"></textarea>
+      </label>
+      <p id="actionModalError" class="staff-action-modal__error" role="alert"></p>
+      <div class="staff-action-modal__buttons">
+        <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="actionModalCancel">Cancel</button>
+        <button type="button" class="staff-portal-btn staff-portal-btn--primary" id="actionModalConfirm">Confirm</button>
+      </div>
     </div>
   </div>
 
@@ -120,440 +173,12 @@
   <script src="js/staff-auth.js"></script>
   <script src="js/applications.js"></script>
   <script src="js/security.js"></script>
-  <script src="js/nav.js"></script>
+  <script src="js/staff-portal.js"></script>
   <script>
     (function () {
-      'use strict';
-      var staff = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
-      if (!staff) {
-        window.location.href = 'staff-login.html';
-        return;
-      }
-
-      var allItems = [];
-      var mapInstance = null;
-      var markerLayer = null;
-
-      function esc(v) {
-        if (window.FarmSecurity && typeof FarmSecurity.escapeHtml === 'function') return FarmSecurity.escapeHtml(v);
-        if (v == null) return '';
-        return String(v).replace(/[&<>"']/g, function (c) {
-          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-        });
-      }
-
-      function formatDate(iso) {
-        if (!iso) return '—';
-        var d = new Date(iso);
-        if (isNaN(d.getTime())) return '—';
-        return d.toLocaleString('en-ZA');
-      }
-
-      function formatLabel(key) {
-        return String(key || '').replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').replace(/\s+/g, ' ').trim().replace(/^./, function (c) { return c.toUpperCase(); });
-      }
-
-      function getGrantType(app) {
-        var t = (app && app.type) || '';
-        if (t === 'mesp_2025_26') return { key: 'mesp_2025_26', label: 'Masibuyele 2025/26 Applications' };
-        if (t === 'livestock') return { key: 'livestock', label: 'Livestock Grant Applications' };
-        if (t === 'crop') return { key: 'crop', label: 'Crop Grant Applications' };
-        if (t === 'environmental') return { key: 'environmental', label: 'Environmental Grant Applications' };
-        return { key: 'other', label: 'Other Applications' };
-      }
-
-      function statusClass(status) {
-        var v = String(status || '').toLowerCase();
-        if (v === 'approved') return 'staff-status-approved';
-        if (v === 'rejected' || v === 'denied') return 'staff-status-rejected';
-        if (v === 'additional documentation required') return 'staff-status-docs-required';
-        if (v.indexOf('review') !== -1 || v.indexOf('assessment') !== -1 || v.indexOf('approval') !== -1 || v.indexOf('induction') !== -1 || v.indexOf('procurement') !== -1 || v.indexOf('inspection') !== -1 || v.indexOf('monitoring') !== -1) return 'staff-status-under-review';
-        return 'staff-status-submitted';
-      }
-
-      function nextProcedureStage(current) {
-        var stages = [
-          'Submitted',
-          'Profiling and Shortlisting',
-          'Farm Assessment',
-          'HOD Approval',
-          'Induction',
-          'Procurement',
-          'Pre and Post Delivery Inspection',
-          'Monitoring Evaluation and Advisory',
-          'Approved'
-        ];
-        var idx = stages.indexOf(current || 'Submitted');
-        if (idx < 0) return stages[1];
-        if (idx >= stages.length - 1) return null;
-        return stages[idx + 1];
-      }
-
-      function collectStageEvidence(nextStage) {
-        var note = prompt('Provide evidence / note for stage: ' + nextStage);
-        if (note === null) return null;
-        note = note.trim();
-        if (!note) {
-          alert('Evidence note is required to advance stage.');
-          return null;
-        }
-        return { evidenceNote: note };
-      }
-
-      function renderValue(value) {
-        if (value === null || value === undefined || value === '') return '—';
-        if (Array.isArray(value)) return value.map(function (v) { return esc(v); }).join(', ');
-        if (typeof value === 'object') return '<pre class="staff-json">' + esc(JSON.stringify(value, null, 2)) + '</pre>';
-        return esc(value);
-      }
-
-      function renderDetails(details) {
-        var keys = Object.keys(details || {}).sort();
-        if (!keys.length) return '<p>—</p>';
-        var html = '<dl class="staff-detail-dl">';
-        keys.forEach(function (key) {
-          html += '<dt>' + esc(formatLabel(key)) + '</dt><dd>' + renderValue(details[key]) + '</dd>';
-        });
-        html += '</dl>';
-        return html;
-      }
-
-      function openDetail(userId, app) {
-        var body = document.getElementById('detailModalBody');
-        var summary = app.summary || {};
-        var details = app.details || {};
-        var html = '';
-        html += '<p><strong>Reference:</strong> ' + esc(app.id) + '</p>';
-        html += '<p><strong>Applicant ID:</strong> ' + esc(userId) + '</p>';
-        html += '<p><strong>Submitted:</strong> ' + esc(formatDate(app.submittedAt)) + '</p>';
-        html += '<p><strong>Status:</strong> <span class="staff-status ' + statusClass(app.status) + '">' + esc(app.status || 'Submitted') + '</span></p>';
-        html += '<p><strong>Commodity:</strong> ' + esc(summary.commodity || '—') + ' &nbsp; <strong>Category:</strong> ' + esc(summary.farmerCategory || '—') + '</p>';
-        html += '<p><strong>Applicant / Project:</strong> ' + esc(summary.registeredName || '—') + '</p>';
-        html += '<p><strong>Farm:</strong> ' + esc(summary.farmName || '—') + '</p>';
-        if (app.statusMessage) html += '<div class="staff-status-message"><strong>Reviewer note:</strong> ' + esc(app.statusMessage) + '</div>';
-        if (app.stageEvidenceLatest) html += '<div class="staff-status-message"><strong>Latest stage evidence:</strong> ' + esc(app.stageEvidenceLatest) + '</div>';
-
-        if (Array.isArray(app.stageHistory) && app.stageHistory.length) {
-          html += '<h4 style="margin-top:1.1rem;">Stage history</h4><ul>';
-          app.stageHistory.forEach(function (entry) {
-            html += '<li><strong>' + esc(entry.to || '—') + '</strong> from ' + esc(entry.from || '—') + ' on ' + esc(formatDate(entry.updatedAt)) + ' by ' + esc(entry.updatedBy || 'Staff');
-            if (entry.note) html += '<br><span>' + esc(entry.note) + '</span>';
-            html += '</li>';
-          });
-          html += '</ul>';
-        }
-
-        html += '<h4 style="margin-top:1.1rem;">All captured application details</h4>';
-        html += renderDetails(details);
-        body.innerHTML = html;
-        document.getElementById('detailModalTitle').textContent = 'Application ' + esc(app.id || '');
-        document.getElementById('detailModal').hidden = false;
-      }
-
-      function buildPdfRows(userId, app) {
-        var rows = [
-          ['Reference', app.id || '—'],
-          ['Applicant ID', userId || '—'],
-          ['Submitted', formatDate(app.submittedAt)],
-          ['Status', app.status || 'Submitted'],
-          ['Application Type', app.type || '—']
-        ];
-        var summary = app.summary || {};
-        Object.keys(summary).sort().forEach(function (k) { rows.push(['Summary: ' + formatLabel(k), String(summary[k] || '—')]); });
-        var details = app.details || {};
-        Object.keys(details).sort().forEach(function (k) { rows.push(['Detail: ' + formatLabel(k), typeof details[k] === 'object' ? JSON.stringify(details[k]) : String(details[k] || '—')]); });
-        return rows;
-      }
-
-      function downloadApplicationPdf(userId, app) {
-        if (!window.jspdf || !window.jspdf.jsPDF) return alert('PDF library unavailable.');
-        var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
-        var margin = 40;
-        var width = doc.internal.pageSize.getWidth() - margin * 2;
-        var y = margin;
-        function ensure(h) {
-          if (y + h > doc.internal.pageSize.getHeight() - margin) { doc.addPage(); y = margin; }
-        }
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(15); doc.text('Application Export', margin, y); y += 22;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.text('Generated: ' + new Date().toLocaleString('en-ZA'), margin, y); y += 16;
-        buildPdfRows(userId, app).forEach(function (row) {
-          var label = doc.splitTextToSize(row[0] + ':', width);
-          var value = doc.splitTextToSize(row[1], width);
-          ensure((label.length + value.length) * 13 + 6);
-          doc.setFont('helvetica', 'bold'); doc.text(label, margin, y); y += label.length * 13;
-          doc.setFont('helvetica', 'normal'); doc.text(value, margin, y); y += value.length * 13 + 6;
-        });
-        doc.save('application-' + String(app.id || 'export').replace(/[^a-zA-Z0-9_-]/g, '_') + '.pdf');
-      }
-
-      function parseCoords(app) {
-        var d = (app && app.details) || {};
-        var lat = parseFloat(d.gpsLatitude);
-        var lon = parseFloat(d.gpsLongitude);
-        if (isFinite(lat) && isFinite(lon)) return { lat: lat, lon: lon };
-        if (d.gpsCoordinates) {
-          var m = String(d.gpsCoordinates).match(/(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/);
-          if (m) return { lat: parseFloat(m[1]), lon: parseFloat(m[2]) };
-        }
-        return null;
-      }
-
-      function initMap() {
-        if (mapInstance || !window.L) return;
-        mapInstance = window.L.map('staffMap').setView([-25.5, 30.9], 7);
-        window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(mapInstance);
-        markerLayer = window.L.layerGroup().addTo(mapInstance);
-      }
-
-      function renderMap(items) {
-        initMap();
-        if (!markerLayer) return;
-        markerLayer.clearLayers();
-
-        var withCoords = [];
-        (items || []).forEach(function (item) {
-          var app = item.application || {};
-          var coords = parseCoords(app);
-          if (!coords) return;
-          withCoords.push({ item: item, coords: coords });
-          var sum = app.summary || {};
-          var popup = ''
-            + '<div class="staff-map-popup">'
-            + '<p><strong>' + esc(sum.registeredName || item.userId || 'Applicant') + '</strong></p>'
-            + '<p>Farm: ' + esc(sum.farmName || '—') + '</p>'
-            + '<p>Status: ' + esc(app.status || 'Submitted') + '</p>'
-            + '<p>Ref: ' + esc(app.id || '—') + '</p>'
-            + '<button type="button" class="staff-btn staff-btn-view js-map-view" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">View full application</button>'
-            + '</div>';
-          window.L.marker([coords.lat, coords.lon]).addTo(markerLayer).bindPopup(popup);
-        });
-
-        var meta = document.getElementById('staffMapMeta');
-        if (meta) meta.textContent = withCoords.length + ' of ' + (items || []).length + ' applications have map coordinates.';
-
-        if (withCoords.length) {
-          var group = window.L.featureGroup(withCoords.map(function (x) { return window.L.marker([x.coords.lat, x.coords.lon]); }));
-          mapInstance.fitBounds(group.getBounds().pad(0.2));
-        }
-      }
-
-      function setStatus(userId, appId, status, extra) {
-        if (!window.FarmApplications) return;
-        FarmApplications.updateApplicationStatus(userId, appId, status, extra || {}).then(loadAll);
-      }
-
-      function advanceStage(item) {
-        var app = item.application;
-        var next = nextProcedureStage(app.status || 'Submitted');
-        if (!next) return alert('Application already at final stage.');
-        var evidence = collectStageEvidence(next);
-        if (!evidence) return;
-        var history = Array.isArray(app.stageHistory) ? app.stageHistory.slice() : [];
-        history.push({
-          from: app.status || 'Submitted',
-          to: next,
-          note: evidence.evidenceNote,
-          updatedBy: staff.name || staff.username || 'Staff',
-          updatedAt: new Date().toISOString()
-        });
-        setStatus(item.userId, app.id, next, {
-          stageHistory: history,
-          stageEvidenceLatest: evidence.evidenceNote
-        });
-      }
-
-      function renderList(items) {
-        var listWrap = document.getElementById('staffList');
-        var emptyEl = document.getElementById('staffEmpty');
-        if (!items.length) {
-          listWrap.hidden = true;
-          emptyEl.hidden = false;
-          return;
-        }
-        emptyEl.hidden = true;
-        listWrap.hidden = false;
-
-        var grouped = {};
-        items.forEach(function (item) {
-          var g = getGrantType(item.application);
-          if (!grouped[g.key]) grouped[g.key] = { label: g.label, items: [] };
-          grouped[g.key].items.push(item);
-        });
-
-        var order = ['mesp_2025_26', 'livestock', 'crop', 'environmental', 'other'];
-        var html = '';
-        order.forEach(function (key) {
-          if (!grouped[key] || !grouped[key].items.length) return;
-          html += '<section class="staff-group-card">';
-          html += '<div class="staff-group-head"><h3>' + esc(grouped[key].label) + '</h3><span class="staff-group-count">' + grouped[key].items.length + '</span></div>';
-          html += '<div class="staff-table-wrap"><table class="staff-table"><thead><tr><th>Reference</th><th>Applicant ID</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-          grouped[key].items.forEach(function (item) {
-            var app = item.application || {};
-            html += '<tr>'
-              + '<td>' + esc(app.id || '—') + '</td>'
-              + '<td>' + esc(item.userId || '—') + '</td>'
-              + '<td>' + esc(formatDate(app.submittedAt)) + '</td>'
-              + '<td><span class="staff-status ' + statusClass(app.status) + '">' + esc(app.status || 'Submitted') + '</span></td>'
-              + '<td class="staff-actions-cell">'
-              + '<button class="staff-btn staff-btn-view" data-action="view" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">View Full</button>'
-              + '<button class="staff-btn staff-btn-view" data-action="pdf" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Download PDF</button>'
-              + '<button class="staff-btn staff-btn-view" data-action="advance" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Advance Stage</button>'
-              + '<button class="staff-btn staff-btn-request-docs" data-action="request-docs" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Request Docs</button>'
-              + '<button class="staff-btn staff-btn-approve" data-action="approve" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Approve</button>'
-              + '<button class="staff-btn staff-btn-deny" data-action="deny" data-userid="' + esc(item.userId) + '" data-appid="' + esc(app.id) + '">Reject</button>'
-              + '</td>'
-              + '</tr>';
-          });
-          html += '</tbody></table></div></section>';
-        });
-        listWrap.innerHTML = html;
-      }
-
-      function issueStatusClass(status) {
-        var v = (status || '').toLowerCase().replace(/\s/g, '-');
-        if (v === 'resolved') return 'staff-status-approved';
-        if (v === 'in-progress') return 'staff-status-under-review';
-        return 'staff-status-submitted';
-      }
-
-      function getIssueReports() {
-        try {
-          var raw = localStorage.getItem('farm_issue_reports');
-          var list = raw ? JSON.parse(raw) : [];
-          list.sort(function (a, b) { return new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0); });
-          return list;
-        } catch (e) { return []; }
-      }
-
-      function saveIssueReports(list) {
-        try { localStorage.setItem('farm_issue_reports', JSON.stringify(list || [])); } catch (e) {}
-      }
-
-      function updateIssueStatus(issueId, status) {
-        var list = getIssueReports();
-        for (var i = 0; i < list.length; i++) {
-          if (list[i].id === issueId) {
-            list[i].status = status;
-            list[i].statusUpdatedAt = new Date().toISOString();
-          }
-        }
-        saveIssueReports(list);
-        renderIssues();
-      }
-
-      function renderIssues() {
-        var listWrap = document.getElementById('staffIssuesList');
-        var emptyEl = document.getElementById('staffIssuesEmpty');
-        var list = getIssueReports();
-        if (!list.length) {
-          listWrap.hidden = true;
-          emptyEl.hidden = false;
-          return;
-        }
-        emptyEl.hidden = true;
-        listWrap.hidden = false;
-        listWrap.innerHTML = list.map(function (issue) {
-          var status = issue.status || 'Submitted';
-          return '<article class="staff-issue-card">'
-            + '<div class="staff-issue-head"><h3 class="staff-issue-title">' + esc(issue.issueType || 'Issue') + '</h3><span class="staff-status ' + issueStatusClass(status) + '">' + esc(status) + '</span></div>'
-            + '<p class="staff-issue-meta"><strong>Ref:</strong> ' + esc(issue.id || '—') + ' &nbsp; <strong>User:</strong> ' + esc(issue.userName || issue.userId || '—') + ' &nbsp; <strong>Submitted:</strong> ' + esc(formatDate(issue.submittedAt)) + '</p>'
-            + '<p class="staff-issue-desc">' + esc(issue.description || '') + '</p>'
-            + '<div class="staff-issue-actions">'
-            + '<button type="button" class="staff-btn staff-btn-view" data-issue-action="submitted" data-issueid="' + esc(issue.id || '') + '">Mark Submitted</button>'
-            + '<button type="button" class="staff-btn staff-btn-request-docs" data-issue-action="progress" data-issueid="' + esc(issue.id || '') + '">Mark In Progress</button>'
-            + '<button type="button" class="staff-btn staff-btn-approve" data-issue-action="resolved" data-issueid="' + esc(issue.id || '') + '">Mark Resolved</button>'
-            + '</div></article>';
-        }).join('');
-      }
-
-      function findItem(userId, appId) {
-        for (var i = 0; i < allItems.length; i++) {
-          if (allItems[i].userId === userId && (allItems[i].application && allItems[i].application.id === appId)) return allItems[i];
-        }
-        return null;
-      }
-
-      function loadAll() {
-        var p = window.FarmApplications ? FarmApplications.getAllApplicationsForStaff() : Promise.resolve([]);
-        p.then(function (items) {
-          allItems = items || [];
-          renderList(allItems);
-          renderMap(allItems);
-          renderIssues();
-        }).catch(function () {
-          allItems = [];
-          renderList(allItems);
-          renderMap(allItems);
-          renderIssues();
-        });
-      }
-
-      document.getElementById('detailModalClose').addEventListener('click', function () {
-        document.getElementById('detailModal').hidden = true;
-      });
-      document.getElementById('detailModal').addEventListener('click', function (e) {
-        if (e.target === document.getElementById('detailModal')) document.getElementById('detailModal').hidden = true;
-      });
-
-      document.addEventListener('click', function (e) {
-        var btn = e.target.closest('button');
-        if (!btn) return;
-
-        if (btn.id === 'btnRefreshData') {
-          loadAll();
-          return;
-        }
-        if (btn.id === 'btnStaffLogout') {
-          if (window.FarmStaffAuth) FarmStaffAuth.logout();
-          window.location.href = 'staff-login.html';
-          return;
-        }
-
-        var mapView = btn.closest('.js-map-view');
-        if (mapView) {
-          var mapItem = findItem(mapView.getAttribute('data-userid'), mapView.getAttribute('data-appid'));
-          if (mapItem) openDetail(mapItem.userId, mapItem.application);
-          return;
-        }
-
-        var issueAction = btn.getAttribute('data-issue-action');
-        if (issueAction) {
-          var issueId = btn.getAttribute('data-issueid');
-          if (issueAction === 'submitted') updateIssueStatus(issueId, 'Submitted');
-          if (issueAction === 'progress') updateIssueStatus(issueId, 'In Progress');
-          if (issueAction === 'resolved') updateIssueStatus(issueId, 'Resolved');
-          return;
-        }
-
-        var action = btn.getAttribute('data-action');
-        if (!action) return;
-        var userId = btn.getAttribute('data-userid');
-        var appId = btn.getAttribute('data-appid');
-        var item = findItem(userId, appId);
-        if (!item) return;
-        var app = item.application;
-        if (action === 'view') openDetail(userId, app);
-        if (action === 'pdf') downloadApplicationPdf(userId, app);
-        if (action === 'advance') advanceStage(item);
-        if (action === 'approve') setStatus(userId, appId, 'Approved');
-        if (action === 'deny') setStatus(userId, appId, 'Rejected');
-        if (action === 'request-docs') {
-          var message = prompt('Describe the additional documentation required from the applicant:');
-          if (message === null) return;
-          message = message.trim();
-          if (!message) return alert('Please provide a description.');
-          setStatus(userId, appId, 'Additional Documentation Required', {
-            statusMessage: message,
-            docsRequestedBy: (staff.name || staff.username),
-            docsRequestedAt: new Date().toISOString()
-          });
-        }
-      });
-
-      loadAll();
+      var s = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
+      var el = document.getElementById('staffUserName');
+      if (el && s) el.textContent = s.name || s.username;
     })();
   </script>
 </body>

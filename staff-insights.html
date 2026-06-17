@@ -17,48 +17,67 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <nav class="site-nav" role="navigation" aria-label="Staff navigation">
+    <nav class="site-nav site-nav--staff" role="navigation" aria-label="Staff portal navigation">
       <div class="site-nav__inner">
-        <a href="index.html" class="site-nav__brand">
+        <a href="staff.html" class="site-nav__brand">
           <img src="images/mpumalanga.webp" alt="" class="site-nav__logo" aria-hidden="true" />
           <span class="site-nav__brand-text">
             <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
             <span class="site-nav__brand-sub">Staff Portal</span>
           </span>
         </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Public site</a></div>
+        </div>
         <div class="site-nav__actions">
-          <a href="staff.html" class="nav-link">Applications</a>
+          <a href="staff.html" class="nav-link">Application Review</a>
+          <a href="staff-insights.html" class="nav-link active" aria-current="page">Stats &amp; Insights</a>
         </div>
       </div>
     </nav>
 
-    <main class="main-content insights-page">
+    <main class="main-content staff-portal-page">
       <div class="container">
         <nav class="insights-nav-tabs" aria-label="Staff sections">
           <a href="staff.html">Application Review</a>
           <a href="staff-insights.html" class="is-active" aria-current="page">Stats &amp; Insights</a>
         </nav>
 
-        <header class="insights-hero">
-          <div>
+        <header class="staff-review-hero">
+          <div class="staff-review-hero__intro">
             <h1>Stats &amp; Insights</h1>
             <p>Website usage, grant submissions, approvals, and programme engagement — stored server-side by month. Download reports for reporting and audits.</p>
           </div>
-          <div class="insights-hero-actions">
-            <span class="insights-staff-pill">Signed in as <span id="insightsStaffName">Staff</span></span>
-            <label class="insights-month-picker">
-              <span class="visually-hidden">Report month</span>
-              <select id="insightsMonthSelect" aria-label="Select report month"></select>
-            </label>
-            <button type="button" class="btn-outline" id="btnInsightsDownloadCsv">Download CSV</button>
-            <button type="button" class="btn-outline" id="btnInsightsDownloadJson">Download JSON</button>
-            <button type="button" class="btn-start-application" id="btnInsightsRefresh">Refresh</button>
-            <button type="button" class="btn-outline" id="btnInsightsLogout">Logout</button>
+          <div class="staff-review-hero__actions staff-portal-actions">
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Export</span>
+              <div class="staff-portal-actions__buttons">
+                <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="btnInsightsDownloadCsv">Download CSV</button>
+                <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="btnInsightsDownloadJson">Download JSON</button>
+              </div>
+            </div>
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Report</span>
+              <div class="staff-portal-actions__buttons">
+                <label class="insights-month-picker">
+                  <span class="visually-hidden">Report month</span>
+                  <select id="insightsMonthSelect" aria-label="Select report month"></select>
+                </label>
+                <button type="button" class="staff-portal-btn staff-portal-btn--primary" id="btnInsightsRefresh">Refresh</button>
+              </div>
+            </div>
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Session</span>
+              <div class="staff-portal-actions__buttons">
+                <span class="insights-staff-pill">Signed in as <span id="staffUserName">Staff</span></span>
+                <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="btnInsightsLogout">Logout</button>
+              </div>
+            </div>
           </div>
         </header>
 
         <p id="insightsAuthWarning" class="insights-auth-warning" hidden>
-          Analytics API token missing. Log out and sign in again while the dev server is running (<code>npm start</code>).
+          Your analytics session expired or is missing. You will be redirected to sign in again.
         </p>
 
         <div id="insightsLoading" class="insights-loading">
@@ -130,10 +149,16 @@
   </div>
 
   <script src="js/staff-auth.js"></script>
-  <script src="js/applications.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/security.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="js/staff-insights.js"></script>
+  <script>
+    (function () {
+      var s = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
+      var el = document.getElementById('staffUserName');
+      if (el && s) el.textContent = s.name || s.username;
+    })();
+  </script>
 </body>
 </html>

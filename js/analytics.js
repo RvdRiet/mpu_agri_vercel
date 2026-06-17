@@ -73,6 +73,11 @@
     var headers = { Accept: 'application/json' };
     if (token) headers.Authorization = 'Bearer ' + token;
     return fetch(apiBase() + url, { headers: headers }).then(function (res) {
+      if (res.status === 401) {
+        var err = new Error('Unauthorized');
+        err.status = 401;
+        throw err;
+      }
       if (!res.ok) throw new Error('Request failed');
       return res.json();
     });
@@ -123,6 +128,11 @@
     return fetch(apiBase() + '/api/analytics/export?month=' + encodeURIComponent(month) + '&format=' + format, {
       headers: { Authorization: 'Bearer ' + token }
     }).then(function (res) {
+      if (res.status === 401) {
+        var err = new Error('Unauthorized');
+        err.status = 401;
+        throw err;
+      }
       if (!res.ok) throw new Error('Export failed');
       return res.blob().then(function (blob) {
         var url = URL.createObjectURL(blob);

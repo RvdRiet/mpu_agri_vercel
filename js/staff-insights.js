@@ -3,7 +3,11 @@
 
   var staff = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
   if (!staff) {
-    window.location.href = 'staff-login.html';
+    window.location.href = 'staff-login.html?return=staff-insights.html';
+    return;
+  }
+  if (!FarmStaffAuth.getApiToken()) {
+    FarmStaffAuth.requireApiToken();
     return;
   }
 
@@ -301,7 +305,7 @@
       metaEl.textContent = formatMonthLabel(month) + ' report'
         + (updated ? ' · last updated ' + new Date(updated).toLocaleString('en-ZA') : '');
     }
-    var staffNameEl = document.getElementById('insightsStaffName');
+    var staffNameEl = document.getElementById('staffUserName');
     if (staffNameEl) staffNameEl.textContent = staff.name || staff.username;
   }
 
@@ -318,7 +322,7 @@
   function showError(message) {
     document.getElementById('insightsLoading').hidden = false;
     document.getElementById('insightsContent').hidden = true;
-    document.getElementById('insightsLoading').innerHTML = '<p>' + esc(message) + ' <button type="button" class="btn-outline" id="insightsRetry">Retry</button></p>';
+    document.getElementById('insightsLoading').innerHTML = '<p>' + esc(message) + ' <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="insightsRetry">Retry</button></p>';
     var retry = document.getElementById('insightsRetry');
     if (retry) retry.addEventListener('click', loadDashboard);
   }
@@ -333,14 +337,19 @@
     }).join('');
   }
 
+  function handleAuthFailure(err) {
+    if (err && err.status === 401 && window.FarmStaffAuth) {
+      FarmStaffAuth.clearApiToken();
+      FarmStaffAuth.requireApiToken();
+      return true;
+    }
+    return false;
+  }
+
   function loadDashboard() {
     if (!window.FarmAnalytics) {
       showError('Analytics module failed to load.');
       return;
-    }
-    if (!FarmStaffAuth.getApiToken()) {
-      var warn = document.getElementById('insightsAuthWarning');
-      if (warn) warn.hidden = false;
     }
 
     document.getElementById('insightsLoading').hidden = false;
@@ -355,13 +364,14 @@
       .then(function (data) {
         showDashboard(data, selectedMonth);
       })
-      .catch(function () {
+      .catch(function (err) {
+        if (handleAuthFailure(err)) return;
         showError('Could not load analytics for ' + formatMonthLabel(selectedMonth) + '. Check your staff login and API server.');
       });
   }
 
   function initMonths() {
-    if (!window.FarmAnalytics || !FarmStaffAuth.getApiToken()) {
+    if (!window.FarmAnalytics) {
       populateMonthSelect([selectedMonth]);
       loadDashboard();
       return;
@@ -371,7 +381,8 @@
         populateMonthSelect(data.months || []);
         loadDashboard();
       })
-      .catch(function () {
+      .catch(function (err) {
+        if (handleAuthFailure(err)) return;
         populateMonthSelect([selectedMonth]);
         loadDashboard();
       });
@@ -394,7 +405,8 @@
   document.getElementById('btnInsightsDownloadCsv').addEventListener('click', function () {
     if (!window.FarmAnalytics) return;
     var month = monthSelect ? monthSelect.value : selectedMonth;
-    FarmAnalytics.downloadMonthReport(month, 'csv').catch(function () {
+    FarmAnalytics.downloadMonthReport(month, 'csv').catch(function (err) {
+      if (handleAuthFailure(err)) return;
       alert('CSV download failed. Log in again and ensure the API is running.');
     });
   });
@@ -402,7 +414,8 @@
   document.getElementById('btnInsightsDownloadJson').addEventListener('click', function () {
     if (!window.FarmAnalytics) return;
     var month = monthSelect ? monthSelect.value : selectedMonth;
-    FarmAnalytics.downloadMonthReport(month, 'json').catch(function () {
+    FarmAnalytics.downloadMonthReport(month, 'json').catch(function (err) {
+      if (handleAuthFailure(err)) return;
       alert('JSON download failed. Log in again and ensure the API is running.');
     });
   });

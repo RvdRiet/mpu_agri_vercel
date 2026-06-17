@@ -58,25 +58,42 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: lower, password: password })
     })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data && data.token) {
-          try { sessionStorage.setItem(SESSION_TOKEN, data.token); } catch (e) {}
-        }
-        setSession({ username: lower, name: user.name });
-        return { ok: true, hasApiToken: !!(data && data.token) };
+      .then(function (res) {
+        return res.json().then(function (data) {
+          if (!res.ok) {
+            return { ok: false, error: (data && data.error) || 'Server login failed.' };
+          }
+          if (data && data.token) {
+            try { sessionStorage.setItem(SESSION_TOKEN, data.token); } catch (e) {}
+          }
+          setSession({ username: lower, name: user.name });
+          return { ok: true, hasApiToken: !!(data && data.token) };
+        });
       })
       .catch(function () {
         setSession({ username: lower, name: user.name });
-        return { ok: true, hasApiToken: false, warning: 'Server analytics token unavailable. Restart the dev server or deploy API routes.' };
+        return {
+          ok: true,
+          hasApiToken: false,
+          warning: 'Signed in for application review, but the analytics API is unavailable. Run npm start locally or deploy API routes on Vercel.'
+        };
       });
   }
 
-  function logout() {
-    try {
-      sessionStorage.removeItem(SESSION_STAFF);
-      sessionStorage.removeItem(SESSION_TOKEN);
-    } catch (e) {}
+  function clearApiToken() {
+    try { sessionStorage.removeItem(SESSION_TOKEN); } catch (e) {}
+  }
+
+  function requireApiToken(loginUrl) {
+    if (getApiToken()) return true;
+    var returnPath = (global.location && global.location.pathname) || 'staff-insights.html';
+    var returnFile = returnPath.split('/').pop() || 'staff-insights.html';
+    var qs = (global.location && global.location.search) || '';
+    var target = (loginUrl || 'staff-login.html')
+      + '?return=' + encodeURIComponent(returnFile + qs)
+      + '&reason=token';
+    global.location.href = target;
+    return false;
   }
 
   function requireStaff(loginUrl) {
@@ -88,9 +105,18 @@
     return staff;
   }
 
+  function logout() {
+    try {
+      sessionStorage.removeItem(SESSION_STAFF);
+      sessionStorage.removeItem(SESSION_TOKEN);
+    } catch (e) {}
+  }
+
   global.FarmStaffAuth = {
     getCurrentStaff: getCurrentStaff,
     getApiToken: getApiToken,
+    clearApiToken: clearApiToken,
+    requireApiToken: requireApiToken,
     login: login,
     logout: logout,
     requireStaff: requireStaff

@@ -132,16 +132,34 @@
   <script src="js/nav.js"></script>
   <script>
     (function () {
-      if (window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff()) {
-        window.location.href = 'staff.html';
+      function getQueryParam(name) {
+        var match = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+        return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : '';
+      }
+
+      var returnTo = getQueryParam('return') || 'staff.html';
+      if (returnTo.indexOf('..') !== -1 || returnTo.indexOf('/') !== -1) returnTo = 'staff.html';
+      var reason = getQueryParam('reason');
+
+      if (window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff() && FarmStaffAuth.getApiToken()) {
+        window.location.href = returnTo;
         return;
       }
+
       var form = document.getElementById('staffLoginForm');
       var usernameEl = document.getElementById('staffUsername');
       var passwordEl = document.getElementById('staffPassword');
       var usernameError = document.getElementById('staffUsernameError');
       var passwordError = document.getElementById('staffPasswordError');
       var formError = document.getElementById('staffFormError');
+
+      if (reason === 'token') {
+        formError.textContent = 'Sign in again to access Stats & Insights. Use npm start locally so the analytics API is available.';
+      }
+
+      if (window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff() && !FarmStaffAuth.getApiToken()) {
+        FarmStaffAuth.clearApiToken();
+      }
 
       function clearFieldErrors() {
         usernameError.textContent = '';
@@ -176,13 +194,18 @@
         if (hasError) return;
 
         FarmStaffAuth.login(username, password).then(function (result) {
-          if (result && result.ok) {
-            window.location.href = 'staff.html';
+          if (!result || !result.ok) {
+            formError.textContent = (result && result.error) || 'Login failed.';
+            usernameEl.classList.add('input-error');
+            passwordEl.classList.add('input-error');
             return;
           }
-          formError.textContent = (result && result.error) || 'Login failed.';
-          usernameEl.classList.add('input-error');
-          passwordEl.classList.add('input-error');
+          var needsAnalytics = returnTo.indexOf('staff-insights') !== -1;
+          if (needsAnalytics && !result.hasApiToken) {
+            formError.textContent = result.warning || 'Analytics API is not reachable. Run npm start in the project folder, then sign in again.';
+            return;
+          }
+          window.location.href = returnTo;
         });
       });
     })();
