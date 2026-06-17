@@ -154,7 +154,7 @@
       var formError = document.getElementById('staffFormError');
 
       if (reason === 'token') {
-        formError.textContent = 'Sign in again to access Stats & Insights. Use npm start locally so the analytics API is available.';
+        formError.textContent = 'Sign in again to access Stats & Insights. Your analytics session expired or was not created during the last login.';
       }
 
       if (window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff() && !FarmStaffAuth.getApiToken()) {
@@ -202,7 +202,7 @@
           }
           var needsAnalytics = returnTo.indexOf('staff-insights') !== -1;
           if (needsAnalytics && !result.hasApiToken) {
-            formError.textContent = result.warning || 'Analytics API is not reachable. Run npm start in the project folder, then sign in again.';
+            formError.textContent = result.error || result.warning || 'Analytics API token was not issued. Sign in again or contact your administrator.';
             return;
           }
           window.location.href = returnTo;

@@ -75,9 +75,14 @@
         return {
           ok: true,
           hasApiToken: false,
-          warning: 'Signed in for application review, but the analytics API is unavailable. Run npm start locally or deploy API routes on Vercel.'
+          warning: 'Application review is available, but the analytics API could not be reached.'
         };
       });
+  }
+
+  /** Fetch API token when staff session exists but token is missing (e.g. after Application Review login). */
+  function refreshApiToken(username, password) {
+    return login(username, password);
   }
 
   function clearApiToken() {
@@ -117,6 +122,7 @@
     getApiToken: getApiToken,
     clearApiToken: clearApiToken,
     requireApiToken: requireApiToken,
+    refreshApiToken: refreshApiToken,
     login: login,
     logout: logout,
     requireStaff: requireStaff

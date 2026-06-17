@@ -32,7 +32,11 @@
   font-size: var(--text-sm);
 }
 
-.insights-auth-warning {
+.insights-auth-warning[hidden] {
+  display: none !important;
+}
+
+.insights-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: var(--space-4);

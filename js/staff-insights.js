@@ -7,6 +7,8 @@
     return;
   }
   if (!FarmStaffAuth.getApiToken()) {
+    var warn = document.getElementById('insightsAuthWarning');
+    if (warn) warn.hidden = false;
     FarmStaffAuth.requireApiToken();
     return;
   }

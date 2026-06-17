@@ -4,26 +4,53 @@ const fs = require('fs');
 const path = require('path');
 const { emptyMonth, isValidMonth, applyEvent, buildReportSummary } = require('./analytics-core');
 
-const DATA_DIR = path.join(process.cwd(), 'data', 'analytics');
 const BLOB_PREFIX = 'analytics/';
 
+function isServerless() {
+  return !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.VERCEL_ENV);
+}
+
+function getDataDir() {
+  if (isServerless()) {
+    return path.join('/tmp', 'farm-analytics');
+  }
+  return path.join(process.cwd(), 'data', 'analytics');
+}
+
 function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+  var dir = getDataDir();
+  try {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    return dir;
+  } catch (e) {
+    console.warn('ensureDataDir failed', e.message);
+    return null;
   }
 }
 
 function monthFilePath(month) {
-  return path.join(DATA_DIR, month + '.json');
+  return path.join(getDataDir(), month + '.json');
+}
+
+async function loadBlobModule() {
+  try {
+    return await import('@vercel/blob');
+  } catch (e) {
+    console.warn('@vercel/blob unavailable', e.message);
+    return null;
+  }
 }
 
 async function loadFromBlob(month) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
   try {
-    const { list, get } = await import('@vercel/blob');
-    const listed = await list({ prefix: BLOB_PREFIX + month + '.json', limit: 1 });
+    var blob = await loadBlobModule();
+    if (!blob) return null;
+    var listed = await blob.list({ prefix: BLOB_PREFIX + month + '.json', limit: 1 });
     if (!listed.blobs.length) return null;
-    const res = await fetch(listed.blobs[0].url);
+    var res = await fetch(listed.blobs[0].url);
     if (!res.ok) return null;
     return JSON.parse(await res.text());
   } catch (e) {
@@ -35,8 +62,9 @@ async function loadFromBlob(month) {
 async function saveToBlob(month, data) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) return false;
   try {
-    const { put } = await import('@vercel/blob');
-    await put(BLOB_PREFIX + month + '.json', JSON.stringify(data), {
+    var blob = await loadBlobModule();
+    if (!blob) return false;
+    await blob.put(BLOB_PREFIX + month + '.json', JSON.stringify(data), {
       access: 'public',
       addRandomSuffix: false,
       contentType: 'application/json',
@@ -49,28 +77,46 @@ async function saveToBlob(month, data) {
   }
 }
 
+function loadFromDisk(month) {
+  var dir = ensureDataDir();
+  if (!dir) return null;
+  var filePath = path.join(dir, month + '.json');
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (e) {
+    console.warn('Disk load failed', month, e.message);
+    return null;
+  }
+}
+
+function saveToDisk(month, data) {
+  var dir = ensureDataDir();
+  if (!dir) return false;
+  try {
+    fs.writeFileSync(path.join(dir, month + '.json'), JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.warn('Disk save failed', month, e.message);
+    return false;
+  }
+}
+
 async function loadMonth(month) {
   if (!isValidMonth(month)) throw new Error('Invalid month');
   var blobData = await loadFromBlob(month);
   if (blobData) return blobData;
 
-  ensureDataDir();
-  var filePath = monthFilePath(month);
-  if (!fs.existsSync(filePath)) return emptyMonth(month);
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (e) {
-    return emptyMonth(month);
-  }
+  var diskData = loadFromDisk(month);
+  if (diskData) return diskData;
+
+  return emptyMonth(month);
 }
 
 async function saveMonth(month, data) {
   if (!isValidMonth(month)) throw new Error('Invalid month');
-  var savedBlob = await saveToBlob(month, data);
-  if (savedBlob) return;
-
-  ensureDataDir();
-  fs.writeFileSync(monthFilePath(month), JSON.stringify(data, null, 2), 'utf8');
+  if (await saveToBlob(month, data)) return;
+  saveToDisk(month, data);
 }
 
 async function recordEvent(event) {
@@ -84,35 +130,39 @@ async function recordEvent(event) {
 
 async function listMonths() {
   var months = new Set();
+  var dir = ensureDataDir();
 
-  ensureDataDir();
-  if (fs.existsSync(DATA_DIR)) {
-    fs.readdirSync(DATA_DIR).forEach(function (file) {
-      var m = file.match(/^(\d{4}-\d{2})\.json$/);
-      if (m) months.add(m[1]);
-    });
+  if (dir && fs.existsSync(dir)) {
+    try {
+      fs.readdirSync(dir).forEach(function (file) {
+        var m = file.match(/^(\d{4}-\d{2})\.json$/);
+        if (m) months.add(m[1]);
+      });
+    } catch (e) {
+      console.warn('Disk list failed', e.message);
+    }
   }
 
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     try {
-      const { list } = await import('@vercel/blob');
-      var cursor;
-      do {
-        var result = await list({ prefix: BLOB_PREFIX, cursor: cursor, limit: 100 });
-        result.blobs.forEach(function (blob) {
-          var m = blob.pathname.match(/(\d{4}-\d{2})\.json$/);
-          if (m) months.add(m[1]);
-        });
-        cursor = result.hasMore ? result.cursor : undefined;
-      } while (cursor);
+      var blob = await loadBlobModule();
+      if (blob) {
+        var cursor;
+        do {
+          var result = await blob.list({ prefix: BLOB_PREFIX, cursor: cursor, limit: 100 });
+          result.blobs.forEach(function (item) {
+            var m = item.pathname.match(/(\d{4}-\d{2})\.json$/);
+            if (m) months.add(m[1]);
+          });
+          cursor = result.hasMore ? result.cursor : undefined;
+        } while (cursor);
+      }
     } catch (e) {
       console.warn('Blob list failed', e.message);
     }
   }
 
-  var current = new Date().toISOString().slice(0, 7);
-  months.add(current);
-
+  months.add(new Date().toISOString().slice(0, 7));
   return Array.from(months).sort().reverse();
 }
 
