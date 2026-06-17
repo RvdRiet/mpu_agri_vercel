@@ -38,7 +38,7 @@
 
 .insights-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
@@ -276,4 +276,23 @@
   text-align: center;
   padding: var(--space-12);
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .insights-chart-wrap {
+    height: 220px;
+  }
+
+  .insights-chart-wrap--tall {
+    height: 260px;
+  }
+
+  .insights-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insights-table-card,
+  .insights-chart-card {
+    padding: var(--space-4);
+  }
 }

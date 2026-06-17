@@ -189,6 +189,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: var(--container-xl);
   margin: 0 auto;
   padding: 0 var(--space-6);
+  min-width: 0;
 }
 
 .container--narrow {
@@ -248,6 +249,9 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .page-wrapper > main {
@@ -1628,6 +1632,47 @@ h1, h2, h3, h4, h5, h6 {
   .cta-banner {
     padding: var(--space-8) var(--space-6);
   }
+
+  .page-header__title {
+    font-size: clamp(1.5rem, 6vw, 2.25rem);
+  }
+
+  .page-header__subtitle {
+    font-size: var(--text-base);
+    max-width: 100%;
+  }
+
+  .section-title {
+    font-size: clamp(1.35rem, 5vw, 2rem);
+  }
+
+  .pill-nav__btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .accordion-btn {
+    min-height: 48px;
+    padding: var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .tab-btn {
+    min-height: 44px;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .card__body > .btn {
+    width: 100%;
+  }
+
+  .cta-banner .btn {
+    width: 100%;
+    max-width: 20rem;
+    white-space: normal;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1649,6 +1694,28 @@ h1, h2, h3, h4, h5, h6 {
 
   .stats-bar__inner {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.6rem 0.75rem;
+    font-size: var(--text-xs);
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+  }
+
+  .data-table thead th {
+    white-space: nowrap;
+  }
+
+  .breadcrumbs {
+    font-size: var(--text-xs);
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    white-space: normal;
   }
 }
 

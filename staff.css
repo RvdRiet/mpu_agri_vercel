@@ -36,6 +36,26 @@
   }
 }
 
+@media (max-width: 640px) {
+  .site-nav--staff .site-nav__inner {
+    height: auto;
+    min-height: 60px;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .site-nav--staff .site-nav__actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .site-nav--staff .site-nav__actions .nav-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
 .insights-nav-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -1335,5 +1355,27 @@
 
   .staff-app-card__meta {
     grid-template-columns: 1fr;
+  }
+
+  .insights-nav-tabs a {
+    min-height: 44px;
+  }
+
+  .staff-review-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .staff-review-hero__actions {
+    width: 100%;
+  }
+
+  .staff-action-modal__buttons {
+    flex-direction: column;
+  }
+
+  .staff-action-modal__buttons .staff-portal-btn {
+    width: 100%;
+    min-height: 44px;
   }
 }

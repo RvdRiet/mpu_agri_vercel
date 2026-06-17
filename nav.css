@@ -378,3 +378,38 @@
     display: block;
   }
 }
+
+@media (max-width: 480px) {
+  .site-nav__inner {
+    padding: 0 var(--space-3);
+    height: 60px;
+  }
+
+  .site-nav__logo {
+    height: 52px;
+  }
+
+  .site-nav__brand-name {
+    font-size: var(--text-sm);
+  }
+
+  .site-nav__mobile {
+    top: 60px;
+    width: min(360px, 100vw);
+    height: calc(100dvh - 60px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .mobile-nav-overlay {
+    top: 60px;
+  }
+
+  .mobile-nav__link {
+    min-height: 44px;
+    padding: var(--space-3) 0;
+  }
+
+  .mobile-nav__actions .btn {
+    min-height: 44px;
+  }
+}

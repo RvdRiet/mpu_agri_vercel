@@ -546,7 +546,7 @@
 
 .sfg-product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: var(--space-4);
   margin-top: var(--space-3);
 }
@@ -573,7 +573,9 @@
 
 .sfg-product-card__qty input {
   width: 4.5rem;
+  min-height: 44px;
   text-align: center;
+  font-size: 1rem;
 }
 
 .sfg-product-card__tag {
@@ -802,6 +804,59 @@
 
   .summary-box {
     padding: var(--space-4);
+  }
+
+  .sfg-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sfg-product-card__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .sfg-product-card__qty {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .sfg-product-card__qty input {
+    width: 100%;
+    max-width: 6rem;
+  }
+
+  .programme-notice {
+    padding: var(--space-3);
+  }
+
+  .programme-notice a {
+    word-break: break-word;
+  }
+
+  .health-checklist-table td:first-child {
+    min-width: 0;
+  }
+
+  .health-checklist-block,
+  .health-records-block {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .address-map {
+    min-height: 220px;
+  }
+
+  .address-map-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .address-map-actions .btn-current-location {
+    width: 100%;
+    text-align: center;
+    min-height: 44px;
   }
 }
 
