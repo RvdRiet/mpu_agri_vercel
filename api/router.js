@@ -6,7 +6,17 @@ const routes = {
   'GET /api/analytics/months': require('./analytics/months'),
   'GET /api/analytics/report': require('./analytics/report'),
   'GET /api/analytics/export': require('./analytics/export'),
-  'POST /api/staff/login': require('./staff/login')
+  'POST /api/staff/login': require('./staff/login'),
+
+  // Applicant auth + applications (database-backed)
+  'POST /api/auth/register': require('./auth/register'),
+  'POST /api/auth/login': require('./auth/login'),
+  'GET /api/applications': require('./applications'),
+  'POST /api/applications': require('./applications'),
+
+  // Staff application review
+  'GET /api/staff/applications': require('./staff/applications'),
+  'PATCH /api/staff/applications': require('./staff/applications')
 };
 
 function matchRoute(method, pathname) {

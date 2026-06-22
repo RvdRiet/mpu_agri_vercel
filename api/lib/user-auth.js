@@ -1,0 +1,102 @@
+'use strict';
+
+// ----------------------------------------------------------------------------
+// Applicant (farmer) authentication helpers.
+//
+// - Passwords are hashed with scrypt (built into Node's crypto, no extra dep).
+// - SA ID numbers are stored as an HMAC hash (`id_number_hash`) so we can look
+//   users up without persisting the raw ID in plaintext as the primary key.
+// - Session tokens are stateless HMAC tokens, mirroring staff-api-auth.js.
+// ----------------------------------------------------------------------------
+
+const crypto = require('crypto');
+
+const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function getSecret() {
+  return process.env.AUTH_SECRET || process.env.STAFF_API_SECRET || 'mpu-dev-auth-secret-change-in-production';
+}
+
+function normalizeId(idNumber) {
+  return String(idNumber || '').replace(/\s+/g, '');
+}
+
+// Basic server-side guard. Full Luhn/date validation also runs client-side.
+function isValidSaId(idNumber) {
+  return /^\d{13}$/.test(normalizeId(idNumber));
+}
+
+function hashId(idNumber) {
+  return crypto.createHmac('sha256', getSecret()).update(normalizeId(idNumber)).digest('hex');
+}
+
+function hashPassword(password) {
+  var salt = crypto.randomBytes(16).toString('hex');
+  var derived = crypto.scryptSync(String(password), salt, 64).toString('hex');
+  return 'scrypt$' + salt + '$' + derived;
+}
+
+function verifyPassword(password, stored) {
+  if (!stored) return false;
+  var parts = String(stored).split('$');
+  if (parts.length !== 3 || parts[0] !== 'scrypt') return false;
+  var salt = parts[1];
+  var expected = parts[2];
+  var derived = crypto.scryptSync(String(password), salt, 64).toString('hex');
+  var a = Buffer.from(derived, 'hex');
+  var b = Buffer.from(expected, 'hex');
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
+function signToken(user) {
+  var payload = {
+    sub: user.id,
+    name: user.fullName || user.full_name || '',
+    exp: Date.now() + TOKEN_TTL_MS
+  };
+  var payloadStr = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  var sig = crypto.createHmac('sha256', getSecret()).update(payloadStr).digest('base64url');
+  return payloadStr + '.' + sig;
+}
+
+function verifyToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  var parts = token.split('.');
+  if (parts.length !== 2) return null;
+  var expected = crypto.createHmac('sha256', getSecret()).update(parts[0]).digest('base64url');
+  if (parts[1] !== expected) return null;
+  try {
+    var payload = JSON.parse(Buffer.from(parts[0], 'base64url').toString('utf8'));
+    if (!payload.exp || Date.now() > payload.exp) return null;
+    return { id: payload.sub, name: payload.name };
+  } catch (e) {
+    return null;
+  }
+}
+
+function extractBearer(req) {
+  var auth = req.headers.authorization || req.headers.Authorization || '';
+  if (auth.toLowerCase().startsWith('bearer ')) {
+    return auth.slice(7).trim();
+  }
+  return null;
+}
+
+function requireUser(req) {
+  var token = extractBearer(req);
+  if (!token) return null;
+  return verifyToken(token);
+}
+
+module.exports = {
+  TOKEN_TTL_MS: TOKEN_TTL_MS,
+  normalizeId: normalizeId,
+  isValidSaId: isValidSaId,
+  hashId: hashId,
+  hashPassword: hashPassword,
+  verifyPassword: verifyPassword,
+  signToken: signToken,
+  verifyToken: verifyToken,
+  requireUser: requireUser
+};

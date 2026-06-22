@@ -1,0 +1,78 @@
+'use strict';
+
+// ----------------------------------------------------------------------------
+// PostgreSQL connection helper (pooled, serverless-safe).
+//
+// - `pg` is lazy-required so the rest of the API keeps working even before
+//   `npm install pg` has been run or a database has been provisioned.
+// - The pool is cached on `global` so Vercel serverless invocations reuse a
+//   single pool instead of opening a new connection per request.
+//
+// Configure via env (see .env.example):
+//   DATABASE_URL   postgresql://user:pass@host:5432/dbname
+//   DATABASE_SSL   "true" for hosted Postgres (Neon/Supabase/Azure), else "false"
+//   PG_POOL_MAX    max pool connections (default 5; keep low on serverless)
+// ----------------------------------------------------------------------------
+
+function isConfigured() {
+  return !!process.env.DATABASE_URL;
+}
+
+function getPool() {
+  if (global.__mpuPgPool) return global.__mpuPgPool;
+
+  var Pool;
+  try {
+    Pool = require('pg').Pool;
+  } catch (e) {
+    throw new Error('The "pg" package is not installed. Run: npm install pg');
+  }
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is not set. Configure it before using the database.');
+  }
+
+  var pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    max: Number(process.env.PG_POOL_MAX || 5),
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+    ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : false
+  });
+  pool.on('error', function (err) {
+    console.error('Unexpected idle PG client error', err);
+  });
+  global.__mpuPgPool = pool;
+  return pool;
+}
+
+async function query(text, params) {
+  return getPool().query(text, params);
+}
+
+async function queryOne(text, params) {
+  var result = await getPool().query(text, params);
+  return result.rows[0] || null;
+}
+
+async function withTransaction(fn) {
+  var client = await getPool().connect();
+  try {
+    await client.query('BEGIN');
+    var result = await fn(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (e) {
+    try { await client.query('ROLLBACK'); } catch (rollbackErr) { /* ignore */ }
+    throw e;
+  } finally {
+    client.release();
+  }
+}
+
+module.exports = {
+  isConfigured: isConfigured,
+  getPool: getPool,
+  query: query,
+  queryOne: queryOne,
+  withTransaction: withTransaction
+};

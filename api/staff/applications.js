@@ -1,0 +1,149 @@
+'use strict';
+
+const db = require('../lib/db');
+const { sendJson, readBody, setCors, parseQuery } = require('../lib/http');
+const { requireStaff } = require('../lib/staff-api-auth');
+
+const VALID_ACTIONS = ['stage_advanced', 'docs_requested', 'approved', 'rejected', 'note', 'reopened'];
+const VALID_STATUSES = ['Submitted', 'In Review', 'Docs Required', 'Approved', 'Rejected'];
+
+function rowToApplication(row) {
+  return {
+    id: row.id,
+    referenceCode: row.reference_code,
+    userId: row.user_id,
+    type: row.type,
+    commodity: row.commodity,
+    farmerCategory: row.farmer_category,
+    status: row.status,
+    summary: row.summary,
+    details: row.details,
+    statusMessage: row.status_message,
+    stageEvidenceLatest: row.stage_evidence_latest,
+    submittedAt: row.submitted_at,
+    decidedAt: row.decided_at
+  };
+}
+
+// Resolve a DB staff_users.id for the logged-in staff (if seeded). May be null.
+async function resolveStaffId(username) {
+  if (!username) return null;
+  try {
+    var row = await db.queryOne('SELECT id FROM staff_users WHERE username = $1', [username]);
+    return row ? row.id : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function listAll(res, query) {
+  if (query.id) {
+    var one = await db.queryOne('SELECT * FROM applications WHERE id = $1', [query.id]);
+    if (!one) return sendJson(res, 404, { error: 'Application not found.' });
+    var events = await db.query(
+      'SELECT * FROM application_events WHERE application_id = $1 ORDER BY created_at',
+      [query.id]
+    );
+    return sendJson(res, 200, {
+      ok: true,
+      application: rowToApplication(one),
+      events: events.rows
+    });
+  }
+
+  var params = [];
+  var where = '';
+  if (query.status && VALID_STATUSES.indexOf(query.status) !== -1) {
+    params.push(query.status);
+    where = 'WHERE status = $1';
+  }
+  var result = await db.query(
+    `SELECT * FROM applications ${where} ORDER BY submitted_at DESC LIMIT 500`,
+    params
+  );
+  return sendJson(res, 200, { ok: true, applications: result.rows.map(rowToApplication) });
+}
+
+async function updateApplication(req, res, staff) {
+  var body = await readBody(req);
+  var id = body.id;
+  var action = String(body.action || '').trim();
+  var note = String(body.note || '').trim();
+
+  if (!id) return sendJson(res, 400, { error: 'Application id is required.' });
+  if (VALID_ACTIONS.indexOf(action) === -1) {
+    return sendJson(res, 400, { error: 'Invalid action.' });
+  }
+  if (!note) {
+    return sendJson(res, 400, { error: 'A note / evidence message is required.' });
+  }
+
+  var current = await db.queryOne('SELECT * FROM applications WHERE id = $1', [id]);
+  if (!current) return sendJson(res, 404, { error: 'Application not found.' });
+
+  var nextStatus = current.status;
+  if (action === 'approved') nextStatus = 'Approved';
+  else if (action === 'rejected') nextStatus = 'Rejected';
+  else if (action === 'docs_requested') nextStatus = 'Docs Required';
+  else if (action === 'reopened') nextStatus = 'In Review';
+  else if (body.status && VALID_STATUSES.indexOf(body.status) !== -1) nextStatus = body.status;
+
+  var isDecision = action === 'approved' || action === 'rejected';
+  var staffId = await resolveStaffId(staff.username);
+
+  var updated = await db.withTransaction(async function (client) {
+    var upd = await client.query(
+      `UPDATE applications
+         SET status = $1,
+             status_message = CASE WHEN $2 = 'docs_requested' THEN $3 ELSE status_message END,
+             stage_evidence_latest = $3,
+             decided_at = CASE WHEN $4 THEN now() ELSE decided_at END,
+             decided_by = CASE WHEN $4 THEN $5 ELSE decided_by END
+       WHERE id = $6
+       RETURNING *`,
+      [nextStatus, action, note, isDecision, staffId, id]
+    );
+    var app = upd.rows[0];
+    await client.query(
+      `INSERT INTO application_events
+         (application_id, actor_staff_id, action, from_status, to_status, stage, note)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [id, staffId, action, current.status, nextStatus, body.stage || null, note]
+    );
+    return app;
+  });
+
+  return sendJson(res, 200, { ok: true, application: rowToApplication(updated) });
+}
+
+async function handler(req, res) {
+  setCors(res, 'GET, PATCH, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  }
+  if (!db.isConfigured()) {
+    return sendJson(res, 503, { error: 'Database not configured. Set DATABASE_URL.' });
+  }
+
+  var staff = requireStaff(req);
+  if (!staff) {
+    return sendJson(res, 401, { error: 'Staff authentication required.' });
+  }
+
+  try {
+    if (req.method === 'GET') {
+      return await listAll(res, parseQuery(req.url));
+    }
+    if (req.method === 'PATCH') {
+      return await updateApplication(req, res, staff);
+    }
+    return sendJson(res, 405, { error: 'Method not allowed' });
+  } catch (e) {
+    console.error('staff applications error', e);
+    return sendJson(res, 500, { error: 'Staff application request failed' });
+  }
+}
+
+module.exports = handler;
+module.exports.default = handler;
