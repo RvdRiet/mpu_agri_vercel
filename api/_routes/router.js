@@ -28,9 +28,40 @@ function matchRoute(method, pathname) {
   return null;
 }
 
-async function handleApiRequest(req, res) {
+/** Normalize path for Vercel rewrites and non-Next catch-all quirks. */
+function normalizePathname(req) {
   var url = req.url || '/';
   var pathname = url.split('?')[0];
+
+  if (pathname.indexOf('://') !== -1) {
+    try {
+      pathname = new URL(pathname).pathname;
+    } catch (e) {}
+  }
+
+  if (!pathname.startsWith('/api')) {
+    var headers = req.headers || {};
+    var orig = headers['x-vercel-original-url'] || headers['x-invoke-path'] || headers['x-forwarded-uri'];
+    if (orig) {
+      pathname = String(orig).split('?')[0];
+    }
+  }
+
+  if ((pathname === '/api' || pathname === '/api/') && req.query && req.query.path) {
+    var segs = req.query.path;
+    if (!Array.isArray(segs)) segs = String(segs).split('/');
+    pathname = '/api/' + segs.filter(Boolean).join('/');
+  }
+
+  if (pathname !== '/api' && !pathname.startsWith('/api/')) {
+    pathname = '/api' + (pathname.startsWith('/') ? pathname : '/' + pathname);
+  }
+
+  return pathname;
+}
+
+async function handleApiRequest(req, res) {
+  var pathname = normalizePathname(req);
   var handler = matchRoute(req.method, pathname);
   if (!handler) {
     res.statusCode = 404;

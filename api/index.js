@@ -2,8 +2,8 @@
 
 /**
  * Single Vercel serverless entry (Hobby plan: max 12 functions).
- * All API routes are dispatched via api/_routes/router.js.
- * Original per-file handlers are preserved as *.js.off for self-hosting restore.
+ * vercel.json rewrites all /api/* requests here; see api/_routes/router.js.
+ * api/[...path].js does not work on non-Next.js projects (preserved as .off).
  */
 
 const { handleApiRequest } = require('./_routes/router');
