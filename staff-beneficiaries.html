@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2d5a27">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Past Beneficiaries — Staff Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nav.css">
+  <link rel="stylesheet" href="account.css">
+  <link rel="stylesheet" href="staff.css">
+  <link rel="stylesheet" href="staff-insights.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <nav class="site-nav site-nav--staff" role="navigation" aria-label="Staff portal navigation">
+      <div class="site-nav__inner">
+        <a href="staff.html" class="site-nav__brand">
+          <img src="images/mpumalanga.webp" alt="" class="site-nav__logo" aria-hidden="true" />
+          <span class="site-nav__brand-text">
+            <span class="site-nav__brand-name">Mpumalanga AgriSupport</span>
+            <span class="site-nav__brand-sub">Staff Portal</span>
+          </span>
+        </a>
+        <div class="site-nav__links">
+          <div class="nav-item"><a href="index.html" class="nav-link">Public site</a></div>
+        </div>
+        <div class="site-nav__actions">
+          <a href="staff.html" class="nav-link">Application Review</a>
+          <a href="staff-beneficiaries.html" class="nav-link active" aria-current="page">Past Beneficiaries</a>
+          <a href="staff-insights.html" class="nav-link">Stats &amp; Insights</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content staff-portal-page">
+      <div class="container">
+        <nav class="insights-nav-tabs" aria-label="Staff sections">
+          <a href="staff.html">Application Review</a>
+          <a href="staff-beneficiaries.html" class="is-active" aria-current="page">Past Beneficiaries</a>
+          <a href="staff-insights.html">Stats &amp; Insights</a>
+        </nav>
+
+        <header class="staff-review-hero">
+          <div class="staff-review-hero__intro">
+            <h1>Past beneficiaries</h1>
+            <p>Look up previous grant beneficiaries from the Mpumalanga PES 3 SAB Boxes programme (2024/25). Search by South African ID number, first name, or surname.</p>
+          </div>
+          <div class="staff-review-hero__actions staff-portal-actions">
+            <div class="staff-portal-actions__group">
+              <span class="staff-portal-actions__label">Session</span>
+              <div class="staff-portal-actions__buttons">
+                <span class="insights-staff-pill">Signed in as <span id="staffUserName">Staff</span></span>
+                <button type="button" class="staff-portal-btn staff-portal-btn--outline" id="btnBeneficiariesLogout">Logout</button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="staff-stats" id="beneficiaryStats" aria-label="Beneficiary summary"></section>
+
+        <section class="staff-toolbar card">
+          <div class="card__body staff-toolbar__inner">
+            <div class="staff-toolbar__search">
+              <label for="beneficiarySearch" class="visually-hidden">Search beneficiaries</label>
+              <input type="search" id="beneficiarySearch" class="staff-search-input" placeholder="Search by ID number, name, or surname…" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="staff-toolbar__filter">
+              <label for="beneficiaryDistrictFilter">District</label>
+              <select id="beneficiaryDistrictFilter">
+                <option value="all">All districts</option>
+              </select>
+            </div>
+          </div>
+          <p class="beneficiary-search-hint" id="beneficiarySearchHint">Type at least 2 letters or 3 digits of an ID to search.</p>
+        </section>
+
+        <div id="beneficiaryLoading" class="insights-loading">
+          <p>Loading beneficiary register…</p>
+        </div>
+
+        <section class="card staff-beneficiaries-section" id="beneficiaryResultsSection" hidden>
+          <div class="card__body">
+            <div class="staff-queue-header">
+              <h2>Search results</h2>
+              <p id="beneficiaryResultCount" class="staff-queue-count">0 matches</p>
+            </div>
+            <div class="staff-beneficiaries-table-wrap" id="beneficiaryTableWrap">
+              <table class="staff-beneficiaries-table" id="beneficiaryTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Surname</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">ID number</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">District</th>
+                    <th scope="col">Boxes</th>
+                    <th scope="col">Total (R)</th>
+                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="beneficiaryTableBody"></tbody>
+              </table>
+            </div>
+            <div id="beneficiaryCards" class="staff-beneficiaries-cards" hidden></div>
+            <div id="beneficiaryEmpty" class="staff-empty" hidden>
+              <p>No beneficiaries match your search.</p>
+              <p class="staff-empty__hint">Try a different spelling, part of the ID number, or clear the district filter.</p>
+            </div>
+            <nav class="staff-beneficiaries-pagination" id="beneficiaryPagination" aria-label="Search results pages" hidden></nav>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="beneficiaryDetailPanel" class="staff-review-panel" hidden>
+    <div class="staff-review-panel__backdrop" id="beneficiaryDetailBackdrop"></div>
+    <aside class="staff-review-panel__drawer" role="dialog" aria-modal="true" aria-labelledby="beneficiaryDetailTitle">
+      <header class="staff-review-panel__header">
+        <div class="staff-review-panel__heading">
+          <p class="staff-review-panel__eyebrow">Past beneficiary</p>
+          <h2 id="beneficiaryDetailTitle">Beneficiary name</h2>
+          <p id="beneficiaryDetailSubtitle" class="staff-review-panel__subtitle"></p>
+        </div>
+        <div class="staff-review-panel__header-meta">
+          <button type="button" class="staff-review-panel__close" id="beneficiaryDetailClose">Close</button>
+        </div>
+      </header>
+      <div class="staff-review-panel__body" id="beneficiaryDetailBody"></div>
+    </aside>
+  </div>
+
+  <script src="js/staff-auth.js"></script>
+  <script src="js/security.js"></script>
+  <script src="js/staff-beneficiaries.js"></script>
+  <script>
+    (function () {
+      var s = window.FarmStaffAuth && FarmStaffAuth.getCurrentStaff();
+      var el = document.getElementById('staffUserName');
+      if (el && s) el.textContent = s.name || s.username;
+    })();
+  </script>
+</body>
+</html>
