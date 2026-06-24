@@ -1,0 +1,36 @@
+'use strict';
+
+const { validateCredentials, signToken } = require('../../_lib/staff-api-auth');
+const { sendJson, readBody, setCors } = require('../../_lib/http');
+
+async function handler(req, res) {
+  setCors(res, 'POST, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204;
+    return res.end();
+  }
+  if (req.method !== 'POST') {
+    return sendJson(res, 405, { error: 'Method not allowed' });
+  }
+
+  try {
+    var body = await readBody(req);
+    var staff = validateCredentials(body.username, body.password);
+    if (!staff) {
+      return sendJson(res, 401, { error: 'Invalid username or password.' });
+    }
+    var token = signToken(staff);
+    return sendJson(res, 200, {
+      ok: true,
+      token: token,
+      staff: { username: staff.username, name: staff.name },
+      expiresInHours: 8
+    });
+  } catch (e) {
+    console.error('staff login error', e);
+    return sendJson(res, 500, { error: 'Login failed' });
+  }
+}
+
+module.exports = handler;
+module.exports.default = handler;

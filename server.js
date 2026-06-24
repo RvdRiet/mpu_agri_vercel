@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { handleApiRequest } = require('./api/router');
+const { handleApiRequest } = require('./api/_routes/router');
 
 const port = 3050;
 const root = __dirname;

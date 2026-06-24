@@ -1,8 +1,8 @@
 'use strict';
 
-const db = require('../lib/db');
-const { sendJson, readBody, setCors, parseQuery } = require('../lib/http');
-const { requireStaff } = require('../lib/staff-api-auth');
+const db = require('../../_lib/db');
+const { sendJson, readBody, setCors, parseQuery } = require('../../_lib/http');
+const { requireStaff } = require('../../_lib/staff-api-auth');
 
 const VALID_ACTIONS = ['stage_advanced', 'docs_requested', 'approved', 'rejected', 'note', 'reopened'];
 const VALID_STATUSES = ['Submitted', 'In Review', 'Docs Required', 'Approved', 'Rejected'];

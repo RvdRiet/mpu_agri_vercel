@@ -1,0 +1,310 @@
+// DEACTIVATED for Vercel Hobby (12 serverless function limit).
+// Active handlers live under api/_routes/ and api/_lib/. Restore by renaming .off -> .js and removing api/[...path].js.
+
+'use strict';
+
+function pageLabel(path) {
+  if (!path || path === '/') return 'Home';
+  var name = path.split('/').pop() || path;
+  name = name.replace(/\.html$/i, '');
+  if (name === 'index') return 'Home';
+  if (name === 'mesp-2025-26') return 'MESP Application';
+  var labels = {
+    crop: 'Crop Programme',
+    livestock: 'Livestock Programme',
+    environmental: 'Environmental Programme',
+    weather: 'Weather',
+    alerts: 'Alerts',
+    guides: 'Guides',
+    'e-learning': 'E-learning',
+    support: 'Support',
+    track: 'Track Application',
+    login: 'Login',
+    register: 'Register',
+    'my-account': 'My Account',
+    terms: 'Terms',
+    popia: 'POPIA'
+  };
+  if (labels[name]) return labels[name];
+  if (path.indexOf('/Application/') !== -1) {
+    if (name === 'crop') return 'Crop Grant Form';
+    if (name === 'environmental') return 'Environmental Grant Form';
+    if (name === 'index') return 'Livestock Grant Form';
+  }
+  return name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' ');
+}
+
+function normalizeStatus(status) {
+  var s = String(status || 'Submitted').toLowerCase();
+  if (s === 'approved') return 'Approved';
+  if (s === 'rejected' || s === 'denied') return 'Rejected';
+  if (s.indexOf('additional') !== -1) return 'Docs Required';
+  if (s === 'submitted') return 'Submitted';
+  return 'In Review';
+}
+
+function grantTypeLabel(type) {
+  if (type === 'mesp_2025_26') return 'MESP 2025/26';
+  if (type === 'livestock') return 'Livestock';
+  if (type === 'crop') return 'Crop';
+  if (type === 'environmental') return 'Environmental';
+  return type || 'Other';
+}
+
+function emptyMonth(month) {
+  return {
+    month: month,
+    pageViews: {
+      total: 0,
+      uniqueSessions: {},
+      byDay: {},
+      byPage: {},
+      byPath: {}
+    },
+    applications: {
+      submitted: 0,
+      approved: 0,
+      rejected: 0,
+      inReview: 0,
+      byType: {},
+      byStatus: {},
+      byCategory: {},
+      byDay: {},
+      recent: []
+    },
+    registrations: { total: 0, byDay: {} },
+    issues: { total: 0, open: 0, resolved: 0, byDay: {} },
+    feedback: { total: 0, sumRating: 0, ratedCount: 0, byDay: {} },
+    meta: { updatedAt: new Date().toISOString(), version: 1 }
+  };
+}
+
+function isValidMonth(month) {
+  return /^\d{4}-\d{2}$/.test(month);
+}
+
+function monthFromIso(iso) {
+  return String(iso || '').slice(0, 7);
+}
+
+function dayFromIso(iso) {
+  return String(iso || '').slice(0, 10);
+}
+
+function bump(map, key, amount) {
+  if (!key) return;
+  map[key] = (map[key] || 0) + (amount || 1);
+}
+
+function recalcApplicationTotals(data) {
+  var apps = data.applications;
+  var byStatus = apps.byStatus || {};
+  apps.submitted = byStatus.Submitted || 0;
+  apps.approved = byStatus.Approved || 0;
+  apps.rejected = byStatus.Rejected || 0;
+  apps.inReview = (byStatus['In Review'] || 0) + (byStatus['Docs Required'] || 0);
+}
+
+function applyPageView(data, event) {
+  var at = event.at || new Date().toISOString();
+  var day = dayFromIso(at);
+  var path = event.path || '/';
+  var label = event.label || pageLabel(path);
+  var sessionId = event.sessionId || 'anon';
+
+  data.pageViews.total += 1;
+  bump(data.pageViews.byDay, day);
+  bump(data.pageViews.byPage, label);
+  bump(data.pageViews.byPath, path);
+  if (sessionId) data.pageViews.uniqueSessions[sessionId] = day;
+}
+
+function applyApplicationSubmitted(data, event) {
+  var at = event.at || new Date().toISOString();
+  var day = dayFromIso(at);
+  var type = grantTypeLabel(event.grantType || event.programmeType || 'other');
+  var status = normalizeStatus(event.status || 'Submitted');
+  var category = event.farmerCategory || 'Unknown';
+
+  bump(data.applications.byType, type);
+  bump(data.applications.byStatus, status);
+  bump(data.applications.byCategory, category);
+  bump(data.applications.byDay, day);
+  recalcApplicationTotals(data);
+
+  var recent = {
+    id: event.id || '',
+    type: event.grantType || event.programmeType || 'other',
+    status: event.status || 'Submitted',
+    submittedAt: at,
+    name: event.name || '—',
+    userId: event.userId || ''
+  };
+  data.applications.recent = [recent].concat(data.applications.recent || []).slice(0, 50);
+}
+
+function applyApplicationStatus(data, event) {
+  var status = normalizeStatus(event.status);
+  bump(data.applications.byStatus, status);
+  recalcApplicationTotals(data);
+
+  var list = data.applications.recent || [];
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].id === event.id) {
+      list[i].status = event.status || status;
+      break;
+    }
+  }
+}
+
+function applyRegistration(data, event) {
+  var day = dayFromIso(event.at || new Date().toISOString());
+  data.registrations.total += 1;
+  bump(data.registrations.byDay, day);
+}
+
+function applyIssue(data, event) {
+  var day = dayFromIso(event.at || new Date().toISOString());
+  data.issues.total += 1;
+  bump(data.issues.byDay, day);
+  var s = String(event.status || 'Submitted').toLowerCase();
+  if (s === 'resolved') data.issues.resolved += 1;
+  else data.issues.open += 1;
+}
+
+function applyFeedback(data, event) {
+  var day = dayFromIso(event.at || new Date().toISOString());
+  data.feedback.total += 1;
+  bump(data.feedback.byDay, day);
+  var rating = Number(event.rating);
+  if (rating >= 1 && rating <= 5) {
+    data.feedback.sumRating += rating;
+    data.feedback.ratedCount += 1;
+  }
+}
+
+function applyEvent(data, event) {
+  if (!event || !event.type) return data;
+  switch (event.type) {
+    case 'page_view':
+      applyPageView(data, event);
+      break;
+    case 'application_submitted':
+      applyApplicationSubmitted(data, event);
+      break;
+    case 'application_status':
+      applyApplicationStatus(data, event);
+      break;
+    case 'user_registered':
+      applyRegistration(data, event);
+      break;
+    case 'issue_reported':
+      applyIssue(data, event);
+      break;
+    case 'feedback_submitted':
+      applyFeedback(data, event);
+      break;
+    default:
+      break;
+  }
+  data.meta.updatedAt = new Date().toISOString();
+  return data;
+}
+
+function buildReportSummary(data) {
+  var pv = data.pageViews || {};
+  var apps = data.applications || {};
+  var fb = data.feedback || {};
+  var uniqueSessions = Object.keys(pv.uniqueSessions || {}).length;
+  var avgRating = fb.ratedCount ? Math.round((fb.sumRating / fb.ratedCount) * 10) / 10 : 0;
+  var totalApps = Object.keys(apps.byType || {}).reduce(function (sum, k) {
+    return sum + (apps.byType[k] || 0);
+  }, 0);
+  if (!totalApps && apps.recent && apps.recent.length) totalApps = apps.recent.length;
+
+  return {
+    month: data.month,
+    pageViews: {
+      total: pv.total || 0,
+      uniqueSessions: uniqueSessions,
+      byPage: pv.byPage || {},
+      byDay: pv.byDay || {},
+      byPath: pv.byPath || {}
+    },
+    applications: {
+      total: totalApps,
+      submitted: apps.submitted || 0,
+      approved: apps.approved || 0,
+      rejected: apps.rejected || 0,
+      inReview: apps.inReview || 0,
+      byType: apps.byType || {},
+      byStatus: apps.byStatus || {},
+      byCategory: apps.byCategory || {},
+      byDay: apps.byDay || {},
+      recent: (apps.recent || []).slice(0, 20)
+    },
+    registrations: data.registrations || { total: 0, byDay: {} },
+    issues: data.issues || { total: 0, open: 0, resolved: 0, byDay: {} },
+    feedback: {
+      total: fb.total || 0,
+      averageRating: avgRating,
+      byDay: fb.byDay || {}
+    },
+    meta: data.meta || {}
+  };
+}
+
+function monthReportToCsv(report) {
+  var lines = ['Section,Metric,Value'];
+  function row(section, metric, value) {
+    var v = String(value == null ? '' : value).replace(/"/g, '""');
+    if (/[",\n]/.test(v)) v = '"' + v + '"';
+    lines.push([section, metric, v].join(','));
+  }
+
+  row('Summary', 'Month', report.month);
+  row('Summary', 'Generated', new Date().toISOString());
+  row('Page Views', 'Total', report.pageViews.total);
+  row('Page Views', 'Unique sessions', report.pageViews.uniqueSessions);
+  row('Applications', 'Total', report.applications.total);
+  row('Applications', 'Approved', report.applications.approved);
+  row('Applications', 'Rejected', report.applications.rejected);
+  row('Applications', 'Submitted', report.applications.submitted);
+  row('Applications', 'In review', report.applications.inReview);
+  row('Registrations', 'Total', report.registrations.total);
+  row('Issues', 'Total', report.issues.total);
+  row('Issues', 'Open', report.issues.open);
+  row('Issues', 'Resolved', report.issues.resolved);
+  row('Feedback', 'Total', report.feedback.total);
+  row('Feedback', 'Average rating', report.feedback.averageRating);
+
+  Object.keys(report.pageViews.byPage || {}).sort().forEach(function (k) {
+    row('Page', k, report.pageViews.byPage[k]);
+  });
+  Object.keys(report.applications.byType || {}).sort().forEach(function (k) {
+    row('Programme', k, report.applications.byType[k]);
+  });
+  Object.keys(report.applications.byStatus || {}).sort().forEach(function (k) {
+    row('Application status', k, report.applications.byStatus[k]);
+  });
+  Object.keys(report.pageViews.byDay || {}).sort().forEach(function (k) {
+    row('Daily page views', k, report.pageViews.byDay[k]);
+  });
+  Object.keys(report.applications.byDay || {}).sort().forEach(function (k) {
+    row('Daily applications', k, report.applications.byDay[k]);
+  });
+
+  return lines.join('\n');
+}
+
+module.exports = {
+  pageLabel: pageLabel,
+  normalizeStatus: normalizeStatus,
+  grantTypeLabel: grantTypeLabel,
+  emptyMonth: emptyMonth,
+  isValidMonth: isValidMonth,
+  monthFromIso: monthFromIso,
+  applyEvent: applyEvent,
+  buildReportSummary: buildReportSummary,
+  monthReportToCsv: monthReportToCsv
+};

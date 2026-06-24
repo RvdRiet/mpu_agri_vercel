@@ -1,8 +1,8 @@
 'use strict';
 
-const { listMonths } = require('../lib/analytics-store');
-const { requireStaff } = require('../lib/staff-api-auth');
-const { sendJson, setCors } = require('../lib/http');
+const { listMonths } = require('../../_lib/analytics-store');
+const { requireStaff } = require('../../_lib/staff-api-auth');
+const { sendJson, setCors } = require('../../_lib/http');
 
 async function handler(req, res) {
   setCors(res, 'GET, OPTIONS');

@@ -1,8 +1,8 @@
 'use strict';
 
-const { recordEvent } = require('../lib/analytics-store');
-const { pageLabel } = require('../lib/analytics-core');
-const { sendJson, readBody, setCors } = require('../lib/http');
+const { recordEvent } = require('../../_lib/analytics-store');
+const { pageLabel } = require('../../_lib/analytics-core');
+const { sendJson, readBody, setCors } = require('../../_lib/http');
 
 async function handler(req, res) {
   setCors(res, 'POST, OPTIONS');

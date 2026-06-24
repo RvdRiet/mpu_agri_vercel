@@ -1,3 +1,6 @@
+// DEACTIVATED for Vercel Hobby (12 serverless function limit).
+// Active handlers live under api/_routes/ and api/_lib/. Restore by renaming .off -> .js and removing api/[...path].js.
+
 'use strict';
 
 const routes = {

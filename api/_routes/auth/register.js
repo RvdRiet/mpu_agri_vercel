@@ -1,8 +1,8 @@
 'use strict';
 
-const db = require('../lib/db');
-const { sendJson, readBody, setCors } = require('../lib/http');
-const { isValidSaId, normalizeId, hashId, hashPassword, signToken } = require('../lib/user-auth');
+const db = require('../../_lib/db');
+const { sendJson, readBody, setCors } = require('../../_lib/http');
+const { isValidSaId, normalizeId, hashId, hashPassword, signToken } = require('../../_lib/user-auth');
 
 async function handler(req, res) {
   setCors(res, 'POST, OPTIONS');
