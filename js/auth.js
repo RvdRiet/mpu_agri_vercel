@@ -9,7 +9,41 @@
   var STORAGE_USERS = 'farm_users';
   var STORAGE_CURRENT = 'farm_currentUser';
 
+  /** Permanent demo account for showcases (client-side auth, like staff admin). */
+  var SHOWCASE_USERS = {
+    '0123456789234': {
+      id: '0123456789234',
+      password: 'Alpha1',
+      name: 'Alpha Sibisi'
+    }
+  };
+
+  function isShowcaseSaId(id) {
+    return String(id || '').replace(/\s/g, '') === '0123456789234';
+  }
+
+  function loadUsers() {
+    var users = {};
+    try {
+      var raw = localStorage.getItem(STORAGE_USERS);
+      users = raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      users = {};
+    }
+    var key;
+    for (key in SHOWCASE_USERS) {
+      if (Object.prototype.hasOwnProperty.call(SHOWCASE_USERS, key)) {
+        users[key] = SHOWCASE_USERS[key];
+      }
+    }
+    try {
+      localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+    } catch (e) {}
+    return users;
+  }
+
   function isValidSAId(id) {
+    if (isShowcaseSaId(id)) return true;
     var s = String(id).replace(/\s/g, '');
     if (!/^\d{13}$/.test(s)) return false;
     var digits = s.split('').map(Number);
@@ -82,13 +116,10 @@
         });
     }
 
-    var users = (function () {
-      try {
-        var raw = localStorage.getItem(STORAGE_USERS);
-        return raw ? JSON.parse(raw) : {};
-      } catch (e) { return {}; }
-    })();
-    if (users[saId]) return Promise.resolve({ ok: false, error: 'This ID is already registered.' });
+    var users = loadUsers();
+    if (users[saId]) {
+      return Promise.resolve({ ok: false, error: 'This ID is already registered.' });
+    }
     users[saId] = { id: saId, password: password, name: fullName.trim() };
     try { localStorage.setItem(STORAGE_USERS, JSON.stringify(users)); } catch (e) {}
     setCurrentUser({ id: saId, name: fullName.trim() });
@@ -104,6 +135,15 @@
     if (!password) return Promise.resolve({ ok: false, error: 'Password is required.' });
 
     if (useFirebase()) {
+      if (isShowcaseSaId(saId)) {
+        var demoUsers = loadUsers();
+        var demo = demoUsers[saId];
+        if (!demo || demo.password !== password) {
+          return Promise.resolve({ ok: false, error: 'Invalid ID or password.' });
+        }
+        setCurrentUser({ id: demo.id, name: demo.name });
+        return Promise.resolve({ ok: true });
+      }
       var email = saIdToEmail(saId);
       return global.firebaseAuth.signInWithEmailAndPassword(email, password)
         .then(function (userCred) {
@@ -120,12 +160,7 @@
         });
     }
 
-    var users = (function () {
-      try {
-        var raw = localStorage.getItem(STORAGE_USERS);
-        return raw ? JSON.parse(raw) : {};
-      } catch (e) { return {}; }
-    })();
+    var users = loadUsers();
     var user = users[saId];
     if (!user || user.password !== password) return Promise.resolve({ ok: false, error: 'Invalid ID or password.' });
     setCurrentUser({ id: user.id, name: user.name });
